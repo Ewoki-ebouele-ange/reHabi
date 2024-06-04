@@ -118,4 +118,11 @@ class ProfilController extends Controller
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
     }
+
+    public function destroy (Profil $profil) {
+        $prof = Profil::findOrfail($profil->id);
+        $prof->delete();
+
+        return redirect('/profil')->with('success','Profil ' .$prof->code_profil. ' supprimé avec succès');
+    }
 }

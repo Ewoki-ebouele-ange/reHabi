@@ -118,4 +118,11 @@ class ModuleController extends Controller
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
     }
+
+    public function destroy (Module $module) {
+        $mod = Module::findOrfail($module->id);
+        $mod->delete();
+
+        return redirect('/module')->with('success','Module ' .$mod->code_module. ' supprimé avec succès');
+    }
 }

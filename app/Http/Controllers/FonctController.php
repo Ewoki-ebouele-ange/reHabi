@@ -119,4 +119,11 @@ class FonctController extends Controller
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
     }
+
+    public function destroy (Fonctionnalite $fonct) {
+        $fonction = Fonctionnalite::findOrfail($fonct->id);
+        $fonction->delete();
+
+        return redirect('/fonct')->with('success','Fonctionnalité ' .$fonction->code_fonct. ' supprimée avec succès');
+    }
 }

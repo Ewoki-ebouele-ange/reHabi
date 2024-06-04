@@ -36,6 +36,9 @@
                     <x-nav-link :href="route('fonct')" :active="request()->routeIs('fonct')">
                         {{ __('Fonctionnalités') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('profil')" :active="request()->routeIs('profil')">
+                        {{ __('Profils') }}
+                    </x-nav-link>
                     <form method="POST" action="{{ route('import') }}" class="form_nav" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="fichier" placeholder="bbbb">

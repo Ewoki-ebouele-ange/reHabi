@@ -55,6 +55,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
         Route::get('/add/import', 'showFormImport')->name('user.import');
         Route::post('/add/export', 'export')->name('user.export');
         Route::get('/add/export', 'showFormExport')->name('user.export');
+        Route::post('/{user}/delete', 'destroy')->name('user.destroy');
+
         
     });
 
@@ -76,9 +78,8 @@ Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::cl
     Route::get('/add/import', 'showFormImport')->name('employe.import');
     Route::post('/add/export', 'export')->name('employe.export');
     Route::get('/add/export', 'showFormExport')->name('employe.export');
-    Route::get('/{employe}/delete', function(Employe $employe){
-        return Employe::delete($employe);
-    })->name('employe.delete');
+    Route::post('/{employe}/delete', 'destroy')->name('employe.destroy');
+
 });
 
 //Entité
@@ -92,9 +93,8 @@ Route::prefix('/entite')->middleware('auth')->controller(\EntiteController::clas
     Route::get('/add/import', 'showFormImport')->name('entite.import');
     Route::post('/add/export', 'export')->name('entite.export');
     Route::get('/add/export', 'showFormExport')->name('entite.export');
-    Route::get('/{entite}/delete', function(Entite $entite){
-        return Entite::delete($employe);
-    })->name('entite.delete');
+    Route::post('/{entite}/delete', 'destroy')->name('entite.destroy');
+
 });
 
 //Poste
@@ -108,9 +108,8 @@ Route::prefix('/poste')->middleware('auth')->controller(\PosteController::class)
     Route::get('/add/import', 'showFormImport')->name('poste.import');
     Route::post('/add/export', 'export')->name('poste.export');
     Route::get('/add/export', 'showFormExport')->name('poste.export');
-    Route::get('/{poste}/delete', function(Poste $poste){
-        return Poste::delete($poste);
-    })->name('poste.delete');
+    Route::post('/{poste}/delete', 'destroy')->name('poste.destroy');
+
 });
 
 //Application
@@ -124,9 +123,8 @@ Route::prefix('/application')->middleware('auth')->controller(\ApplicationContro
     Route::get('/add/import', 'showFormImport')->name('application.import');
     Route::post('/add/export', 'export')->name('application.export');
     Route::get('/add/export', 'showFormExport')->name('application.export');
-    Route::get('/{application}/delete', function(Application $application){
-        return Application::delete($application);
-    })->name('application.delete');
+    Route::post('/{application}/delete', 'destroy')->name('application.destroy');
+
 });
 
 //Module
@@ -140,9 +138,8 @@ Route::prefix('/module')->middleware('auth')->controller(\ModuleController::clas
     Route::get('/add/import', 'showFormImport')->name('module.import');
     Route::post('/add/export', 'export')->name('module.export');
     Route::get('/add/export', 'showFormExport')->name('module.export');
-    Route::get('/{module}/delete', function(Module $module){
-        return Module::delete($module);
-    })->name('module.delete');
+    Route::post('/{module}/delete', 'destroy')->name('module.destroy');
+
 });
 
 //Fonctionnalité
@@ -156,9 +153,7 @@ Route::prefix('/fonct')->middleware('auth')->controller(\FonctController::class)
     Route::get('/add/import', 'showFormImport')->name('fonct.import');
     Route::post('/add/export', 'export')->name('fonct.export');
     Route::get('/add/export', 'showFormExport')->name('fonct.export');
-    Route::get('/{fonct}/delete', function(Fonct $fonct){
-        return Fonct::delete($fonct);
-    })->name('fonct.delete');
+    Route::post('/{fonct}/delete', 'destroy')->name('fonct.destroy');
 });
 
 //Profil
@@ -172,9 +167,7 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::get('/add/import', 'showFormImport')->name('profil.import');
     Route::post('/add/export', 'export')->name('profil.export');
     Route::get('/add/export', 'showFormExport')->name('profil.export');
-    Route::get('/{profil}/delete', function(Profil $profil){
-        return Profil::delete($profil);
-    })->name('profil.delete');
+    Route::post('/{profil}/delete', 'destroy')->name('profil.destroy');
 });
 
 //importer fichier

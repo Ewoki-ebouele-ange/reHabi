@@ -118,4 +118,11 @@ class ApplicationController extends Controller
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
     }
+
+    public function destroy (Application $application) {
+        $app = Application::findOrfail($application->id);
+        $app->delete();
+
+        return redirect('/application')->with('success','Application ' .$app->code_application. ' supprimée avec succès');
+    }
 }

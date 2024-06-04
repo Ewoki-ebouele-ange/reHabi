@@ -118,4 +118,11 @@ class EntiteController extends Controller
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
     }
+
+    public function destroy (Entite $entite) {
+        $ent = Entite::findOrfail($entite->id);
+        $ent->delete();
+
+        return redirect('/entite')->with('success','Entité ' .$ent->code_entite. ' supprimée avec succès');
+    }
 }

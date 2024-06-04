@@ -118,4 +118,11 @@ class EmployeController extends Controller
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
     }
+
+    public function destroy (Employe $employe) {
+        $emp = Employe::findOrfail($employe->id);
+        $emp->delete();
+
+        return redirect('/employe')->with('success','Employé ' .$emp->nom. ' supprimé avec succès');
+    }
 }

@@ -118,4 +118,11 @@ class PosteController extends Controller
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
     }
+
+    public function destroy (Poste $poste) {
+        $pos = Poste::findOrfail($poste->id);
+        $pos->delete();
+
+        return redirect('/poste')->with('success','Poste ' .$pos->code_poste. ' supprimé avec succès');
+    }
 }
