@@ -73,17 +73,27 @@ class ApplicationController extends Controller
             return $row;
         });
 
-        // 5. On insère toutes les lignes dans la base de données
-        $status = Application::insert($rows->toArray());
-        // Si toutes les lignes sont insérées
-    	if ($status) {
-            // 6. On supprime le fichier uploadé
-            $reader->close(); // On ferme le $reader
-            File::delete($fichier);
-            // unlink($fichier);
-            // 7. Retour vers le formulaire avec un message $msg
-            return redirect()->route('application')->with('success', "Importation reussie");
-        } else { abort(500); }
+        //Filtrage des lignes dans la base de données
+        $filteredRows = $rows->filter(function($row){
+            return ! Application::where('code_application', $row['code_application'])->exists();
+        });
+
+        //Insertion des lignes filtrées dans la base de données
+        if($filteredRows->isNotEmpty()){
+            $status = Application::insert($filteredRows->toArray());
+
+            if ($status) {
+                // 6. On supprime le fichier uploadé
+                $reader->close(); // On ferme le $reader
+                //File::delete($fichier);
+                // unlink($fichier);
+                // 7. Retour vers le formulaire avec un message $msg
+                return redirect()->route('application')->with('success', "Importation reussie");
+            } else { abort(500); }
+        }
+        else {
+            return redirect()->route('application')->with('info', "Aucune nouvelle application à importer");
+        }
 
         // On prend 10 lignes
         /*$reader->take(10);

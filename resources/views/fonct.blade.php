@@ -11,6 +11,11 @@
                             {{session()->get('success')}}   
                         </div>                       
                     @endif
+                    @if(session()->get('info'))
+                        <div class="inf">
+                            {{session()->get('info')}}   
+                        </div>                       
+                    @endif
                     <div class="head_emp">
                         <span>Liste des fonctionnalités</span>
                         <div class="import_export">

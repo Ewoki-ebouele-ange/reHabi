@@ -73,17 +73,27 @@ class EmployeController extends Controller
             return $row;
         });
 
-        // 5. On insère toutes les lignes dans la base de données
-        $status = Employe::insert($rows->toArray());
-        // Si toutes les lignes sont insérées
-    	if ($status) {
-            // 6. On supprime le fichier uploadé
-            $reader->close(); // On ferme le $reader
-            File::delete($fichier);
-            // unlink($fichier);
-            // 7. Retour vers le formulaire avec un message $msg
-            return redirect()->route('employe')->with('success', "Importation reussie");
-        } else { abort(500); }
+        //Filtrage des lignes dans la base de données
+        $filteredRows = $rows->filter(function($row){
+            return ! Employe::where('matricule', $row['matricule'])->exists();
+        });
+
+        //Insertion des lignes filtrées dans la base de données
+        if($filteredRows->isNotEmpty()){
+            $status = Employe::insert($filteredRows->toArray());
+
+            if ($status) {
+                // 6. On supprime le fichier uploadé
+                $reader->close(); // On ferme le $reader
+                //File::delete($fichier);
+                // unlink($fichier);
+                // 7. Retour vers le formulaire avec un message $msg
+                return redirect()->route('employe')->with('success', "Importation reussie");
+            } else { abort(500); }
+        }
+        else {
+            return redirect()->route('employe')->with('info', "Aucun nouvel employé à importer");
+        }
 
         // On prend 10 lignes
         /*$reader->take(10);

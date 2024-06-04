@@ -73,17 +73,27 @@ class ModuleController extends Controller
             return $row;
         });
 
-        // 5. On insère toutes les lignes dans la base de données
-        $status = Module::insert($rows->toArray());
-        // Si toutes les lignes sont insérées
-    	if ($status) {
-            // 6. On supprime le fichier uploadé
-            $reader->close(); // On ferme le $reader
-            File::delete($fichier);
-            // unlink($fichier);
-            // 7. Retour vers le formulaire avec un message $msg
-            return redirect()->route('module')->with('success', "Importation reussie");
-        } else { abort(500); }
+        //Filtrage des lignes dans la base de données
+        $filteredRows = $rows->filter(function($row){
+            return ! Module::where('code_module', $row['code_module'])->exists();
+        });
+
+        //Insertion des lignes filtrées dans la base de données
+        if($filteredRows->isNotEmpty()){
+            $status = Module::insert($filteredRows->toArray());
+
+            if ($status) {
+                // 6. On supprime le fichier uploadé
+                $reader->close(); // On ferme le $reader
+                //File::delete($fichier);
+                // unlink($fichier);
+                // 7. Retour vers le formulaire avec un message $msg
+                return redirect()->route('module')->with('success', "Importation reussie");
+            } else { abort(500); }
+        }
+        else {
+            return redirect()->route('module')->with('info', "Aucun nouveau module à importer");
+        }
 
         // On prend 10 lignes
         /*$reader->take(10);

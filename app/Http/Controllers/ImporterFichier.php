@@ -33,10 +33,14 @@ class ImporterFichier extends Controller
             $row['updated_at'] = $currentTimestamp;
             return $row;
         });
-        
-        //$arrayligne = $rows->toArray();
 
-        // Tableau pour stocker les valeurs de la colonne spécifique
+        //Filtrage des lignes dans la base de données
+        $filteredRows = $rows->filter(function($row){
+            return !Employe::where('matricule', $row['matricule'])->exists() & !Entite::where('code_entite', $row['code_entite'])->exists() & !Poste::where('code_poste', $row['code_poste'])->exists();
+        });
+        
+        if($filteredRows->isNotEmpty()){
+            // Tableau pour stocker les valeurs de la colonne spécifique
         $matEmp = [];
         $nomEmp = [];
 
@@ -45,6 +49,8 @@ class ImporterFichier extends Controller
 
         $codePoste = [];
         $libPoste = [];
+        $createdAt = [];
+        $updatedAt = [];
 
         // Nom de la colonne que vous souhaitez récupérer
         $columnName1 = 'nom';
@@ -53,9 +59,13 @@ class ImporterFichier extends Controller
         $columnName4 = 'libelle_entite';
         $columnName5 = 'code_poste';
         $columnName6 = 'libelle_poste';
+        $columnName7 = 'created_at';
+        $columnName8 = 'updated_at';
+
+        
 
         // Parcours des lignes et récupération des valeurs de la colonne spécifique
-        foreach ($rows as $row) {
+        foreach ($filteredRows as $row) {
             // Vérifie si la colonne spécifique existe dans la ligne
             if (isset($row[$columnName1])) {
                 // Ajoute la valeur de la colonne spécifique au tableau
@@ -86,40 +96,64 @@ class ImporterFichier extends Controller
                 // Ajoute la valeur de la colonne spécifique au tableau
                 $libPoste[] = $row[$columnName6];
             }
+            if (isset($row[$columnName7])) {
+                // Ajoute la valeur de la colonne spécifique au tableau
+                $createdAt[] = $row[$columnName7];
+            }
+            if (isset($row[$columnName8])) {
+                // Ajoute la valeur de la colonne spécifique au tableau
+                $updatedAt[] = $row[$columnName8];
+            }
         }
 
-$employeArray = array([$nomEmp, $matEmp]);       
-$entiteArray = array([$codeEnt, $libEnt]);       
-$posteArray = array([$codePoste, $libPoste]);       
+$employeArray = array([$nomEmp, $matEmp, $createdAt, $updatedAt]);       
+$entiteArray = array([$codeEnt, $libEnt, $createdAt, $updatedAt]);       
+$posteArray = array([$codePoste, $libPoste, $createdAt, $updatedAt]);  
+
+//dd($employeArray);
         
 
     for($i=0; $i<count($employeArray[0][0]); $i++){
         $employeData[] = [
             'nom' => $employeArray[0][0][$i],
             'matricule' => $employeArray[0][1][$i],
+            'created_at' => $employeArray[0][2][$i],
+            'updated_at' => $employeArray[0][3][$i],
         // Ajoutez d'autres colonnes selon votre structure de base de données
         ];
         $entiteData[] = [
             'code_entite' => $entiteArray[0][0][$i],
-            'libelle_entite' => $entiteArray[0][1][$i],
+            'libelle_entite' => $entiteArray[0][1][$i],            
+            'created_at' => $entiteArray[0][2][$i],
+            'updated_at' => $entiteArray[0][3][$i],
+
             // Ajoutez d'autres colonnes selon votre structure de base de données
         ];
         $posteData[] = [
         'code_poste' => $posteArray[0][0][$i],
-        'libelle_poste' => $posteArray[0][1][$i],
+        'libelle_poste' => $posteArray[0][1][$i],            
+        'created_at' => $posteArray[0][2][$i],
+        'updated_at' => $posteArray[0][3][$i],
+
         // Ajoutez d'autres colonnes selon votre structure de base de données
         ];
     }
 
- $status = Employe::insert($employeData);
- $status = Entite::insert($entiteData);
- $status = Poste::insert($posteData);
+    
 
-if ($status) {
+ $status1 = Employe::insert($employeData);
+ $status2 = Entite::insert($entiteData);
+ $status3 = Poste::insert($posteData);
+
+if ($status1 & $status2 & $status3) {
     $reader->close();
 }else { abort(500); }
 
-        return redirect()->route('dashboard')->with('success', "Importation reussie");
+$routeName = request()->route()->getName();
+
+//dd($routeName);
+
+        return redirect()->route('import')->with('success', "Importation reussie");
 
 
         // 5. On insère toutes les lignes dans la base de données
@@ -141,5 +175,9 @@ if ($status) {
         //$rows = $reader->getRows()->filter(function ($ligne) {
             return filter_var($ligne['email'], FILTER_VALIDATE_EMAIL) === true;
         });*/
+        }else{
+            return redirect()->route('import')->with('info', "Aucune nouvelle information à ajouter");
+        }
+        
     }
 }

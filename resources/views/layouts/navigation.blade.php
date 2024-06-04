@@ -1,4 +1,4 @@
-@vite(['resources/css/app.css'])
+@vite(['resources/js/app.js','resources/css/app.css'])
 
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
@@ -39,13 +39,13 @@
                     <x-nav-link :href="route('profil')" :active="request()->routeIs('profil')">
                         {{ __('Profils') }}
                     </x-nav-link>
-                    <form method="POST" action="{{ route('import') }}" class="form_nav" enctype="multipart/form-data">
+                    <form id='upload-form' method="POST" action="{{ route('import') }}" class="flex justify-center items-center m-0" enctype="multipart/form-data">
                         @csrf
-                        <input type="file" name="fichier" placeholder="bbbb">
+                        <input type="file" name="fichier" id="file-input" class="hidden">
                         {{-- <a  class="text-3xl">
                             +
                         </a> --}}
-                        <button type="submit">Enregistrer</button>
+                        <button type="button" id="custom-button" class="text-3xl">+</button>
                     </form>
                 </div>
             </div>

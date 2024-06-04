@@ -73,18 +73,27 @@ class EntiteController extends Controller
             return $row;
         });
 
-        // 5. On insère toutes les lignes dans la base de données
-        $status = Entite::insert($rows->toArray());
-        // Si toutes les lignes sont insérées
-    	if ($status) {
-            // 6. On supprime le fichier uploadé
-            $reader->close(); // On ferme le $reader
-            File::delete($fichier);
-            // unlink($fichier);
-            // 7. Retour vers le formulaire avec un message $msg
-            return redirect()->route('entite')->with('success', "Importation reussie");
-        } else { abort(500); }
+        //Filtrage des lignes dans la base de données
+        $filteredRows = $rows->filter(function($row){
+            return ! Entite::where('code_entite', $row['code_entite'])->exists();
+        });
 
+        //Insertion des lignes filtrées dans la base de données
+        if($filteredRows->isNotEmpty()){
+            $status = Entite::insert($filteredRows->toArray());
+
+            if ($status) {
+                // 6. On supprime le fichier uploadé
+                $reader->close(); // On ferme le $reader
+                //File::delete($fichier);
+                // unlink($fichier);
+                // 7. Retour vers le formulaire avec un message $msg
+                return redirect()->route('entite')->with('success', "Importation reussie");
+            } else { abort(500); }
+        }
+        else {
+            return redirect()->route('entite')->with('info', "Aucund nouvelle entité à importer");
+        }
         // On prend 10 lignes
         /*$reader->take(10);
 

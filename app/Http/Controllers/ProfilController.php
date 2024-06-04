@@ -73,17 +73,32 @@ class ProfilController extends Controller
             return $row;
         });
 
+        //Filtrage des lignes dans la base de données
+        $filteredRows = $rows->filter(function($row){
+            return ! Profil::where('code_profil', $row['code_profil'])->exists() ;
+        });
+
+        //Insertion des lignes filtrées dans la base de données
+        if($filteredRows->isNotEmpty()){
+            $status = Profil::insert($filteredRows->toArray());
+
+            if ($status) {
+                // 6. On supprime le fichier uploadé
+                $reader->close(); // On ferme le $reader
+                //File::delete($fichier);
+                // unlink($fichier);
+                // 7. Retour vers le formulaire avec un message $msg
+                return redirect()->route('profil')->with('success', "Importation reussie");
+            } else { abort(500); }
+        }
+        else {
+            return redirect()->route('profil')->with('info', "Aucun nouveau profil à importer");
+        }
+
         // 5. On insère toutes les lignes dans la base de données
-        $status = Profil::insert($rows->toArray());
+        //$status = Profil::insert($rows->toArray());
         // Si toutes les lignes sont insérées
-    	if ($status) {
-            // 6. On supprime le fichier uploadé
-            $reader->close(); // On ferme le $reader
-            File::delete($fichier);
-            // unlink($fichier);
-            // 7. Retour vers le formulaire avec un message $msg
-            return redirect()->route('profil')->with('success', "Importation reussie");
-        } else { abort(500); }
+    	
 
         // On prend 10 lignes
         /*$reader->take(10);
