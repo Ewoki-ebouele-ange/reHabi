@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+.accueil {
+    display: flex;
+    flex-direction: column;
+    background-image: url("../../public/images/bgimg.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.navbar {
+    display: flex;
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 12%;
+    background-color: #fff;
+    align-items: center;
+    padding: 1.5% 5%;
+}
+
+.img img {
+    width: 80%;
+    height: 60%;
+}
+
+.desc_projet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 150px 100px;
+    gap: 30px;
+}
+
+.desc_projet p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 50px;
+    color: #000000;
+}
+
+.log_reg {
+    display: flex;
+    width: 100%;
+    gap: 50px;
+}
+
+.log_reg a {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.log_reg a:hover {
+    text-transform: none;
+}
+
+/* .form_nav{
+    position: relative;
+    display: inline-block;
+}
+
+
+.form_nav{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.form_nav input[type="file"]{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 0;
+} */

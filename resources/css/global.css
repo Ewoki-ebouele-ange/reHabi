@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sidebar_acc{
+    display: flex;
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-right: 30px;
+}
+
+.link_ul{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.link_ul .link{
+    font-size: large;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 5px;
+    background-color: rgb(103, 98, 98);
+}
+
+.link_ul .link_none{
+    font-size: large;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.link_ul .link_none:hover{
+    background-color: rgb(232, 232, 232);
+}
+
+.add{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-left: 20px;
+    gap: 20px;
+    border-left: solid 1px black;
+
+}
+
+.tit_add{
+    display: flex;
+    font-weight: 900;
+    font-size: large;
+}
+
+.inp_name{
+    width: 300px;
+}
+
+.head_emp{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.import_export{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 10%;
+}
+
+.import_export a{
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mess{
+    display: block;
+    color: red;
+}

@@ -1,0 +1,22 @@
+{
+  "public/images/bgimg.webp": {
+    "file": "assets/bgimg-DO5PbXDr.webp",
+    "src": "public/images/bgimg.webp"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BXrq7boL.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/employe.css": {
+    "file": "assets/employe-D52ML9NL.css",
+    "src": "resources/css/employe.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CpC4tdKg.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
