@@ -10,7 +10,7 @@ use App\Models\Entite;
 use App\Models\Poste;
 use Carbon\Carbon;
 
-class ImporterFichier extends Controller
+class ImporterFichierEEP extends Controller
 {
     public function import(Request $request) {
         // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée

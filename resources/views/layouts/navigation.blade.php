@@ -42,9 +42,6 @@
                     <form id='upload-form' method="POST" action="{{ route('import') }}" class="flex justify-center items-center m-0" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="fichier" id="file-input" class="hidden">
-                        {{-- <a  class="text-3xl">
-                            +
-                        </a> --}}
                         <button type="button" id="custom-button" class="text-3xl">+</button>
                     </form>
                 </div>

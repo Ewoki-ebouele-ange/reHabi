@@ -23,6 +23,7 @@
     background-color: #fff;
     align-items: center;
     padding: 1.5% 5%;
+    white-space: pre-wrap;
 }
 
 .img img {

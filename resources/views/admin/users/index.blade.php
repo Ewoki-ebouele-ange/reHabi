@@ -77,10 +77,10 @@
                                         <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $user->id }}
                                         </th>
-                                        <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 overflow-hidden whitespace-nowrap max-w-[100px] text-ellipsis dark:text-white">
                                             {{ $user->name }}
                                         </th>
-                                        <td class="px-6 py-4 text-center">
+                                        <td class="px-6 py-4 text-center overflow-hidden whitespace-nowrap max-w-[100px] text-ellipsis">
                                             {{ $user->email }} 
                                         </td>
                                         <td class="px-6 py-4 flex gap-2 items-center justify-center">

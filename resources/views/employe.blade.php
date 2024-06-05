@@ -55,10 +55,10 @@
                                         <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $employe->id }}
                                         </th>
-                                        <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <td class="text-center px-6 py-4 font-medium text-gray-900 overflow-hidden whitespace-nowrap max-w-[100px] text-ellipsis dark:text-white">
                                             {{ $employe->nom }}
-                                        </th>
-                                        <td class="px-6 py-4 text-center">
+                                        </td>
+                                        <td class="px-6 py-4 text-center overflow-hidden whitespace-nowrap max-w-[150px] text-ellipsis">
                                             {{ $employe->matricule }} 
                                         </td>
                                         <td class="px-6 py-4 flex gap-2 items-center justify-center">

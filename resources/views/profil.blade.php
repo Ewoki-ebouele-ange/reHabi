@@ -55,10 +55,10 @@
                                         <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $profil->id }}
                                         </th>
-                                        <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <th scope="row" class="text-center px-6 py-4 font-medium text-gray-900 overflow-hidden whitespace-nowrap max-w-[100px] text-ellipsis dark:text-white">
                                             {{ $profil->code_profil }}
                                         </th>
-                                        <td class="px-6 py-4 text-center">
+                                        <td class="px-6 py-4 text-center overflow-hidden whitespace-nowrap max-w-[150px] text-ellipsis">
                                             {{ $profil->libelle_profil }} 
                                         </td>
                                         <td class="px-6 py-4 flex gap-2 items-center justify-center">
