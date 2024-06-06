@@ -39,10 +39,15 @@
                     <x-nav-link :href="route('profil')" :active="request()->routeIs('profil')">
                         {{ __('Profils') }}
                     </x-nav-link>
-                    <form id='upload-form' method="POST" action="{{ route('import') }}" class="flex justify-center items-center m-0" enctype="multipart/form-data">
+                    <form id='upload-form' method="POST" action="{{ route('importEEP') }}" class="flex justify-center items-center m-0" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="fichier" id="file-input" class="hidden">
                         <button type="button" id="custom-button" class="text-3xl">+</button>
+                    </form>
+                    <form id='upload-form1' method="POST" action="{{ route('importFP') }}" class="flex justify-center items-center m-0" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" name="fichier" id="file-input1" class="hidden">
+                        <button type="button" id="custom-button1" class="text-3xl">*</button>
                     </form>
                 </div>
             </div>

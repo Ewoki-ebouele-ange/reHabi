@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code_fonct')->unique();
             $table->string('libelle_fonct');
+            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
             $table->timestamps();
         });
     }

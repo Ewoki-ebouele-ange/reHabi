@@ -11,6 +11,15 @@ class Fonctionnalite extends Model
 
     protected $fillable = [
         'code_fonct',
-        'libelle_fonct'
+        'libelle_fonct',
+        'module_id'
     ];
+
+    public function module(){
+        return $this->belongsTo(Module::class,'module_id');
+    }
+
+    public function profils(){
+        return $this->belongsToMany(Profil::class ,'profil_id');
+    }
 }

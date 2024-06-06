@@ -10,7 +10,7 @@ use App\Models\Entite;
 use App\Models\Poste;
 use Carbon\Carbon;
 
-class ImporterFichierEEP extends Controller
+class ImporterFichier extends Controller
 {
     public function import(Request $request) {
         // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
@@ -106,78 +106,77 @@ class ImporterFichierEEP extends Controller
             }
         }
 
-$employeArray = array([$nomEmp, $matEmp, $createdAt, $updatedAt]);       
-$entiteArray = array([$codeEnt, $libEnt, $createdAt, $updatedAt]);       
-$posteArray = array([$codePoste, $libPoste, $createdAt, $updatedAt]);  
+        $employeArray = array([$nomEmp, $matEmp, $createdAt, $updatedAt]);       
+        $entiteArray = array([$codeEnt, $libEnt, $createdAt, $updatedAt]);       
+        $posteArray = array([$codePoste, $libPoste, $createdAt, $updatedAt]);  
 
-//dd($employeArray);
-        
 
-    for($i=0; $i<count($employeArray[0][0]); $i++){
-        $employeData[] = [
-            'nom' => $employeArray[0][0][$i],
-            'matricule' => $employeArray[0][1][$i],
-            'created_at' => $employeArray[0][2][$i],
-            'updated_at' => $employeArray[0][3][$i],
-        // Ajoutez d'autres colonnes selon votre structure de base de données
-        ];
-        $entiteData[] = [
-            'code_entite' => $entiteArray[0][0][$i],
-            'libelle_entite' => $entiteArray[0][1][$i],            
-            'created_at' => $entiteArray[0][2][$i],
-            'updated_at' => $entiteArray[0][3][$i],
+        for($i=0; $i<count($employeArray[0][0]); $i++){
+            $employeData[] = [
+                'nom' => $employeArray[0][0][$i],
+                'matricule' => $employeArray[0][1][$i],
+                'created_at' => $employeArray[0][2][$i],
+                'updated_at' => $employeArray[0][3][$i],
+            // Ajoutez d'autres colonnes selon votre structure de base de données
+            ];
+            $entiteData[] = [
+                'code_entite' => $entiteArray[0][0][$i],
+                'libelle_entite' => $entiteArray[0][1][$i],            
+                'created_at' => $entiteArray[0][2][$i],
+                'updated_at' => $entiteArray[0][3][$i],
+
+                // Ajoutez d'autres colonnes selon votre structure de base de données
+            ];
+            $posteData[] = [
+            'code_poste' => $posteArray[0][0][$i],
+            'libelle_poste' => $posteArray[0][1][$i],            
+            'created_at' => $posteArray[0][2][$i],
+            'updated_at' => $posteArray[0][3][$i],
 
             // Ajoutez d'autres colonnes selon votre structure de base de données
-        ];
-        $posteData[] = [
-        'code_poste' => $posteArray[0][0][$i],
-        'libelle_poste' => $posteArray[0][1][$i],            
-        'created_at' => $posteArray[0][2][$i],
-        'updated_at' => $posteArray[0][3][$i],
-
-        // Ajoutez d'autres colonnes selon votre structure de base de données
-        ];
-    }
+            ];
+        }
 
     
 
- $status1 = Employe::insert($employeData);
- $status2 = Entite::insert($entiteData);
- $status3 = Poste::insert($posteData);
+        $status1 = Employe::insert($employeData);
+        $status2 = Entite::insert($entiteData);
+        $status3 = Poste::insert($posteData);
 
-if ($status1 & $status2 & $status3) {
-    $reader->close();
-}else { abort(500); }
+        if ($status1 & $status2 & $status3) {
+            $reader->close();
+        }else { abort(500); }
 
-$routeName = request()->route()->getName();
-
-//dd($routeName);
+        $routeName = request()->route()->getName();
 
         return redirect()->route('import')->with('success', "Importation reussie");
 
-
-        // 5. On insère toutes les lignes dans la base de données
-        //$status = Fonctionnalite::insert($rows->toArray());
-        // Si toutes les lignes sont insérées
-    	// if ($status) {
-        //     // 6. On supprime le fichier uploadé
-        //     $reader->close(); // On ferme le $reader
-        //     File::delete($fichier);
-        //     //unlink($fichier);
-        //     // 7. Retour vers le formulaire avec un message $msg
-        //     return redirect()->route('fonct')->with('success', "Importation reussie");
-        // } else { abort(500); }
-
-        // On prend 10 lignes
-        /*$reader->take(10);
-
-        // On filtre les lignes en s'assurant que l'adresse email est correcte
-        //$rows = $reader->getRows()->filter(function ($ligne) {
-            return filter_var($ligne['email'], FILTER_VALIDATE_EMAIL) === true;
-        });*/
         }else{
-            return redirect()->route('import')->with('info', "Aucune nouvelle information à ajouter");
+            return redirect()->route('importEEP')->with('info', "Aucune nouvelle information à ajouter");
         }
         
+    }
+
+    public function importFonctProfil(Request $request){
+        // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
+    	$this->validate($request, [
+    		'fichier' => 'bail|required|file|mimes:xlsx'
+    	]);
+    	// 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
+    	$fichier = $request->fichier->move(public_path('storage/'), $request->fichier->hashName());
+        // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
+    	$reader = SimpleExcelReader::create($fichier);
+        // On récupère le contenu (les lignes) du fichier
+        $rows = $reader->getRows();
+        // $rows est une Illuminate\Support\LazyCollection
+        //dd($rows->toArray());
+
+        // 4. Ajouter les colonnes `created_at` et `updated_at` à chaque ligne
+        $currentTimestamp = Carbon::now(); // Récupérer le timestamp actuel
+        $rows = $rows->map(function ($row) use ($currentTimestamp) {
+            $row['created_at'] = $currentTimestamp;
+            $row['updated_at'] = $currentTimestamp;
+            return $row;
+        });
     }
 }

@@ -13,4 +13,13 @@ class Application extends Model
         "code_application",
         "libelle_application"
     ];
+
+    public function modules(){
+        return $this->hasMany(Module::class);
+    }
+
+    public function fonctionnalites(){
+        return $this->hasManyThrough(Fonctionnalite::class, Module::class);
+    }
+
 }

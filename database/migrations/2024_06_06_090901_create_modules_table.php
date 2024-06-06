@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code_module')->unique();
             $table->string('libelle_module');
+            $table->foreignId('application_id')->nullabe()->constrained('applications')->onDelete('cascade');
             $table->timestamps();
         });
     }

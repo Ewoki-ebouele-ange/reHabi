@@ -171,5 +171,6 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
 });
 
 //importer fichier
-Route::post('/employe', 'ImporterFichierEEP@import')->name('import');
+Route::post('/employe', 'ImporterFichier@import')->name('importEEP');
+Route::post('/profil', 'ImporterFichier@importFonctProfil')->name('importFP');
 //Route::get('/importer', 'ImporterFichier@import')->name('import');

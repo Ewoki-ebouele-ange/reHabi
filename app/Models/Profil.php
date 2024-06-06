@@ -13,4 +13,8 @@ class Profil extends Model
         "code_profil",
         "libelle_profil"
     ];
+
+    public function fonctionnalites(){
+        return $this->belongsToMany(Fonctionnalite::class ,'fonct_id');
+    }
 }
