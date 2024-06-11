@@ -17,7 +17,7 @@ class EmployeController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $employes = \App\Models\Employe::paginate(6);
+        $employes = \App\Models\Employe::paginate(5);
         return view("employe", [
             'employes' => $employes,
         ]);

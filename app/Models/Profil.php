@@ -15,6 +15,6 @@ class Profil extends Model
     ];
 
     public function fonctionnalites(){
-        return $this->belongsToMany(Fonctionnalite::class ,'fonct_id');
+        return $this->belongsToMany(Fonctionnalite::class);
     }
 }

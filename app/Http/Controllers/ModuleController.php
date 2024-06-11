@@ -73,10 +73,20 @@ class ModuleController extends Controller
             return $row;
         });
 
+        $uniqueElements = $rows->map(function ($row) {
+            return $row['code_module'];
+        })->unique()->values()->all();
+
+        //dd($uniqueElements);
+
         //Filtrage des lignes dans la base de données
         $filteredRows = $rows->filter(function($row){
             return ! Module::where('code_module', $row['code_module'])->exists();
         });
+
+        // $rowmod = $rows->map(function($row){
+        //     return $row["code_fonct"];
+        // });
 
         //Insertion des lignes filtrées dans la base de données
         if($filteredRows->isNotEmpty()){

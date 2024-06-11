@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateFonctRequest;
 use Illuminate\View\View;
 use App\Models\Fonctionnalite;
+use App\Models\Module;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use Carbon\Carbon;
@@ -78,10 +79,18 @@ class FonctController extends Controller
             return ! Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists();
         });
 
+        $rowmod = $rows->map(function($row){
+            return $row["code_module"];
+        });
+
+        //dd($rowmod->toArray());
+
+        
+
         //Insertion des lignes filtrées dans la base de données
         if($filteredRows->isNotEmpty()){
             $status = Fonctionnalite::insert($filteredRows->toArray());
-
+            
             if ($status) {
                 // 6. On supprime le fichier uploadé
                 $reader->close(); // On ferme le $reader

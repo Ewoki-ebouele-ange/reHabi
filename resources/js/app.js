@@ -1,4 +1,5 @@
 import './bootstrap';
+import '../css/app.css';
 
 document.getElementById('custom-button').addEventListener('click', function(){
     document.getElementById('file-input').click();

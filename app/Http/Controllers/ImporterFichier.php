@@ -8,6 +8,8 @@ use Spatie\SimpleExcel\SimpleExcelReader;
 use App\Models\Employe;
 use App\Models\Entite;
 use App\Models\Poste;
+use App\Models\Fonctionnalite;
+use App\Models\Profil;
 use Carbon\Carbon;
 
 class ImporterFichier extends Controller
@@ -178,5 +180,98 @@ class ImporterFichier extends Controller
             $row['updated_at'] = $currentTimestamp;
             return $row;
         });
+
+        //Filtrage des lignes dans la base de données
+        $filterRows = $rows->filter(function($row){
+            return !Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists() & !Profil::where('code_profil', $row['code_profil'])->exists();
+        });
+
+        if($filterRows->isNotEmpty()){
+            // Tableau pour stocker les valeurs de la colonne spécifique
+        $codeFonct = [];
+        $codeProf = [];
+
+        // Nom de la colonne que vous souhaitez récupérer
+        $columnName1 = 'code_fonct';
+        $columnName2 = 'code_profil';
+
+        
+
+        // Parcours des lignes et récupération des valeurs de la colonne spécifique
+        foreach ($filterRows as $row) {
+            // Vérifie si la colonne spécifique existe dans la ligne
+            if (isset($row[$columnName1])) {
+                // Ajoute la valeur de la colonne spécifique au tableau
+                $codeFonct[] = $row[$columnName1];
+            }
+            if (isset($row[$columnName2])) {
+                // Ajoute la valeur de la colonne spécifique au tableau
+                $codeProf[] = $row[$columnName2];
+            }
+        }
+
+        $fonct_prof = array([$codeFonct, $codeProf]);    
+        
+        for($i=0; $i<count($fonct_prof[0][0]); $i++){
+            $fonctData[] = [
+                'code_fonct' => $fonct_prof[0][0][$i],
+            //     'code_profil' => $fonct_prof[0][1][$i],
+            // // Ajoutez d'autres colonnes selon votre structure de base de données
+            ];
+            $profData[]= [
+                'code_profil' => $fonct_prof[0][1][$i],
+            ];
+        }
+
+        // $fonct = Fonctionnalite::where('code_fonct', $fonctData[3]['code_fonct'])->first()->profils();
+        // dd($fonct);
+
+        //dd($profData);
+
+        $status1 = Fonctionnalite::insert($fonctData);
+        $status2 = Profil::insert($profData);
+
+        $fon = Fonctionnalite::orderBy('id','asc')->get();
+        $pro = Profil::orderBy('id','asc')->get();
+
+        //dd($fon[4]);
+
+        for($i=1; $i<count($fon)+1; $i++){
+
+            $fonction = $fon[$i-1];
+            $profil = $pro[$i-1];
+
+            $fonction::whereId($i)->first()->profils()->attach($profil->id);
+        }
+
+        //dd($fon);
+
+        // for($i=0; $i<count($fonctData); $i++){
+        //     $fonct = Fonctionnalite::where('code_fonct', $fonctData[$i]['code_fonct']);
+
+        //     //dd($fonct);
+        //     for($j=0; $j<count($profData); $j++){
+        //         $fonct->first()->profils()->attach($profData[$j]['code_profil']);
+        //     }            
+        // }
+        
+
+        if ($status1 & $status2) {
+            
+            $reader->close();
+        }else { abort(500); }
+
+        return redirect()->route('importFP')->with('success', "Importation reussie");
+
+        }
+        
+        else{
+            return redirect()->route('importFP')->with('info', "Aucune nouvelle information à ajouter");
+        }
+
+
+
+        
+        
     }
 }

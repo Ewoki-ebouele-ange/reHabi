@@ -49,6 +49,7 @@
                         <input type="file" name="fichier" id="file-input1" class="hidden">
                         <button type="button" id="custom-button1" class="text-3xl">*</button>
                     </form>
+
                 </div>
             </div>
 
@@ -123,4 +124,4 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> 

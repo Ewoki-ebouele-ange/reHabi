@@ -11,7 +11,9 @@ class Module extends Model
 
     protected $fillable = [
         "code_module",
-        "libelle_module"
+        "libelle_module",
+        'application_id',
+        'code_application',
     ];
 
     public function application(){
