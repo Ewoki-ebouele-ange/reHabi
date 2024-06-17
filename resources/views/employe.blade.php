@@ -128,6 +128,8 @@
 
 @section("script")
     <!-- third party js -->
+    <script src="/assets/libs/jquery/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/bootstrap.min.js"></script>
     <script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
     <script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
@@ -141,8 +143,7 @@
     <script src="/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
     <script src="/assets/libs/pdfmake/build/pdfmake.min.js"></script>
     <script src="/assets/libs/pdfmake/build/vfs_fonts.js"></script>
-    <script src="/assets/libs/jquery/jquery.min.js"></script>
-    <script src="/assets/libs/bootstrap/js/bootstrap.min.js"></script>
+    
     <!-- third party js ends -->
 
     <!-- Datatables init -->
