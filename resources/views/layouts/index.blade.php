@@ -212,6 +212,8 @@
         <script src="/assets/js/vendor.min.js"></script>
         @yield('script')
 
+        
+
 
         <!-- knob plugin -->
         <script src="/assets/libs/jquery-knob/jquery.knob.min.js"></script>

@@ -73,7 +73,7 @@ Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::cl
     Route::get('/add','addi')->name('employe.add');
     Route::post('/add', 'store');
     Route::get('/{employe}/edit', 'edit')->name('employe.edit');
-    Route::post('/{employe}/edit', 'update');
+    Route::post('/{employe}', 'update')->name('employe.update');
     Route::post('/add/import', 'import')->name('employe.import');
     Route::get('/add/import', 'showFormImport')->name('employe.import');
     Route::post('/add/export', 'export')->name('employe.export');

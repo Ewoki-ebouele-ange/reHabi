@@ -32,10 +32,11 @@ class EmployeController extends Controller
             return redirect()->route('employe')->with('success', "L'employé a bien été ajouté");
     }
 
-    public function edit(Employe $employe): View{
-        return view("employe.edit-employe",[
-            'employe'=> $employe
-        ]);
+    public function edit($employ){
+
+        $employe = Employe::find($employ);
+        return response()->json($employe);
+    
     }
 
     public function update(Employe $employe, CreateEmployeRequest $request){
