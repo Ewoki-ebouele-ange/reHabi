@@ -32,11 +32,13 @@ class PosteController extends Controller
             return redirect()->route('poste')->with('success', "Le poste a bien été ajouté");
     }
 
-    public function edit(Poste $poste): View{
-        return view("poste.edit-poste",[
-            'poste'=> $poste
-        ]);
+    public function edit($post){
+
+        $poste = Poste::find($post);
+        return response()->json($poste);
+    
     }
+
 
     public function update(Poste $poste, CreatePosteRequest $request){
         $poste->update($request->validated());

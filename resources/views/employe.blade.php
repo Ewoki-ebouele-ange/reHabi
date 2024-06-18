@@ -2,11 +2,13 @@
 
 @section('link')
      <!-- third party css -->
-     <link href="/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-     <link href="/assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-     <link href="/assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-     <link href="/assets/libs/datatables.net-select-bs5/css//select.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+     <link href="{{asset("/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css")}}" rel="stylesheet" type="text/css" />
+     <link href="{{asset("/assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css")}}" rel="stylesheet" type="text/css" />
+     <link href="{{asset("/assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css")}}" rel="stylesheet" type="text/css" />
+     <link href="{{asset("/assets/libs/datatables.net-select-bs5/css//select.bootstrap5.min.css")}}" rel="stylesheet" type="text/css" />
      <!-- third party css end -->
+     <!-- Sweet Alert-->
+        <link href="{{asset("/assets/libs/sweetalert2/sweetalert2.min.css")}}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -15,10 +17,27 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mt-0 header-title">Buttons example</h4>
-                                        <p class="text-muted font-14 mb-3">
-                                            The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
-                                        </p>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <h4 class="mt-0 header-title">Listes des employés</h4>
+                                            <div class="d-flex gap-2">
+                                                <div class="fileupload add-new-plus">
+                                                        <span data-bs-toggle="modal" data-bs-target="#custom-modal-tree"
+                                                        data-animation="fadein"
+                                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                                            <i class="fe-download"></i>
+                                                        </span>
+                                                </div>
+                                                <div class="fileupload add-new-plus text-center">
+                                                    <span>
+                                                        <a data-bs-toggle="modal" data-bs-target="#custom-modal-two" data-animation="fadein"
+                                                            data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                                            <i class="mdi-plus mdi"></i>
+                                                        </a>
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
     
                                         <table id="datatable" class="table table-striped table-bordered table-hover dt-responsive nowrap">
                                             <thead>
@@ -31,29 +50,22 @@
                                             </thead>
     
     
-                                            <tbody>
+                                            <tbody id="employesList">
                                                 @foreach ($employes as $employe)
                                             <tr>
                                                 <td>{{ $employe->id }}</td>
-                                                <td>{{ $employe->nom }}</td>
-                                                <td>{{ $employe->matricule }}</td>
-                                                <td>
-                                                    
-                                                        <div class="text-center pt-2">
-                                                            <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$employe->id}}" id="openModal"
-                                                                class="btn btn-primary waves-effect waves-light" data-animation="fadein"
-                                                                data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-                                                                <i class="mdi mdi-plus"></i> Add New
-                                                            </a>
-                                                        </div>
-                                                
+                                                <td class="text-truncate" style="max-width: 100px;">{{ $employe->nom }}</td>
+                                                <td class="text-truncate" style="max-width: 100px;">{{ $employe->matricule }}</td>
+                                                <td class="d-flex">
+                                                    <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$employe->id}}"
+                                                        class="btn waves-effect waves-light openModal" data-animation="fadein"
+                                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                                        <i class="fe-edit"></i>
+                                                    </a>
                                                     <form action="{{route('employe.destroy', $employe->id)}}" method="post" class="m-0">
                                                         @csrf
-                                                        
-                                                        {{-- <i class="fa-light fa-delete-left"></i>
-                                                        <i class="fa-duotone fa-pen-to-square"></i> --}}
-                                                        <button type="submit">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                                        <button type="submit" class="btn btn-danger waves-effect waves-light">
+                                                            <i class="fe-trash-2"></i>
                                                         </button>
                                                     </form> 
                                                 </td>
@@ -69,32 +81,76 @@
                         </div>
                     </div>
 
-                    <!-- Modal -->
-    <div class="modal fade" id="custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+ <!-- Modal 1 -->
+ <div class="modal fade" id="custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myCenterModalLabel">Modifier</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="editForm" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label class="form-label" for="nom">Nom de l'employé</label>
+                        <input id="nom" name="nom" type="text" class="form-control">
+                        @error('nom')
+                            {{$message}}
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="matricule">Matricule de l'employé</label>
+                        <input id="matricule" name="matricule" type="text" class="form-control">
+                        @error('matricule')
+                            {{$message}}
+                        @enderror
+                    </div>
+                    <button type="submit" class="btn btn-success waves-effect waves-light me-1" data-bs-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-danger waves-effect waves-light"
+                        data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+                    <!-- Modal 2-->
+    <div class="modal fade" id="custom-modal-two" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myCenterModalLabel">Add New</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                <div class="modal-header d-flex justify-content-between">
+                    <h4 class="modal-title" id="myCenterModalLabel">Ajouter</h4>
+                    <div class="d-flex gap-2">
+                        <div class="fileupload add-new-plus">
+                            <form role="form" id='upload-form' action="{{ route('employe.import') }}"  method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <span><i class="fe-upload"></i></span>
+                                <input type="file" name="fichier" id="file-input" class="upload">
+                            </form>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="editForm" method="POST">
+                    <form role="form" id="addForm" action="{{ route('employe.add') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label" for="nom">Nom de l'employé</label>
-                            <input id="nom" name="nom" type="text" class="form-control">
+                            <input id="nom" name="nom" type="text" class="form-control" value="{{old('nom')}}">
                             @error('nom')
                                 {{$message}}
                             @enderror
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="matricule">Matricule de l'employé</label>
-                            <input id="matricule" name="matricule" type="text" class="form-control">
+                            <input id="matricule" name="matricule" type="text" class="form-control" value="{{old('matricule')}}">
                             @error('matricule')
                                 {{$message}}
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-success waves-effect waves-light me-1" data-bs-toggle="modal" data-bs-target="#success-alert-modal">Save</button>
+                        <button type="submit" class="btn btn-success waves-effect waves-light me-1" data-bs-dismiss="modal">Save</button>
                         <button type="button" class="btn btn-danger waves-effect waves-light"
                             data-bs-dismiss="modal">Cancel</button>
                     </form>
@@ -104,7 +160,36 @@
     </div>
     <!-- /.modal -->
 
-    @if(session()->get('success'))
+                   
+
+    <!-- Modal 3 -->
+    <div class="modal fade" id="custom-modal-tree" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Exporter</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('employe.export') }}" class="d-flex flex-column aligns-items-center">
+                        @csrf
+                        <div class="d-flex flex-row mb-2">
+                        <input type="text" class="form-control col-auto w-75" aria-label="Username" aria-describedby="basic-addon1" name="name" placeholder="Nom de fichier" >
+                            <select name="extension" class="form-select col-auto w-25" aria-label="Default select example" >
+                                <option value="xlsx" >.xlsx</option>
+                                <option value="csv" >.csv</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#success-alert-modal">Exporter</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    
+
         <!-- Success Alert Modal -->
         <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -112,62 +197,206 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <i class="dripicons-checkmark h1 text-white"></i>
-                            <h4 class="mt-2 text-white">Well Done!</h4>
-                            <p class="mt-3 text-white">{{session()->get('success')}}</p>
-                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continue</button>
+                            <h4 class="mt-2 text-white">Reussi!</h4>
+                            <p class="mt-3 text-white" id="success-alert-modal-message"></p>
+                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continuer</button>
                         </div>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->                       
-    @endif
 
+        <!-- Warning Alert Modal -->
+        <div id="warning-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="dripicons-warning h1 text-warning"></i>
+                            <h4 class="mt-2">Information incorrecte</h4>
+                            <p class="mt-3" id="warning-alert-modal-message"></p>
+                            <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">Continue</button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- Danger Alert Modal -->
+        <div id="danger-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content modal-filled bg-danger">
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="dripicons-wrong h1 text-white"></i>
+                            <h4 class="mt-2 text-white">Erreur</h4>
+                            <p class="mt-3 text-white" id="danger-alert-modal-message"></p>
+                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continue</button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     
     
 @endsection
 
 @section("script")
     <!-- third party js -->
-    <script src="/assets/libs/jquery/jquery.min.js"></script>
-    <script src="/assets/libs/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="/assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
-    <script src="/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="/assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
-    <script src="/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="/assets/libs/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="/assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-    <script src="/assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
-    <script src="/assets/libs/pdfmake/build/pdfmake.min.js"></script>
-    <script src="/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="{{asset("/assets/libs/jquery/jquery.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/bootstrap/js/bootstrap.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net/js/jquery.dataTables.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-buttons/js/buttons.html5.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-buttons/js/buttons.flash.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-buttons/js/buttons.print.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/datatables.net-select/js/dataTables.select.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/pdfmake/build/pdfmake.min.js")}}"></script>
+    <script src="{{asset("/assets/libs/pdfmake/build/vfs_fonts.js")}}"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="{{asset("/assets/libs/sweetalert2/sweetalert2.all.min.js")}}"></script>
+
+    <!-- Sweet alert init js-->
+    <script src={{asset("/assets/js/pages/sweet-alerts.init.js")}}></script>
     
     <!-- third party js ends -->
 
     <!-- Datatables init -->
-    <script src="../assets/js/pages/datatables.init.js"></script>
+    <script src="{{asset("/assets/js/pages/datatables.init.js")}}"></script>
 
     <script>
 
         var employeId = null;
 
         $(document).ready(function() {
-  $(document).on('click','#openModal', function (event) {
-    event.preventDefault();
-    employeId = $(this).data('id');
+            $(document).on('click','.openModal', function (event) {
+                event.preventDefault();
+                employeId = $(this).data('id');
 
-    console.log(employeId);
+                $.get('/employe/' + employeId + '/edit', function(data) {
+                $('#editForm').attr('action', '/employe/' + employeId);
+                $('#nom').val(data.nom);
+                $('#matricule').val(data.matricule)
+                });
+            });
 
-    // Fetch item data
-    $.get('/employe/' + employeId + '/edit', function(data) {
-      $('#editForm').attr('action', '/employe/' + employeId);
-      $('#nom').val(data.nom);
-      $('#matricule').val(data.matricule)
-    });
-  });
-});
+
+
+            $('#editForm').on('submit', function(event) {
+                event.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                url: '/employe/' + employeId,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        showAlertModalSuccess(response.message);
+                        updateEmployeList();
+                        $('#custom-modal').modal('hide');
+                    } else {
+                        showAlertModalWarning('Something went wrong. Please try again.');
+                    }
+                },
+                error: function(response) {
+                    showAlertModalError('An error occurred. Please try again.');
+                }
+                });
+            });
+
+            $('#addForm').on('submit', function(event) {
+                event.preventDefault();
+
+                var uploadData = $(this).serialize();
+
+                $.ajax({
+                url: '/employe/add',
+                type: 'POST',
+                data: uploadData,
+                success: function(response) {
+                    if (response.success) {
+                        showAlertModalSuccess(response.message);
+                        updateEmployeList();
+                        $('#custom-modal-two').modal('hide');
+                    } else {
+                        showAlertModalWarning('Something went wrong. Please try again.');
+                    }
+                },
+                error: function(response) {
+                    showAlertModalError('An error occurred. Please try again.');
+                }
+                });
+            });
+
+            
+            function showAlertModalSuccess(message) {
+                $('#success-alert-modal-message').text(message);
+                $('#success-alert-modal').modal('show');
+            }
+
+            function showAlertModalWarning(message) {
+                $('#warning-alert-modal-message').text(message);
+                $('#warning-alert-modal').modal('show');
+            }
+
+            function showAlertModalError(message) {
+                $('#danger-alert-modal-message').text(message);
+                $('#danger-alert-modal').modal('show');
+            }
+
+            function updateEmployeList() {
+                $.ajax({
+                url: '/employe/list', // La route qui renvoie la liste des employés mise à jour
+                type: 'GET',
+                success: function(response) {
+                    $('#employesList').html(response);
+                },
+                error: function() {
+                    showAlertModalError('Failed to reload employe list.');
+                }
+                });
+            }
+
+            // document.getElementById('file-input1').addEventListener('change', function(){
+            //     document.getElementById('upload-form').submit();
+
+            //     $('#upload-form').on('submit', function(event) {
+            //         event.preventDefault();
+
+            //         var uploadData = $(this).serialize();
+
+            //         console.log('upload',uploadData);
+
+            //         $.ajax({
+            //         url: '/employe/import',
+            //         type: 'POST',
+            //         data: uploadData,
+            //         success: function(response) {
+            //             if (response.success) {
+            //                 showAlertModalSuccess(response.message);
+            //                 updateEmployeList();
+            //                 $('#custom-modal-two').modal('hide');
+            //             } else {
+            //                 showAlertModalWarning('Something went wrong. Please try again.');
+            //             }
+            //         },
+            //         error: function(response) {
+            //             showAlertModalError('An error occurred. Please try again.');
+            //         }
+            //         });
+            //     });
+            // });
+
+        });
+
     </script>
 
     

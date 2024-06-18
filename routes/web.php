@@ -70,14 +70,15 @@ Route::post('/admin/users/add', 'Auth\RegisteredUserController@store')->middlewa
 //Employé
 Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::class)->group(function () {
     Route::get('/', 'index')->name('employe');
-    Route::get('/add','addi')->name('employe.add');
-    Route::post('/add', 'store');
+    //Route::get('/add','addi')->name('employe.add');
+    Route::post('/add', 'store')->name('employe.add');
     Route::get('/{employe}/edit', 'edit')->name('employe.edit');
     Route::post('/{employe}', 'update')->name('employe.update');
-    Route::post('/add/import', 'import')->name('employe.import');
-    Route::get('/add/import', 'showFormImport')->name('employe.import');
-    Route::post('/add/export', 'export')->name('employe.export');
-    Route::get('/add/export', 'showFormExport')->name('employe.export');
+    Route::get('/list', 'list')->name('employe.list');
+    Route::post('/import', 'import')->name('employe.import');
+    //Route::get('/import', 'showFormImport')->name('employe.import');
+    Route::post('/export', 'export')->name('employe.export');
+    Route::get('/export', 'showFormExport')->name('employe.export');
     Route::post('/{employe}/delete', 'destroy')->name('employe.destroy');
 
 });
@@ -88,7 +89,7 @@ Route::prefix('/entite')->middleware('auth')->controller(\EntiteController::clas
     Route::get('/add','addi')->name('entite.add');
     Route::post('/add', 'store');
     Route::get('/{entite}/edit', 'edit')->name('entite.edit');
-    Route::post('/{entite}/edit', 'update');
+    Route::post('/{entite}', 'update')->name('entite.update');
     Route::post('/add/import', 'import')->name('entite.import');
     Route::get('/add/import', 'showFormImport')->name('entite.import');
     Route::post('/add/export', 'export')->name('entite.export');
@@ -103,7 +104,7 @@ Route::prefix('/poste')->middleware('auth')->controller(\PosteController::class)
     Route::get('/add','addi')->name('poste.add');
     Route::post('/add', 'store');
     Route::get('/{poste}/edit', 'edit')->name('poste.edit');
-    Route::post('/{poste}/edit', 'update');
+    Route::post('/{poste}', 'update')->name('poste.update');
     Route::post('/add/import', 'import')->name('poste.import');
     Route::get('/add/import', 'showFormImport')->name('poste.import');
     Route::post('/add/export', 'export')->name('poste.export');
@@ -118,7 +119,7 @@ Route::prefix('/application')->middleware('auth')->controller(\ApplicationContro
     Route::get('/add','addi')->name('application.add');
     Route::post('/add', 'store');
     Route::get('/{application}/edit', 'edit')->name('application.edit');
-    Route::post('/{application}/edit', 'update');
+    Route::post('/{application}', 'update')->name('application.update');
     Route::post('/add/import', 'import')->name('application.import');
     Route::get('/add/import', 'showFormImport')->name('application.import');
     Route::post('/add/export', 'export')->name('application.export');
@@ -133,7 +134,7 @@ Route::prefix('/module')->middleware('auth')->controller(\ModuleController::clas
     Route::get('/add','addi')->name('module.add');
     Route::post('/add', 'store');
     Route::get('/{module}/edit', 'edit')->name('module.edit');
-    Route::post('/{module}/edit', 'update');
+    Route::post('/{module}', 'update')->name('module.update');
     Route::post('/add/import', 'import')->name('module.import');
     Route::get('/add/import', 'showFormImport')->name('module.import');
     Route::post('/add/export', 'export')->name('module.export');
@@ -148,7 +149,7 @@ Route::prefix('/fonct')->middleware('auth')->controller(\FonctController::class)
     Route::get('/add','addi')->name('fonct.add');
     Route::post('/add', 'store');
     Route::get('/{fonct}/edit', 'edit')->name('fonct.edit');
-    Route::post('/{fonct}/edit', 'update');
+    Route::post('/{fonct}', 'update')->name('fonct.update');
     Route::post('/add/import', 'import')->name('fonct.import');
     Route::get('/add/import', 'showFormImport')->name('fonct.import');
     Route::post('/add/export', 'export')->name('fonct.export');
@@ -162,7 +163,7 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::get('/add','addi')->name('profil.add');
     Route::post('/add', 'store');
     Route::get('/{profil}/edit', 'edit')->name('profil.edit');
-    Route::post('/{profil}/edit', 'update');
+    Route::post('/{profil}', 'update')->name('profil.update');;
     Route::post('/add/import', 'import')->name('profil.import');
     Route::get('/add/import', 'showFormImport')->name('profil.import');
     Route::post('/add/export', 'export')->name('profil.export');

@@ -32,11 +32,13 @@ class ModuleController extends Controller
             return redirect()->route('module')->with('success', "Le module a bien été ajouté");
     }
 
-    public function edit(Module $module): View{
-        return view("module.edit-module",[
-            'module'=> $module
-        ]);
+    public function edit($mod){
+
+        $module = Module::find($mod);
+        return response()->json($module);
+    
     }
+
 
     public function update(Module $module, CreateModuleRequest $request){
         $module->update($request->validated());

@@ -29,27 +29,35 @@ class EmployeController extends Controller
 
     public function store(CreateEmployeRequest $request){
         $employe = Employe::create($request->validated());
-            return redirect()->route('employe')->with('success', "L'employé a bien été ajouté");
+        return response()->json([
+            'success' => true,
+            'message' => "L'employé a bien été modifié",
+        ]);
+            //return redirect()->route('employe')->with('success', "L'employé a bien été ajouté");
     }
 
     public function edit($employ){
-
         $employe = Employe::find($employ);
         return response()->json($employe);
-    
     }
 
     public function update(Employe $employe, CreateEmployeRequest $request){
         $employe->update($request->validated());
-        return redirect()->route('employe')->with('success', "L'employé a bien été modifié");
+
+        return response()->json([
+            'success' => true,
+            'message' => "L'employé a bien été modifié",
+        ]);
+        //return redirect()->route('employe')->with('success', "L'employé a bien été modifié");
     }
 
-    public function showFormImport(): View {
-        return view('employe.import-employe');
-    }
-
-    public function showFormExport(): View {
-        return view('employe.export-employe');
+    public function list() : View
+    {
+        $employes = Employe::paginate(5);
+        //return view('employe.list', compact('employes'))->render();
+        return view("employe.list", [
+            'employes' => $employes,
+        ]);
     }
 
     public function import(Request $request) {
@@ -89,7 +97,11 @@ class EmployeController extends Controller
                 //File::delete($fichier);
                 // unlink($fichier);
                 // 7. Retour vers le formulaire avec un message $msg
-                return redirect()->route('employe')->with('success', "Importation reussie");
+                return response()->json([
+                    'success' => true,
+                    'message' => "Employé(s) bien ajouté(s)",
+                ]);
+                //return redirect()->route('employe')->with('success', "Importation reussie");
             } else { abort(500); }
         }
         else {
@@ -128,12 +140,13 @@ class EmployeController extends Controller
 
         // 6. Lancer le téléchargement du fichier
         $writer->toBrowser();
+
     }
 
     public function destroy (Employe $employe) {
         $emp = Employe::findOrfail($employe->id);
         $emp->delete();
 
-        return redirect('/employe')->with('success','Employé ' .$emp->nom. ' supprimé avec succès');
+        return redirect()->route('employe')->with('success','Employé ' .$emp->nom. ' supprimé avec succès');
     }
 }

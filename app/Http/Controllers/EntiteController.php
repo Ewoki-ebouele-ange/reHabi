@@ -32,11 +32,13 @@ class EntiteController extends Controller
             return redirect()->route('entite')->with('success', "L'entité a bien été ajoutée");
     }
 
-    public function edit(Entite $entite): View{
-        return view("entite.edit-entite",[
-            'entite'=> $entite
-        ]);
+    public function edit($ent){
+
+        $entite = Entite::find($ent);
+        return response()->json($entite);
+    
     }
+
 
     public function update(Entite $entite, CreateEntiteRequest $request){
         $entite->update($request->validated());

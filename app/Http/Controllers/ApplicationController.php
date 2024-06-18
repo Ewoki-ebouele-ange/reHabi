@@ -32,11 +32,13 @@ class ApplicationController extends Controller
             return redirect()->route('application')->with('success', "Le application a bien été ajouté");
     }
 
-    public function edit(Application $application): View{
-        return view("application.edit-application",[
-            'application'=> $application
-        ]);
+    public function edit($app){
+
+        $application = Application::find($app);
+        return response()->json($application);
+    
     }
+
 
     public function update(Application $application, CreateApplicationRequest $request){
         $application->update($request->validated());

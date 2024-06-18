@@ -33,11 +33,13 @@ class FonctController extends Controller
             return redirect()->route('fonct')->with('success', "La fonctionnalité a bien été ajouté");
     }
 
-    public function edit(Fonctionnalite $fonct): View{
-        return view("fonct.edit-fonct",[
-            'fonct'=> $fonct
-        ]);
+    public function edit($fonction){
+
+        $fonct = Fonctionnalite::find($fonction);
+        return response()->json($fonct);
+    
     }
+
 
     public function update(Fonctionnalite $fonct, CreateFonctRequest $request){
         $fonct->update($request->validated());

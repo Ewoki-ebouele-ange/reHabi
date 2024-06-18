@@ -32,11 +32,13 @@ class ProfilController extends Controller
             return redirect()->route('profil')->with('success', "Le profil a bien été ajouté");
     }
 
-    public function edit(Profil $profil): View{
-        return view("profil.edit-profil",[
-            'profil'=> $profil
-        ]);
+    public function edit($prof){
+
+        $profil = Profil::find($prof);
+        return response()->json($profil);
+    
     }
+
 
     public function update(Profil $profil, CreateProfilRequest $request){
         $profil->update($request->validated());
