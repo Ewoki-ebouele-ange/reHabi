@@ -17,7 +17,7 @@ class EmployeController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $employes = \App\Models\Employe::paginate(5);
+        $employes = \App\Models\Employe::all();
         return view("employe", [
             'employes' => $employes,
         ]);
@@ -51,9 +51,10 @@ class EmployeController extends Controller
         //return redirect()->route('employe')->with('success', "L'employé a bien été modifié");
     }
 
+
     public function list() : View
     {
-        $employes = Employe::paginate(5);
+        $employes = Employe::all();
         //return view('employe.list', compact('employes'))->render();
         return view("employe.list", [
             'employes' => $employes,
@@ -67,7 +68,7 @@ class EmployeController extends Controller
     		'fichier' => 'bail|required|file|mimes:xlsx'
     	]);
     	// 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
-    	$fichier = $request->fichier->move(public_path('storage/'), $request->fichier->hashName());
+    	$fichier = $request->fichier->move(public_path("/storage"), $request->fichier->hashName());
         // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
     	$reader = SimpleExcelReader::create($fichier);
         // On récupère le contenu (les lignes) du fichier
@@ -81,6 +82,7 @@ class EmployeController extends Controller
             $row['updated_at'] = $currentTimestamp;
             return $row;
         });
+
 
         //Filtrage des lignes dans la base de données
         $filteredRows = $rows->filter(function($row){
@@ -97,24 +99,16 @@ class EmployeController extends Controller
                 //File::delete($fichier);
                 // unlink($fichier);
                 // 7. Retour vers le formulaire avec un message $msg
-                return response()->json([
-                    'success' => true,
-                    'message' => "Employé(s) bien ajouté(s)",
-                ]);
-                //return redirect()->route('employe')->with('success', "Importation reussie");
+                // return response()->json([
+                //     'success' => true,
+                //     'message' => "Employé(s) bien ajouté(s)",
+                // ]);
+                return redirect()->route('employe')->with('success', "Importation reussie");
             } else { abort(500); }
         }
         else {
             return redirect()->route('employe')->with('info', "Aucun nouvel employé à importer");
         }
-
-        // On prend 10 lignes
-        /*$reader->take(10);
-
-        // On filtre les lignes en s'assurant que l'adresse email est correcte
-        //$rows = $reader->getRows()->filter(function ($ligne) {
-            return filter_var($ligne['email'], FILTER_VALIDATE_EMAIL) === true;
-        });*/
     }
 
         // Exporter les données
@@ -143,10 +137,17 @@ class EmployeController extends Controller
 
     }
 
-    public function destroy (Employe $employe) {
-        $emp = Employe::findOrfail($employe->id);
-        $emp->delete();
+    public function destroy ($employe) {
 
-        return redirect()->route('employe')->with('success','Employé ' .$emp->nom. ' supprimé avec succès');
+        $emp = Employe::find($employe);
+
+        if ($emp) {
+            $emp->delete();
+            return response()->json(['success' => true, 'message' => "L'employé a bien été supprimé"]);
+        } else {
+            return response()->json(['success' => false, 'message' => "L'employé n'existe pas"]);
+        }
+
+        //return redirect()->route('employe')->with('success','Employé ' .$emp->nom. ' supprimé avec succès');
     }
 }

@@ -9,6 +9,7 @@
      <!-- third party css end -->
      <!-- Sweet Alert-->
         <link href="{{asset("/assets/libs/sweetalert2/sweetalert2.min.css")}}" rel="stylesheet" type="text/css" />
+
 @endsection
 
 @section('content')
@@ -26,6 +27,12 @@
                                                         data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
                                                             <i class="fe-download"></i>
                                                         </span>
+                                                </div>
+                                                <div class="fileupload add-new-plus">
+                                                    <span data-bs-toggle="modal" data-bs-target="#custom-modal-four" data-animation="fadein"
+                                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a" data-bs-dismiss="modal">
+                                                        <i class="fe-upload"></i>
+                                                    </span>
                                                 </div>
                                                 <div class="fileupload add-new-plus text-center">
                                                     <span>
@@ -62,18 +69,14 @@
                                                         data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
                                                         <i class="fe-edit"></i>
                                                     </a>
-                                                    <form action="{{route('employe.destroy', $employe->id)}}" method="post" class="m-0">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-danger waves-effect waves-light">
-                                                            <i class="fe-trash-2"></i>
-                                                        </button>
-                                                    </form> 
+                                                    <button type="button" id="sa-warning" data-id="{{ $employe->id }}" class="btn btn-danger waves-effect waves-light delete-button">
+                                                        <i class="fe-trash-2"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                             @endforeach
                                             </tbody>
                                         </table>
-                                          {{$employes->links()}}
                                     </div>
                                 </div>
                                
@@ -121,15 +124,19 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between">
-                    <h4 class="modal-title" id="myCenterModalLabel">Ajouter</h4>
+                    <h4 class="modal-title" id="myCenterModalLabel">Ajouter un employé</h4>
                     <div class="d-flex gap-2">
-                        <div class="fileupload add-new-plus">
+                        {{-- <div class="fileupload add-new-plus">
+                            <span data-bs-toggle="modal" data-bs-target="#custom-modal-four" class="importModal" data-animation="fadein"
+                                data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a" data-bs-dismiss="modal">
+                                <i class="fe-upload"></i>
+                            </span>
                             <form role="form" id='upload-form' action="{{ route('employe.import') }}"  method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <span><i class="fe-upload"></i></span>
                                 <input type="file" name="fichier" id="file-input" class="upload">
                             </form>
-                        </div>
+                        </div> --}}
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                     </div>
                 </div>
@@ -160,7 +167,28 @@
     </div>
     <!-- /.modal -->
 
-                   
+    <!-- Modal 4 -->
+    <div class="modal fade" id="custom-modal-four" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Ajouter un/plusieurs employé(s)</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form method='POST' action="{{ route('employe.import') }}" class="d-flex flex-column aligns-items-center">
+                        @csrf
+                        <input type="file" name="fichier" class="form-control col-auto w-100 mb-2">
+                        <div class="d-flex flex-row justify-content-between">
+                            <button class="btn btn-success" type="submit">Importer</button>
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->       
 
     <!-- Modal 3 -->
     <div class="modal fade" id="custom-modal-tree" tabindex="-1" role="dialog" aria-hidden="true">
@@ -171,22 +199,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('employe.export') }}" class="d-flex flex-column aligns-items-center">
+                    <form action="{{ route('employe.export') }}" method="POST" class="d-flex flex-column aligns-items-center">
                         @csrf
                         <div class="d-flex flex-row mb-2">
-                        <input type="text" class="form-control col-auto w-75" aria-label="Username" aria-describedby="basic-addon1" name="name" placeholder="Nom de fichier" >
+                            <input type="text" class="form-control col-auto w-75" name="name" placeholder="Nom de fichier" >
                             <select name="extension" class="form-select col-auto w-25" aria-label="Default select example" >
                                 <option value="xlsx" >.xlsx</option>
                                 <option value="csv" >.csv</option>
                             </select>
                         </div>
-                        <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#success-alert-modal">Exporter</button>
+                        <div class="d-flex flex-row justify-content-between">
+                            <button class="btn btn-success" type="submit">Exporter</button>
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    
 
     
 
@@ -261,9 +294,6 @@
 
     <!-- Sweet Alerts js -->
     <script src="{{asset("/assets/libs/sweetalert2/sweetalert2.all.min.js")}}"></script>
-
-    <!-- Sweet alert init js-->
-    <script src={{asset("/assets/js/pages/sweet-alerts.init.js")}}></script>
     
     <!-- third party js ends -->
 
@@ -273,20 +303,27 @@
     <script>
 
         var employeId = null;
+        var deleteEmployeId = null;
 
         $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            //Editer un employé
             $(document).on('click','.openModal', function (event) {
                 event.preventDefault();
                 employeId = $(this).data('id');
 
                 $.get('/employe/' + employeId + '/edit', function(data) {
-                $('#editForm').attr('action', '/employe/' + employeId);
-                $('#nom').val(data.nom);
-                $('#matricule').val(data.matricule)
+                    $('#editForm').attr('action', '/employe/' + employeId);
+                    $('#nom').val(data.nom);
+                    $('#matricule').val(data.matricule)
                 });
             });
-
-
 
             $('#editForm').on('submit', function(event) {
                 event.preventDefault();
@@ -312,6 +349,7 @@
                 });
             });
 
+            //Ajouter un employé
             $('#addForm').on('submit', function(event) {
                 event.preventDefault();
 
@@ -336,25 +374,106 @@
                 });
             });
 
-            
+            // Supprimer un employe
+            $('.delete-button').on('click', function() {
+
+                deleteEmployeId = $(this).data('id');
+
+                console.log('Employe',deleteEmployeId);
+
+                // Utiliser SweetAlert pour la confirmation
+                Swal.fire({
+                title: 'Êtes vous sûr de vouloir supprimer?',
+                text: "Vous ne pourrez pas revenir en arrière !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui, supprimer',
+                cancelButtonText: 'Annuler'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                    url: '/employe/delete/' + deleteEmployeId, // Votre route de suppression
+                    type: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content') // Token CSRF
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                        Swal.fire(
+                            'Supprimé!',
+                            response.message,
+                            'success'
+                        );
+                        updateEmployeList(); // Recharger la liste des employés
+                        } else {
+                        Swal.fire(
+                            'Echoué!',
+                            "Échec de la suppression de l'employé. Veuillez réessayer.",
+                            'error'
+                        );
+                        }
+                    },
+                    error: function() {
+                        Swal.fire(
+                        'Erreur!',
+                        "Une erreur s'est produite. Veuillez réessayer.",
+                        'error'
+                        );
+                    }});
+                }});
+            });
+
+            //Importer les employés
+
+            // $('#importForm').on('submit', function(event) {
+            //     event.preventDefault();
+
+            //     var uploadData = $(this).serialize();
+            //     console.log(uploadData);
+
+            //     $.ajax({
+            //     url: '/employe/add/import',
+            //     type: 'POST',
+            //     data: uploadData,
+            //     success: function(response) {
+            //         if (response.success) {
+            //             showAlertModalSuccess(response.message);
+            //             updateEmployeList();
+            //             $('#custom-modal-two').modal('hide');
+            //         } else {
+            //             showAlertModalWarning('Something went wrong. Please try again.');
+            //         }
+            //     },
+            //     error: function(response) {
+            //         showAlertModalError('An error occurred. Please try again.');
+            //     }
+            //     });
+            // });
+
+            //Alerte de succès
             function showAlertModalSuccess(message) {
                 $('#success-alert-modal-message').text(message);
                 $('#success-alert-modal').modal('show');
             }
 
+            //Alerte d'attention
             function showAlertModalWarning(message) {
                 $('#warning-alert-modal-message').text(message);
                 $('#warning-alert-modal').modal('show');
             }
 
+            //Alerte d'erreur
             function showAlertModalError(message) {
                 $('#danger-alert-modal-message').text(message);
                 $('#danger-alert-modal').modal('show');
             }
 
+            //Mise à jour du tableau
             function updateEmployeList() {
                 $.ajax({
-                url: '/employe/list', // La route qui renvoie la liste des employés mise à jour
+                url: '/employe/list',
                 type: 'GET',
                 success: function(response) {
                     $('#employesList').html(response);
@@ -364,6 +483,8 @@
                 }
                 });
             }
+
+            
 
             // document.getElementById('file-input1').addEventListener('change', function(){
             //     document.getElementById('upload-form').submit();

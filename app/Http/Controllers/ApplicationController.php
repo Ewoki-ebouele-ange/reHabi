@@ -17,7 +17,7 @@ class ApplicationController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $applications = \App\Models\Application::paginate(6);
+        $applications = \App\Models\Application::all();
         return view("application", [
             'applications' => $applications,
         ]);
@@ -27,9 +27,13 @@ class ApplicationController extends Controller
         return view("application.add-application");
     }
 
+
     public function store(CreateApplicationRequest $request){
         $application = Application::create($request->validated());
-            return redirect()->route('application')->with('success', "Le application a bien été ajouté");
+        return response()->json([
+            'success' => true,
+            'message' => "L'application a bien été modifiée",
+        ]);
     }
 
     public function edit($app){
@@ -42,15 +46,19 @@ class ApplicationController extends Controller
 
     public function update(Application $application, CreateApplicationRequest $request){
         $application->update($request->validated());
-        return redirect()->route('application')->with('success', "Le application a bien été modifié");
+        return response()->json([
+            'success' => true,
+            'message' => "L'application a bien été modifiée",
+        ]);
     }
 
-    public function showFormImport(): View {
-        return view('application.import-application');
-    }
-
-    public function showFormExport(): View {
-        return view('application.export-application');
+    public function list() : View
+    {
+        $applications = Application::all();
+        //return view('employe.list', compact('employes'))->render();
+        return view("application.list", [
+            'applications' => $applications,
+        ]);
     }
 
     public function import(Request $request) {
@@ -131,10 +139,13 @@ class ApplicationController extends Controller
         $writer->toBrowser();
     }
 
-    public function destroy (Application $application) {
-        $app = Application::findOrfail($application->id);
-        $app->delete();
-
-        return redirect('/application')->with('success','Application ' .$app->code_application. ' supprimée avec succès');
+    public function destroy ($application) {
+        $app = Application::find($application);
+        if ($app) {
+            $app->delete();
+            return response()->json(['success' => true, 'message' => "L'employé a bien été supprimé"]);
+        } else {
+            return response()->json(['success' => false, 'message' => "L'employé n'existe pas"]);
+        }
     }
 }

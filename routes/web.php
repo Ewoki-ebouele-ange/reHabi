@@ -75,11 +75,11 @@ Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::cl
     Route::get('/{employe}/edit', 'edit')->name('employe.edit');
     Route::post('/{employe}', 'update')->name('employe.update');
     Route::get('/list', 'list')->name('employe.list');
-    Route::post('/import', 'import')->name('employe.import');
-    //Route::get('/import', 'showFormImport')->name('employe.import');
-    Route::post('/export', 'export')->name('employe.export');
-    Route::get('/export', 'showFormExport')->name('employe.export');
-    Route::post('/{employe}/delete', 'destroy')->name('employe.destroy');
+    Route::post('/add/import', 'EmployeController@import')->name('employe.import');
+    //Route::get('/import/get', 'EmployeController@showFormImport')->name('employe.import');
+    Route::post('/add/export', 'export')->name('employe.export');
+    //Route::get('/export', 'showFormExport')->name('employe.export');
+    Route::delete('/delete/{employe}', 'destroy')->name('employe.destroy');
 
 });
 
@@ -116,16 +116,13 @@ Route::prefix('/poste')->middleware('auth')->controller(\PosteController::class)
 //Application
 Route::prefix('/application')->middleware('auth')->controller(\ApplicationController::class)->group(function () {
     Route::get('/', 'index')->name('application');
-    Route::get('/add','addi')->name('application.add');
-    Route::post('/add', 'store');
+    Route::post('/add', 'store')->name('application.add');
     Route::get('/{application}/edit', 'edit')->name('application.edit');
     Route::post('/{application}', 'update')->name('application.update');
-    Route::post('/add/import', 'import')->name('application.import');
-    Route::get('/add/import', 'showFormImport')->name('application.import');
+    Route::get('/list', 'list')->name('application.list');
+    Route::post('/add/import', 'EmployeController@import')->name('application.import');
     Route::post('/add/export', 'export')->name('application.export');
-    Route::get('/add/export', 'showFormExport')->name('application.export');
-    Route::post('/{application}/delete', 'destroy')->name('application.destroy');
-
+    Route::delete('/delete/{application}', 'destroy')->name('application.destroy');
 });
 
 //Module
