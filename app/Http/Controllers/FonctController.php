@@ -18,7 +18,7 @@ class FonctController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $foncts = \App\Models\Fonctionnalite::paginate(6);
+        $foncts = \App\Models\Fonctionnalite::all();
         return view("fonct", [
             'foncts' => $foncts,
         ]);
@@ -30,7 +30,10 @@ class FonctController extends Controller
 
     public function store(CreateFonctRequest $request){
         $fonct = Fonctionnalite::create($request->validated());
-            return redirect()->route('fonct')->with('success', "La fonctionnalité a bien été ajouté");
+        return response()->json([
+            'success' => true,
+            'message' => "La fonctionnalité a bien été ajoutée",
+        ]);
     }
 
     public function edit($fonction){
@@ -43,15 +46,18 @@ class FonctController extends Controller
 
     public function update(Fonctionnalite $fonct, CreateFonctRequest $request){
         $fonct->update($request->validated());
-        return redirect()->route('fonct')->with('success', "La fonctionnalité a bien été modifié");
+        return response()->json([
+            'success' => true,
+            'message' => "La fonctionnalité a bien été modifiée",
+        ]);
     }
 
-    public function showFormImport(): View {
-        return view('fonct.import-fonct');
-    }
-
-    public function showFormExport(): View {
-        return view('fonct.export-fonct');
+    public function list() : View
+    {
+        $foncts = Fonctionnalite::all();
+        return view("fonct.list", [
+            'foncts' => $foncts,
+        ]);
     }
 
     public function import(Request $request) {
@@ -140,10 +146,13 @@ class FonctController extends Controller
         $writer->toBrowser();
     }
 
-    public function destroy (Fonctionnalite $fonct) {
-        $fonction = Fonctionnalite::findOrfail($fonct->id);
-        $fonction->delete();
-
-        return redirect('/fonct')->with('success','Fonctionnalité ' .$fonction->code_fonct. ' supprimée avec succès');
+    public function destroy ($fonct) {
+        $fonc = Fonctionnalite::find($fonct);
+        if ($fonc) {
+            $fonc->delete();
+            return response()->json(['success' => true, 'message' => "La fonctionnalité a bien été supprimée"]);
+        } else {
+            return response()->json(['success' => false, 'message' => "La fonctionnalité n'existe pas"]);
+        }
     }
 }

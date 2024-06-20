@@ -17,7 +17,7 @@ class EntiteController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $entites = \App\Models\Entite::paginate(6);
+        $entites = \App\Models\Entite::all();
         return view("entite", [
             'entites' => $entites,
         ]);
@@ -29,28 +29,33 @@ class EntiteController extends Controller
 
     public function store(CreateEntiteRequest $request){
         $entite = Entite::create($request->validated());
-            return redirect()->route('entite')->with('success', "L'entité a bien été ajoutée");
+        return response()->json([
+            'success' => true,
+            'message' => "L'entité a bien été ajoutée",
+        ]);
     }
 
     public function edit($ent){
-
         $entite = Entite::find($ent);
         return response()->json($entite);
-    
     }
 
 
     public function update(Entite $entite, CreateEntiteRequest $request){
         $entite->update($request->validated());
-        return redirect()->route('entite')->with('success', "L'entité a bien été modifiée");
+        return response()->json([
+            'success' => true,
+            'message' => "L'entité a bien été modifiée",
+        ]);
     }
 
-    public function showFormImport(): View {
-        return view('entite.import-entite');
-    }
-
-    public function showFormExport(): View {
-        return view('entite.export-entite');
+    public function list() : View
+    {
+        $entites = Entite::all();
+        //return view('employe.list', compact('employes'))->render();
+        return view("entite.list", [
+            'entites' => $entites,
+        ]);
     }
 
     public function import(Request $request) {
@@ -130,10 +135,13 @@ class EntiteController extends Controller
         $writer->toBrowser();
     }
 
-    public function destroy (Entite $entite) {
-        $ent = Entite::findOrfail($entite->id);
-        $ent->delete();
-
-        return redirect('/entite')->with('success','Entité ' .$ent->code_entite. ' supprimée avec succès');
+    public function destroy ($entite) {
+        $ent = Entite::find($entite);
+        if ($ent) {
+            $ent->delete();
+            return response()->json(['success' => true, 'message' => "L'entité a bien été supprimée"]);
+        } else {
+            return response()->json(['success' => false, 'message' => "L'entité n'existe pas"]);
+        }
     }
 }

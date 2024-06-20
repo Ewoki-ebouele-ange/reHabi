@@ -97,7 +97,8 @@ class EmployeController extends Controller
                 // 6. On supprime le fichier uploadé
                 $reader->close(); // On ferme le $reader
                 //File::delete($fichier);
-                // unlink($fichier);
+                //gc_collect_cycles();
+                //unlink($fichier);
                 // 7. Retour vers le formulaire avec un message $msg
                 // return response()->json([
                 //     'success' => true,

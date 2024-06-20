@@ -14,77 +14,70 @@
 
 @section('content')
 <div class="container-fluid">
-<div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <h4 class="mt-0 header-title">Listes des employés</h4>
-                                            <div class="d-flex gap-2">
-                                                <div class="fileupload add-new-plus">
-                                                        <span data-bs-toggle="modal" data-bs-target="#custom-modal-tree"
-                                                        data-animation="fadein"
-                                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-                                                            <i class="fe-download"></i>
-                                                        </span>
-                                                </div>
-                                                <div class="fileupload add-new-plus">
-                                                    <span data-bs-toggle="modal" data-bs-target="#custom-modal-four" data-animation="fadein"
-                                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a" data-bs-dismiss="modal">
-                                                        <i class="fe-upload"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="fileupload add-new-plus text-center">
-                                                    <span>
-                                                        <a data-bs-toggle="modal" data-bs-target="#custom-modal-two" data-animation="fadein"
-                                                            data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-                                                            <i class="mdi-plus mdi"></i>
-                                                        </a>
-                                                </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-    
-                                        <table id="datatable" class="table table-striped table-bordered table-hover dt-responsive nowrap">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Nom</th>
-                                                <th>Matricule</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                            </thead>
-    
-    
-                                            <tbody id="employesList">
-                                                @foreach ($employes as $employe)
-                                            <tr>
-                                                <td>{{ $employe->id }}</td>
-                                                <td class="text-truncate" style="max-width: 100px;">{{ $employe->nom }}</td>
-                                                <td class="text-truncate" style="max-width: 100px;">{{ $employe->matricule }}</td>
-                                                <td class="d-flex">
-                                                    <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$employe->id}}"
-                                                        class="btn waves-effect waves-light openModal" data-animation="fadein"
-                                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-                                                        <i class="fe-edit"></i>
-                                                    </a>
-                                                    <button type="button" id="sa-warning" data-id="{{ $employe->id }}" class="btn btn-danger waves-effect waves-light delete-button">
-                                                        <i class="fe-trash-2"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                               
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h4 class="mt-0 header-title">Listes des employés</h4>
+                        <div class="d-flex gap-2">
+                            <div class="fileupload add-new-plus">
+                                    <span data-bs-toggle="modal" data-bs-target="#custom-modal-tree"
+                                    data-animation="fadein"
+                                    data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                        <i class="fe-download"></i>
+                                    </span>
+                            </div>
+                            <div class="fileupload add-new-plus text-center">
+                                <span>
+                                    <a data-bs-toggle="modal" data-bs-target="#custom-modal-two" data-animation="fadein"
+                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                        <i class="fe-user-plus"></i>
+                                    </a>
+                            </span>
                             </div>
                         </div>
                     </div>
+                    
 
- <!-- Modal 1 -->
+                    <table id="datatable" class="table table-striped table-bordered table-hover dt-responsive nowrap">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Matricule</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+
+                        <tbody id="employesList">
+                            @foreach ($employes as $employe)
+                        <tr>
+                            <td>{{ $employe->id }}</td>
+                            <td class="text-truncate" style="max-width: 100px;">{{ $employe->nom }}</td>
+                            <td class="text-truncate" style="max-width: 100px;">{{ $employe->matricule }}</td>
+                            <td class="d-flex">
+                                <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$employe->id}}"
+                                    class="btn waves-effect waves-light openModal" data-animation="fadein"
+                                    data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                    <i class="fe-edit"></i>
+                                </a>
+                                <button type="button" id="sa-warning" data-id="{{ $employe->id }}" class="btn btn-danger waves-effect waves-light delete-button">
+                                    <i class="fe-trash-2"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Modal modifier -->
  <div class="modal fade" id="custom-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -119,24 +112,20 @@
 </div>
 <!-- /.modal -->
 
-                    <!-- Modal 2-->
+                    <!-- Modal ajouter-->
     <div class="modal fade" id="custom-modal-two" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between">
                     <h4 class="modal-title" id="myCenterModalLabel">Ajouter un employé</h4>
                     <div class="d-flex gap-2">
-                        {{-- <div class="fileupload add-new-plus">
-                            <span data-bs-toggle="modal" data-bs-target="#custom-modal-four" class="importModal" data-animation="fadein"
-                                data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a" data-bs-dismiss="modal">
-                                <i class="fe-upload"></i>
-                            </span>
+                         <div class="fileupload add-new-plus">
                             <form role="form" id='upload-form' action="{{ route('employe.import') }}"  method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <span><i class="fe-upload"></i></span>
-                                <input type="file" name="fichier" id="file-input" class="upload">
+                                <input type="file" name="fichier" id="file-input1" class="upload">
                             </form>
-                        </div> --}}
+                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                     </div>
                 </div>
@@ -165,32 +154,9 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal -->  
 
-    <!-- Modal 4 -->
-    <div class="modal fade" id="custom-modal-four" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myCenterModalLabel">Ajouter un/plusieurs employé(s)</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <form method='POST' action="{{ route('employe.import') }}" class="d-flex flex-column aligns-items-center">
-                        @csrf
-                        <input type="file" name="fichier" class="form-control col-auto w-100 mb-2">
-                        <div class="d-flex flex-row justify-content-between">
-                            <button class="btn btn-success" type="submit">Importer</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->       
-
-    <!-- Modal 3 -->
+    <!-- Modal export -->
     <div class="modal fade" id="custom-modal-tree" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -219,57 +185,53 @@
     </div>
     <!-- /.modal -->
 
-    
-
-    
-
-        <!-- Success Alert Modal -->
-        <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content modal-filled bg-success">
-                    <div class="modal-body">
-                        <div class="text-center">
-                            <i class="dripicons-checkmark h1 text-white"></i>
-                            <h4 class="mt-2 text-white">Reussi!</h4>
-                            <p class="mt-3 text-white" id="success-alert-modal-message"></p>
-                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continuer</button>
-                        </div>
+    <!-- Success Alert Modal -->
+    <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-filled bg-success">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="dripicons-checkmark h1 text-white"></i>
+                        <h4 class="mt-2 text-white">Reussi!</h4>
+                        <p class="mt-3 text-white" id="success-alert-modal-message"></p>
+                        <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continuer</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->                       
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->                       
 
-        <!-- Warning Alert Modal -->
-        <div id="warning-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="text-center">
-                            <i class="dripicons-warning h1 text-warning"></i>
-                            <h4 class="mt-2">Information incorrecte</h4>
-                            <p class="mt-3" id="warning-alert-modal-message"></p>
-                            <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">Continue</button>
-                        </div>
+    <!-- Warning Alert Modal -->
+    <div id="warning-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="dripicons-warning h1 text-warning"></i>
+                        <h4 class="mt-2">Information incorrecte</h4>
+                        <p class="mt-3" id="warning-alert-modal-message"></p>
+                        <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">Continue</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-        <!-- Danger Alert Modal -->
-        <div id="danger-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content modal-filled bg-danger">
-                    <div class="modal-body">
-                        <div class="text-center">
-                            <i class="dripicons-wrong h1 text-white"></i>
-                            <h4 class="mt-2 text-white">Erreur</h4>
-                            <p class="mt-3 text-white" id="danger-alert-modal-message"></p>
-                            <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continue</button>
-                        </div>
+    <!-- Danger Alert Modal -->
+    <div id="danger-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-filled bg-danger">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="dripicons-wrong h1 text-white"></i>
+                        <h4 class="mt-2 text-white">Erreur</h4>
+                        <p class="mt-3 text-white" id="danger-alert-modal-message"></p>
+                        <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continue</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     
     
 @endsection
@@ -299,226 +261,7 @@
 
     <!-- Datatables init -->
     <script src="{{asset("/assets/js/pages/datatables.init.js")}}"></script>
-
-    <script>
-
-        var employeId = null;
-        var deleteEmployeId = null;
-
-        $(document).ready(function() {
-
-            $.ajaxSetup({
-                headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            //Editer un employé
-            $(document).on('click','.openModal', function (event) {
-                event.preventDefault();
-                employeId = $(this).data('id');
-
-                $.get('/employe/' + employeId + '/edit', function(data) {
-                    $('#editForm').attr('action', '/employe/' + employeId);
-                    $('#nom').val(data.nom);
-                    $('#matricule').val(data.matricule)
-                });
-            });
-
-            $('#editForm').on('submit', function(event) {
-                event.preventDefault();
-
-                var formData = $(this).serialize();
-
-                $.ajax({
-                url: '/employe/' + employeId,
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    if (response.success) {
-                        showAlertModalSuccess(response.message);
-                        updateEmployeList();
-                        $('#custom-modal').modal('hide');
-                    } else {
-                        showAlertModalWarning('Something went wrong. Please try again.');
-                    }
-                },
-                error: function(response) {
-                    showAlertModalError('An error occurred. Please try again.');
-                }
-                });
-            });
-
-            //Ajouter un employé
-            $('#addForm').on('submit', function(event) {
-                event.preventDefault();
-
-                var uploadData = $(this).serialize();
-
-                $.ajax({
-                url: '/employe/add',
-                type: 'POST',
-                data: uploadData,
-                success: function(response) {
-                    if (response.success) {
-                        showAlertModalSuccess(response.message);
-                        updateEmployeList();
-                        $('#custom-modal-two').modal('hide');
-                    } else {
-                        showAlertModalWarning('Something went wrong. Please try again.');
-                    }
-                },
-                error: function(response) {
-                    showAlertModalError('An error occurred. Please try again.');
-                }
-                });
-            });
-
-            // Supprimer un employe
-            $('.delete-button').on('click', function() {
-
-                deleteEmployeId = $(this).data('id');
-
-                console.log('Employe',deleteEmployeId);
-
-                // Utiliser SweetAlert pour la confirmation
-                Swal.fire({
-                title: 'Êtes vous sûr de vouloir supprimer?',
-                text: "Vous ne pourrez pas revenir en arrière !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Oui, supprimer',
-                cancelButtonText: 'Annuler'
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                    url: '/employe/delete/' + deleteEmployeId, // Votre route de suppression
-                    type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content') // Token CSRF
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                        Swal.fire(
-                            'Supprimé!',
-                            response.message,
-                            'success'
-                        );
-                        updateEmployeList(); // Recharger la liste des employés
-                        } else {
-                        Swal.fire(
-                            'Echoué!',
-                            "Échec de la suppression de l'employé. Veuillez réessayer.",
-                            'error'
-                        );
-                        }
-                    },
-                    error: function() {
-                        Swal.fire(
-                        'Erreur!',
-                        "Une erreur s'est produite. Veuillez réessayer.",
-                        'error'
-                        );
-                    }});
-                }});
-            });
-
-            //Importer les employés
-
-            // $('#importForm').on('submit', function(event) {
-            //     event.preventDefault();
-
-            //     var uploadData = $(this).serialize();
-            //     console.log(uploadData);
-
-            //     $.ajax({
-            //     url: '/employe/add/import',
-            //     type: 'POST',
-            //     data: uploadData,
-            //     success: function(response) {
-            //         if (response.success) {
-            //             showAlertModalSuccess(response.message);
-            //             updateEmployeList();
-            //             $('#custom-modal-two').modal('hide');
-            //         } else {
-            //             showAlertModalWarning('Something went wrong. Please try again.');
-            //         }
-            //     },
-            //     error: function(response) {
-            //         showAlertModalError('An error occurred. Please try again.');
-            //     }
-            //     });
-            // });
-
-            //Alerte de succès
-            function showAlertModalSuccess(message) {
-                $('#success-alert-modal-message').text(message);
-                $('#success-alert-modal').modal('show');
-            }
-
-            //Alerte d'attention
-            function showAlertModalWarning(message) {
-                $('#warning-alert-modal-message').text(message);
-                $('#warning-alert-modal').modal('show');
-            }
-
-            //Alerte d'erreur
-            function showAlertModalError(message) {
-                $('#danger-alert-modal-message').text(message);
-                $('#danger-alert-modal').modal('show');
-            }
-
-            //Mise à jour du tableau
-            function updateEmployeList() {
-                $.ajax({
-                url: '/employe/list',
-                type: 'GET',
-                success: function(response) {
-                    $('#employesList').html(response);
-                },
-                error: function() {
-                    showAlertModalError('Failed to reload employe list.');
-                }
-                });
-            }
-
-            
-
-            // document.getElementById('file-input1').addEventListener('change', function(){
-            //     document.getElementById('upload-form').submit();
-
-            //     $('#upload-form').on('submit', function(event) {
-            //         event.preventDefault();
-
-            //         var uploadData = $(this).serialize();
-
-            //         console.log('upload',uploadData);
-
-            //         $.ajax({
-            //         url: '/employe/import',
-            //         type: 'POST',
-            //         data: uploadData,
-            //         success: function(response) {
-            //             if (response.success) {
-            //                 showAlertModalSuccess(response.message);
-            //                 updateEmployeList();
-            //                 $('#custom-modal-two').modal('hide');
-            //             } else {
-            //                 showAlertModalWarning('Something went wrong. Please try again.');
-            //             }
-            //         },
-            //         error: function(response) {
-            //             showAlertModalError('An error occurred. Please try again.');
-            //         }
-            //         });
-            //     });
-            // });
-
-        });
-
-    </script>
+    <script src="{{asset("/assets/js/employe.js")}}"></script>
 
     
 @endsection

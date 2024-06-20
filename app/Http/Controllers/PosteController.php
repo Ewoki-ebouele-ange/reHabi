@@ -17,7 +17,7 @@ class PosteController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $postes = \App\Models\Poste::paginate(6);
+        $postes = \App\Models\Poste::all();
         return view("poste", [
             'postes' => $postes,
         ]);
@@ -29,28 +29,33 @@ class PosteController extends Controller
 
     public function store(CreatePosteRequest $request){
         $poste = Poste::create($request->validated());
-            return redirect()->route('poste')->with('success', "Le poste a bien été ajouté");
+        return response()->json([
+            'success' => true,
+            'message' => "Le poste a bien été ajouté",
+        ]);
     }
 
     public function edit($post){
-
         $poste = Poste::find($post);
         return response()->json($poste);
-    
     }
 
 
     public function update(Poste $poste, CreatePosteRequest $request){
         $poste->update($request->validated());
-        return redirect()->route('poste')->with('success', "Le poste a bien été modifié");
+        return response()->json([
+            'success' => true,
+            'message' => "Le poste a bien été modifié",
+        ]);
     }
 
-    public function showFormImport(): View {
-        return view('poste.import-poste');
-    }
-
-    public function showFormExport(): View {
-        return view('poste.export-poste');
+    public function list() : View
+    {
+        $postes = Poste::all();
+        //return view('employe.list', compact('employes'))->render();
+        return view("poste.list", [
+            'postes' => $postes,
+        ]);
     }
 
     public function import(Request $request) {
@@ -131,10 +136,13 @@ class PosteController extends Controller
         $writer->toBrowser();
     }
 
-    public function destroy (Poste $poste) {
-        $pos = Poste::findOrfail($poste->id);
-        $pos->delete();
-
-        return redirect('/poste')->with('success','Poste ' .$pos->code_poste. ' supprimé avec succès');
+    public function destroy ($poste) {
+        $post = Poste::find($poste);
+        if ($post) {
+            $post->delete();
+            return response()->json(['success' => true, 'message' => "Le poste a bien été supprimé"]);
+        } else {
+            return response()->json(['success' => false, 'message' => "Le poste n'existe pas"]);
+        }
     }
 }

@@ -17,7 +17,7 @@ class ModuleController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $modules = \App\Models\Module::paginate(6);
+        $modules = \App\Models\Module::all();
         return view("module", [
             'modules' => $modules,
         ]);
@@ -29,28 +29,33 @@ class ModuleController extends Controller
 
     public function store(CreateModuleRequest $request){
         $module = Module::create($request->validated());
-            return redirect()->route('module')->with('success', "Le module a bien été ajouté");
+        return response()->json([
+            'success' => true,
+            'message' => "Le module a bien été ajouté",
+        ]);
     }
 
     public function edit($mod){
-
         $module = Module::find($mod);
         return response()->json($module);
-    
     }
 
 
     public function update(Module $module, CreateModuleRequest $request){
         $module->update($request->validated());
-        return redirect()->route('module')->with('success', "Le module a bien été modifié");
+        return response()->json([
+            'success' => true,
+            'message' => "Le module a bien été modifié",
+        ]);
     }
 
-    public function showFormImport(): View {
-        return view('module.import-module');
-    }
-
-    public function showFormExport(): View {
-        return view('module.export-module');
+    public function list() : View
+    {
+        $modules = Module::all();
+        //return view('employe.list', compact('employes'))->render();
+        return view("module.list", [
+            'modules' => $modules,
+        ]);
     }
 
     public function import(Request $request) {
@@ -141,10 +146,13 @@ class ModuleController extends Controller
         $writer->toBrowser();
     }
 
-    public function destroy (Module $module) {
-        $mod = Module::findOrfail($module->id);
-        $mod->delete();
-
-        return redirect('/module')->with('success','Module ' .$mod->code_module. ' supprimé avec succès');
+    public function destroy ($module) {
+        $mod = Module::find($module);
+        if ($mod) {
+            $mod->delete();
+            return response()->json(['success' => true, 'message' => "Le module a bien été supprimé"]);
+        } else {
+            return response()->json(['success' => false, 'message' => "Le module n'existe pas"]);
+        }
     }
 }

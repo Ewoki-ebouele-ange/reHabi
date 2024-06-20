@@ -159,119 +159,127 @@ class ImporterFichier extends Controller
         
     }
 
-    public function importFonctProfil(Request $request){
-        // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
-    	$this->validate($request, [
-    		'fichier' => 'bail|required|file|mimes:xlsx'
-    	]);
-    	// 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
-    	$fichier = $request->fichier->move(public_path('storage/'), $request->fichier->hashName());
-        // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
-    	$reader = SimpleExcelReader::create($fichier);
-        // On récupère le contenu (les lignes) du fichier
-        $rows = $reader->getRows();
-        // $rows est une Illuminate\Support\LazyCollection
-        //dd($rows->toArray());
 
-        // 4. Ajouter les colonnes `created_at` et `updated_at` à chaque ligne
-        $currentTimestamp = Carbon::now(); // Récupérer le timestamp actuel
-        $rows = $rows->map(function ($row) use ($currentTimestamp) {
-            $row['created_at'] = $currentTimestamp;
-            $row['updated_at'] = $currentTimestamp;
-            return $row;
-        });
+    public function importFonctProfil(Request $request)
+{
+    // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
+    $this->validate($request, [
+        'fichier' => 'bail|required|file|mimes:xlsx'
+    ]);
 
-        //Filtrage des lignes dans la base de données
-        $filterRows = $rows->filter(function($row){
-            return !Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists() & !Profil::where('code_profil', $row['code_profil'])->exists();
-        });
+    // 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
+    $fichier = $request->fichier->move(public_path('storage/'), $request->fichier->hashName());
 
-        if($filterRows->isNotEmpty()){
-            // Tableau pour stocker les valeurs de la colonne spécifique
-        $codeFonct = [];
-        $codeProf = [];
+    // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
+    $reader = SimpleExcelReader::create($fichier);
+    $rows = $reader->getRows();
+    $currentTimestamp = Carbon::now(); // Récupérer le timestamp actuel
 
-        // Nom de la colonne que vous souhaitez récupérer
-        $columnName1 = 'code_fonct';
-        $columnName2 = 'code_profil';
+    $rows = $rows->map(function ($row) use ($currentTimestamp) {
+        $row['created_at'] = $currentTimestamp;
+        $row['updated_at'] = $currentTimestamp;
+        return $row;
+    });
 
-        
+    // Filtrage des lignes existantes dans la base de données
+    // $filteredRows = $rows->filter(function($row) {
+    //     return !Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists() && !Profil::where('code_profil', $row['code_profil'])->exists();
+    // });
 
-        // Parcours des lignes et récupération des valeurs de la colonne spécifique
-        foreach ($filterRows as $row) {
-            // Vérifie si la colonne spécifique existe dans la ligne
-            if (isset($row[$columnName1])) {
-                // Ajoute la valeur de la colonne spécifique au tableau
-                $codeFonct[] = $row[$columnName1];
-            }
-            if (isset($row[$columnName2])) {
-                // Ajoute la valeur de la colonne spécifique au tableau
-                $codeProf[] = $row[$columnName2];
-            }
-        }
+    if ($rows->isNotEmpty()) {
+        foreach ($rows as $row) {
+            // Insérer ou trouver les enregistrements de fonctionnalite et profil
+            $fonctionnalite = Fonctionnalite::firstOrCreate(
+                ['code_fonct' => $row['code_fonct']],
+                ['libelle_fonct' => $row['libelle_fonct']],
+                ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
+            );
 
-        $fonct_prof = array([$codeFonct, $codeProf]);    
-        
-        for($i=0; $i<count($fonct_prof[0][0]); $i++){
-            $fonctData[] = [
-                'code_fonct' => $fonct_prof[0][0][$i],
-            //     'code_profil' => $fonct_prof[0][1][$i],
-            // // Ajoutez d'autres colonnes selon votre structure de base de données
-            ];
-            $profData[]= [
-                'code_profil' => $fonct_prof[0][1][$i],
-            ];
-        }
+            $profil = Profil::firstOrCreate(
+                ['code_profil' => $row['code_profil']],
+                ['libelle_profil' => $row['libelle_profil']],
+                ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
+            );
 
-        // $fonct = Fonctionnalite::where('code_fonct', $fonctData[3]['code_fonct'])->first()->profils();
-        // dd($fonct);
-
-        //dd($profData);
-
-        $status1 = Fonctionnalite::insert($fonctData);
-        $status2 = Profil::insert($profData);
-
-        $fon = Fonctionnalite::orderBy('id','asc')->get();
-        $pro = Profil::orderBy('id','asc')->get();
-
-        //dd($fon[4]);
-
-        for($i=1; $i<count($fon)+1; $i++){
-
-            $fonction = $fon[$i-1];
-            $profil = $pro[$i-1];
-
-            $fonction::whereId($i)->first()->profils()->attach($profil->id);
-        }
-
-        //dd($fon);
-
-        // for($i=0; $i<count($fonctData); $i++){
-        //     $fonct = Fonctionnalite::where('code_fonct', $fonctData[$i]['code_fonct']);
-
-        //     //dd($fonct);
-        //     for($j=0; $j<count($profData); $j++){
-        //         $fonct->first()->profils()->attach($profData[$j]['code_profil']);
-        //     }            
-        // }
-        
-
-        if ($status1 & $status2) {
-            
-            $reader->close();
-        }else { abort(500); }
-
-        return redirect()->route('importFP')->with('success', "Importation reussie");
+            // Associer la fonctionnalite et le profil
+            $profil->fonctionnalites()->syncWithoutDetaching($fonctionnalite->id);
+            $fonctionnalite->profils()->syncWithoutDetaching($profil->id);
 
         }
-        
-        else{
-            return redirect()->route('importFP')->with('info', "Aucune nouvelle information à ajouter");
-        }
 
-
-
-        
-        
+        $reader->close();
+        return redirect()->route('profil')->with('success', "Importation réussie");
+    } else {
+        return redirect()->route('profil')->with('info', "Aucune nouvelle information à ajouter");
     }
+}
+
+public function importAndCompare(Request $request)
+{
+    // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
+    $this->validate($request, [
+        'fichier' => 'bail|required|file|mimes:xlsx'
+    ]);
+
+    // 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
+    $fichier = $request->file('fichier')->move(public_path('storage/'), $request->file('fichier')->hashName());
+
+    // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
+    $reader = SimpleExcelReader::create($fichier);
+    $rows = $reader->getRows();
+    $currentTimestamp = Carbon::now();
+
+    // 4. Initialisation des lignes qui n'existent pas
+    $nonExistingRows = [];
+
+    foreach ($rows as $row) {
+        $fonctionnaliteExists = Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists();
+        $profilExists = Profil::where('code_profil', $row['code_profil'])->exists();
+
+        // 5. Stockage des lignes qui n'existent pas
+        if (!$fonctionnaliteExists || !$profilExists) {
+            $nonExistingRows[] = $row;
+        }
+    }
+
+    // 6. Écriture des lignes qui n'existent pas dans un fichier texte
+    if (!empty($nonExistingRows)) {
+        $diffFilePath = public_path('storage/fic_sorti.txt');
+        $fileContent = "";
+
+        foreach ($nonExistingRows as $row) {
+            $fileContent .= implode("\t", $row) . "\n"; // Utilisation de tabulation comme séparateur
+        }
+
+        file_put_contents($diffFilePath, $fileContent);
+        return response()->download($diffFilePath);
+    } else {
+        return redirect()->route('profil')->with('info', "Toutes les informations existent déjà dans la base de données");
+    }
+
+    // // 4. Initialisation du contenu des différences
+    // $differences = [];
+
+    // foreach ($rows as $row) {
+    //     $fonctionnaliteExists = Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists();
+    //     $profilExists = Profil::where('code_profil', $row['code_profil'])->exists();
+
+    //     // 5. Comparaison des données et stockage des différences
+    //     if (!$fonctionnaliteExists || !$profilExists) {
+    //         $differences[] = "Code Fonctionnalite: " . ($fonctionnaliteExists ? '' : $row['code_fonct']) . " not found. " .
+    //                          "Code Profil: " . ($profilExists ? '' : $row['code_profil']) . " not found.";
+    //     }
+    // }
+
+    // // 6. Écriture des différences dans un fichier texte
+    // if (!empty($differences)) {
+    //     $diffFilePath = public_path('storage/differences.txt');
+    //     file_put_contents($diffFilePath, implode("\n", $differences));
+    //     return response()->download($diffFilePath);
+    // } else {
+    //     return redirect()->route('profil')->with('info', "Aucune différence trouvée");
+    // }
+}
+
+
 }

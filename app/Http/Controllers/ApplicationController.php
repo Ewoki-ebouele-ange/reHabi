@@ -32,7 +32,7 @@ class ApplicationController extends Controller
         $application = Application::create($request->validated());
         return response()->json([
             'success' => true,
-            'message' => "L'application a bien été modifiée",
+            'message' => "L'application a bien été ajoutée",
         ]);
     }
 
@@ -52,8 +52,7 @@ class ApplicationController extends Controller
         ]);
     }
 
-    public function list() : View
-    {
+    public function list() : View {
         $applications = Application::all();
         //return view('employe.list', compact('employes'))->render();
         return view("application.list", [
@@ -98,7 +97,7 @@ class ApplicationController extends Controller
                 //File::delete($fichier);
                 // unlink($fichier);
                 // 7. Retour vers le formulaire avec un message $msg
-                return redirect()->route('application')->with('success', "Importation reussie");
+                //return redirect()->route('application')->with('success', "Importation reussie");
             } else { abort(500); }
         }
         else {
@@ -143,9 +142,9 @@ class ApplicationController extends Controller
         $app = Application::find($application);
         if ($app) {
             $app->delete();
-            return response()->json(['success' => true, 'message' => "L'employé a bien été supprimé"]);
+            return response()->json(['success' => true, 'message' => "L'application a bien été supprimée"]);
         } else {
-            return response()->json(['success' => false, 'message' => "L'employé n'existe pas"]);
+            return response()->json(['success' => false, 'message' => "L'application n'existe pas"]);
         }
     }
 }

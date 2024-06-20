@@ -70,46 +70,38 @@ Route::post('/admin/users/add', 'Auth\RegisteredUserController@store')->middlewa
 //Employé
 Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::class)->group(function () {
     Route::get('/', 'index')->name('employe');
-    //Route::get('/add','addi')->name('employe.add');
     Route::post('/add', 'store')->name('employe.add');
     Route::get('/{employe}/edit', 'edit')->name('employe.edit');
     Route::post('/{employe}', 'update')->name('employe.update');
     Route::get('/list', 'list')->name('employe.list');
     Route::post('/add/import', 'EmployeController@import')->name('employe.import');
-    //Route::get('/import/get', 'EmployeController@showFormImport')->name('employe.import');
     Route::post('/add/export', 'export')->name('employe.export');
-    //Route::get('/export', 'showFormExport')->name('employe.export');
     Route::delete('/delete/{employe}', 'destroy')->name('employe.destroy');
-
 });
 
 //Entité
 Route::prefix('/entite')->middleware('auth')->controller(\EntiteController::class)->group(function () {
     Route::get('/', 'index')->name('entite');
-    Route::get('/add','addi')->name('entite.add');
-    Route::post('/add', 'store');
+    Route::post('/add', 'store')->name('entite.add');
     Route::get('/{entite}/edit', 'edit')->name('entite.edit');
     Route::post('/{entite}', 'update')->name('entite.update');
-    Route::post('/add/import', 'import')->name('entite.import');
-    Route::get('/add/import', 'showFormImport')->name('entite.import');
+    Route::get('/list', 'list')->name('entite.list');
+    Route::post('/add/import', 'EntiteController@import')->name('entite.import');
     Route::post('/add/export', 'export')->name('entite.export');
-    Route::get('/add/export', 'showFormExport')->name('entite.export');
-    Route::post('/{entite}/delete', 'destroy')->name('entite.destroy');
+    Route::delete('/delete/{entite}', 'destroy')->name('entite.destroy');
 
 });
 
 //Poste
 Route::prefix('/poste')->middleware('auth')->controller(\PosteController::class)->group(function () {
     Route::get('/', 'index')->name('poste');
-    Route::get('/add','addi')->name('poste.add');
-    Route::post('/add', 'store');
+    Route::post('/add', 'store')->name('poste.add');
     Route::get('/{poste}/edit', 'edit')->name('poste.edit');
     Route::post('/{poste}', 'update')->name('poste.update');
-    Route::post('/add/import', 'import')->name('poste.import');
-    Route::get('/add/import', 'showFormImport')->name('poste.import');
+    Route::get('/list', 'list')->name('poste.list');
+    Route::post('/add/import', 'PosteController@import')->name('poste.import');
     Route::post('/add/export', 'export')->name('poste.export');
-    Route::get('/add/export', 'showFormExport')->name('poste.export');
-    Route::post('/{poste}/delete', 'destroy')->name('poste.destroy');
+    Route::delete('/delete/{poste}', 'destroy')->name('poste.destroy');
 
 });
 
@@ -120,7 +112,7 @@ Route::prefix('/application')->middleware('auth')->controller(\ApplicationContro
     Route::get('/{application}/edit', 'edit')->name('application.edit');
     Route::post('/{application}', 'update')->name('application.update');
     Route::get('/list', 'list')->name('application.list');
-    Route::post('/add/import', 'EmployeController@import')->name('application.import');
+    Route::post('/add/import', 'ApplicationController@import')->name('application.import');
     Route::post('/add/export', 'export')->name('application.export');
     Route::delete('/delete/{application}', 'destroy')->name('application.destroy');
 });
@@ -128,47 +120,42 @@ Route::prefix('/application')->middleware('auth')->controller(\ApplicationContro
 //Module
 Route::prefix('/module')->middleware('auth')->controller(\ModuleController::class)->group(function () {
     Route::get('/', 'index')->name('module');
-    Route::get('/add','addi')->name('module.add');
-    Route::post('/add', 'store');
+    Route::post('/add', 'store')->name('module.add');
     Route::get('/{module}/edit', 'edit')->name('module.edit');
     Route::post('/{module}', 'update')->name('module.update');
-    Route::post('/add/import', 'import')->name('module.import');
-    Route::get('/add/import', 'showFormImport')->name('module.import');
+    Route::get('/list', 'list')->name('module.list');
+    Route::post('/add/import', 'ModuleController@import')->name('module.import');
     Route::post('/add/export', 'export')->name('module.export');
-    Route::get('/add/export', 'showFormExport')->name('module.export');
-    Route::post('/{module}/delete', 'destroy')->name('module.destroy');
+    Route::delete('/delete/{module}', 'destroy')->name('module.destroy');
 
 });
 
 //Fonctionnalité
 Route::prefix('/fonct')->middleware('auth')->controller(\FonctController::class)->group(function () {
     Route::get('/', 'index')->name('fonct');
-    Route::get('/add','addi')->name('fonct.add');
-    Route::post('/add', 'store');
+    Route::post('/add', 'store')->name('fonct.add');
     Route::get('/{fonct}/edit', 'edit')->name('fonct.edit');
     Route::post('/{fonct}', 'update')->name('fonct.update');
-    Route::post('/add/import', 'import')->name('fonct.import');
-    Route::get('/add/import', 'showFormImport')->name('fonct.import');
+    Route::get('/list', 'list')->name('fonct.list');
+    Route::post('/add/import', 'FonctController@import')->name('fonct.import');
     Route::post('/add/export', 'export')->name('fonct.export');
-    Route::get('/add/export', 'showFormExport')->name('fonct.export');
-    Route::post('/{fonct}/delete', 'destroy')->name('fonct.destroy');
+    Route::delete('/delete/{fonct}', 'destroy')->name('fonct.destroy');
 });
 
 //Profil
 Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::class)->group(function () {
     Route::get('/', 'index')->name('profil');
-    Route::get('/add','addi')->name('profil.add');
-    Route::post('/add', 'store');
+    Route::post('/add', 'store')->name('profil.add');
     Route::get('/{profil}/edit', 'edit')->name('profil.edit');
-    Route::post('/{profil}', 'update')->name('profil.update');;
-    Route::post('/add/import', 'import')->name('profil.import');
-    Route::get('/add/import', 'showFormImport')->name('profil.import');
+    Route::post('/{profil}', 'update')->name('profil.update');
+    Route::get('/list', 'list')->name('profil.list');
+    Route::post('/add/import', 'ProfilController@import')->name('profil.import');
     Route::post('/add/export', 'export')->name('profil.export');
-    Route::get('/add/export', 'showFormExport')->name('profil.export');
-    Route::post('/{profil}/delete', 'destroy')->name('profil.destroy');
+    Route::delete('/delete/{profil}', 'destroy')->name('profil.destroy');
 });
 
 //importer fichier
 Route::post('/employe', 'ImporterFichier@import')->name('importEEP');
-Route::post('/profil', 'ImporterFichier@importFonctProfil')->name('importFP');
+Route::post('/profil/add/importFP', 'ImporterFichier@importFonctProfil')->name('importFP');
+Route::post('/profil/add/importIC', 'ImporterFichier@importAndCompare')->name('importIC');
 //Route::get('/importer', 'ImporterFichier@import')->name('import');

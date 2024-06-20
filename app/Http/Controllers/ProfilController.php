@@ -17,7 +17,7 @@ class ProfilController extends Controller
     public function index() : View {
         //dd(Auth::user());
 
-        $profils = \App\Models\Profil::paginate(6);
+        $profils = \App\Models\Profil::all();
         return view("profil", [
             'profils' => $profils,
         ]);
@@ -29,7 +29,10 @@ class ProfilController extends Controller
 
     public function store(CreateProfilRequest $request){
         $profil = Profil::create($request->validated());
-            return redirect()->route('profil')->with('success', "Le profil a bien été ajouté");
+        return response()->json([
+            'success' => true,
+            'message' => "Le profil a bien été ajouté",
+        ]);
     }
 
     public function edit($prof){
@@ -42,15 +45,19 @@ class ProfilController extends Controller
 
     public function update(Profil $profil, CreateProfilRequest $request){
         $profil->update($request->validated());
-        return redirect()->route('profil')->with('success', "Le profil a bien été modifié");
+        return response()->json([
+            'success' => true,
+            'message' => "Le profil a bien été modifié",
+        ]);
     }
 
-    public function showFormImport(): View {
-        return view('profil.import-profil');
-    }
-
-    public function showFormExport(): View {
-        return view('profil.export-profil');
+    public function list() : View
+    {
+        $profils = Profil::all();
+        //return view('employe.list', compact('employes'))->render();
+        return view("profil.list", [
+            'profils' => $profils,
+        ]);
     }
 
     public function import(Request $request) {
@@ -136,10 +143,13 @@ class ProfilController extends Controller
         $writer->toBrowser();
     }
 
-    public function destroy (Profil $profil) {
-        $prof = Profil::findOrfail($profil->id);
-        $prof->delete();
-
-        return redirect('/profil')->with('success','Profil ' .$prof->code_profil. ' supprimé avec succès');
+    public function destroy ($profil) {
+        $prof = Profil::find($profil);
+        if ($prof) {
+            $prof->delete();
+            return response()->json(['success' => true, 'message' => "Le profil a bien été supprimé"]);
+        } else {
+            return response()->json(['success' => false, 'message' => "Le profil n'existe pas"]);
+        }
     }
 }
