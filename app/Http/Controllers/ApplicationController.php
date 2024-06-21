@@ -88,8 +88,8 @@ class ApplicationController extends Controller
         });
 
         //Insertion des lignes filtrées dans la base de données
-        if($filteredRows->isNotEmpty()){
-            $status = Application::insert($filteredRows->toArray());
+        if($rows->isNotEmpty()){
+            $status = Application::firstOrCreate($rows->toArray());
 
             if ($status) {
                 // 6. On supprime le fichier uploadé

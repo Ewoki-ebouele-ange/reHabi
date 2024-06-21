@@ -12,7 +12,6 @@ class Fonctionnalite extends Model
     protected $fillable = [
         'code_fonct',
         'libelle_fonct',
-        'module_id',
         'code_module'
     ];
 

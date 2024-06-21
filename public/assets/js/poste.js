@@ -118,7 +118,7 @@ $(document).ready(function() {
         }});
     });
 
-    //Importer les applications
+    //Importer les poste
     document.getElementById('file-input1').addEventListener('change', function(){
         document.getElementById('upload-form').submit().addEventListener('click', function(e){
         e.preventDefault();
@@ -134,6 +134,33 @@ $(document).ready(function() {
                 showAlertModalSuccess(response.message);
                 updateEmployeList();
                 $('#custom-modal-two').modal('hide');
+            } else {
+                showAlertModalWarning('Something went wrong. Please try again.');
+            }
+        },
+        error: function(response) {
+            showAlertModalError('An error occurred. Please try again.');
+        }
+        });
+        });
+    });
+
+    //Importer les profils et fonctions
+    document.getElementById('file-input2').addEventListener('change', function(){
+        document.getElementById('upload-form2').submit().addEventListener('click', function(e){
+        e.preventDefault();
+
+        var uploadData = $(this).serialize();
+
+        $.ajax({
+        url: '/poste/add/importPP',
+        type: 'POST',
+        data: uploadData,
+        success: function(response) {
+            if (response.success) {
+                showAlertModalSuccess(response.message);
+                updatePostList();
+                //$('#custom-modal-two').modal('hide');
             } else {
                 showAlertModalWarning('Something went wrong. Please try again.');
             }

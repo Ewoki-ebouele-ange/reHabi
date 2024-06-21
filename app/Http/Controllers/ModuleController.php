@@ -80,12 +80,6 @@ class ModuleController extends Controller
             return $row;
         });
 
-        $uniqueElements = $rows->map(function ($row) {
-            return $row['code_module'];
-        })->unique()->values()->all();
-
-        //dd($uniqueElements);
-
         //Filtrage des lignes dans la base de données
         $filteredRows = $rows->filter(function($row){
             return ! Module::where('code_module', $row['code_module'])->exists();
@@ -96,8 +90,8 @@ class ModuleController extends Controller
         // });
 
         //Insertion des lignes filtrées dans la base de données
-        if($filteredRows->isNotEmpty()){
-            $status = Module::insert($filteredRows->toArray());
+        if($rows->isNotEmpty()){
+            $status = Module::firstOrCreate($rows->toArray());
 
             if ($status) {
                 // 6. On supprime le fichier uploadé

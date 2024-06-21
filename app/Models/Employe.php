@@ -11,6 +11,11 @@ class Employe extends Model
 
     protected $fillable = [
         "nom",
-        "matricule"
+        "matricule",
+        "code_poste"
     ];
+
+    public function poste(){
+        return $this->belongsTo(Poste::class,'poste_id');
+    }
 }

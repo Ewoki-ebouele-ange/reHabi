@@ -86,8 +86,8 @@ class EntiteController extends Controller
         });
 
         //Insertion des lignes filtrées dans la base de données
-        if($filteredRows->isNotEmpty()){
-            $status = Entite::insert($filteredRows->toArray());
+        if($rows->isNotEmpty()){
+            $status = Entite::firstOrCreate($rows->toArray());
 
             if ($status) {
                 // 6. On supprime le fichier uploadé

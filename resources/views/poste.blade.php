@@ -34,6 +34,13 @@
                                     </a>
                             </span>
                             </div>
+                            <div class="fileupload add-new-plus">
+                                <form role="form" id='upload-form2' action="{{ route('importPP') }}"  method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <span><i class="mdi-plus mdi"></i></span>
+                                    <input type="file" name="fichier" id="file-input2" class="upload">
+                                </form>
+                            </div>
                         </div>
                     </div>
                     

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('postes', function (Blueprint $table) {
-            $table->id();
-            $table->string('code_poste')->unique();
-            $table->string('libelle_poste');
-            $table->timestamps();
+        Schema::create('profil__poste', function (Blueprint $table) {
+            $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
+            $table->foreignId('poste_id')->constrained('postes')->onDelete('cascade');
+
+            $table->primary(['profil_id','poste_id']);
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('postes');
+        Schema::dropIfExists('profil__poste');
     }
 };

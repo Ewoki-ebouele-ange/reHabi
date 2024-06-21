@@ -15,7 +15,6 @@ return new class extends Migration
             $table->foreignId('fonctionnalite_id')->constrained('fonctionnalites')->onDelete('cascade');
             $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
 
-
             $table->primary(['fonctionnalite_id','profil_id']);
         });
     }

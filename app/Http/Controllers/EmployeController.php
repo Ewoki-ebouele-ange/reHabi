@@ -90,8 +90,8 @@ class EmployeController extends Controller
         });
 
         //Insertion des lignes filtrées dans la base de données
-        if($filteredRows->isNotEmpty()){
-            $status = Employe::insert($filteredRows->toArray());
+        if($rows->isNotEmpty()){
+            $status = Employe::firstOrCreate($rows->toArray());
 
             if ($status) {
                 // 6. On supprime le fichier uploadé

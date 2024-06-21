@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('modules', function (Blueprint $table) {
+        Schema::create('fonctionnalites', function (Blueprint $table) {
             $table->id();
-            $table->string('code_module')->unique();
-            $table->string('libelle_module');
-            $table->foreignId('application_id')->nullabe()->constrained('applications')->onDelete('cascade');
-            $table->string('code_application');
+            $table->string('code_fonct')->unique();
+            $table->string('libelle_fonct')->nullable();
+            $table->string('code_module');
             $table->timestamps();
+
+            $table->foreign('code_module')->nullable()->references('code_module')->on('modules')->onDelete('cascade');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('fonctionnalites');
     }
 };
