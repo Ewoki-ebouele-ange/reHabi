@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
             $table->string('code_module')->unique();
-            $table->string('libelle_module');
-            $table->string('code_application');
+            $table->string('libelle_module')->nullable();
+            $table->foreignId('application_id')->nullable()->constrained('applications')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('code_application')->nullable()->references('code_application')->on('applications')->onDelete('cascade');
         });
     }
 

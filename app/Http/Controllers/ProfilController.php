@@ -152,4 +152,22 @@ class ProfilController extends Controller
             return response()->json(['success' => false, 'message' => "Le profil n'existe pas"]);
         }
     }
+
+    public function fonctionnalites ($profil) {
+        $prof = Profil::find($profil);
+        $foncts = $prof->fonctionnalites()->get();
+
+        return view("fonct", [
+            'foncts' => $foncts,
+        ]);
+    }
+
+    public function postes ($profil) {
+        $prof = Profil::find($profil);
+        $postes = $prof->postes()->get();
+
+        return view("poste", [
+            'postes' => $postes,
+        ]);
+    }
 }

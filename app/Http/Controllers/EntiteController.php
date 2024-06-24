@@ -144,4 +144,22 @@ class EntiteController extends Controller
             return response()->json(['success' => false, 'message' => "L'entité n'existe pas"]);
         }
     }
+
+    public function postes ($entite) {
+        $ent = Entite::find($entite);
+        $postes = $ent->postes()->get();
+
+        return view("poste", [
+            'postes' => $postes,
+        ]);
+    }
+
+    public function employes ($entite) {
+        $ent = Entite::find($entite);
+        $employes = $ent->employes()->get();
+
+        return view("employe", [
+            'employes' => $employes,
+        ]);
+    }
 }

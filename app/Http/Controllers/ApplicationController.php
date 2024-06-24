@@ -147,4 +147,22 @@ class ApplicationController extends Controller
             return response()->json(['success' => false, 'message' => "L'application n'existe pas"]);
         }
     }
+
+    public function modules ($application) {
+        $app = Application::find($application);
+        $modules = $app->modules()->get();
+
+        return view("module", [
+            'modules' => $modules,
+        ]);
+    }
+
+    public function fonctionnalites ($application) {
+        $app = Application::find($application);
+        $foncts = $app->fonctionnalites()->get();
+
+        return view("fonct", [
+            'foncts' => $foncts,
+        ]);
+    }
 }

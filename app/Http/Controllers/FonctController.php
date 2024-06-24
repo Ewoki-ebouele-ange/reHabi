@@ -155,4 +155,22 @@ class FonctController extends Controller
             return response()->json(['success' => false, 'message' => "La fonctionnalité n'existe pas"]);
         }
     }
+
+    public function module ($fonct) {
+        $fon = Fonctionnalite::find($fonct);
+        $modules = $fon->module()->get();
+
+        return view("module", [
+            'modules' => $modules,
+        ]);
+    }
+
+    public function profils ($fonct) {
+        $fon = Fonctionnalite::find($fonct);
+        $profils = $fon->profils()->get();
+
+        return view("profil", [
+            'profils' => $profils,
+        ]);
+    }
 }

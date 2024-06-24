@@ -12,6 +12,7 @@ class Employe extends Model
     protected $fillable = [
         "nom",
         "matricule",
+        "poste_id",
         "code_poste"
     ];
 

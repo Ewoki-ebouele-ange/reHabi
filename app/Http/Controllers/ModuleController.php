@@ -49,8 +49,7 @@ class ModuleController extends Controller
         ]);
     }
 
-    public function list() : View
-    {
+    public function list() : View{
         $modules = Module::all();
         //return view('employe.list', compact('employes'))->render();
         return view("module.list", [
@@ -148,5 +147,23 @@ class ModuleController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => "Le module n'existe pas"]);
         }
+    }
+
+    public function app ($module) {
+        $mod = Module::find($module);
+        $applications = $mod->application()->get();
+
+        return view("application", [
+            'applications' => $applications,
+        ]);
+    }
+
+    public function fonctionnalites ($module) {
+        $mod = Module::find($module);
+        $foncts = $mod->fonctionnalites()->get();
+
+        return view("fonct", [
+            'foncts' => $foncts,
+        ]);
     }
 }

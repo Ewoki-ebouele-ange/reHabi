@@ -20,5 +20,8 @@ class Profil extends Model
         return $this->belongsToMany(Fonctionnalite::class);
     }
 
-    
+    public function postes(){
+        return $this->belongsToMany(Poste::class);
+    }
+
 }

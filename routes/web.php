@@ -77,6 +77,8 @@ Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::cl
     Route::post('/add/import', 'EmployeController@import')->name('employe.import');
     Route::post('/add/export', 'export')->name('employe.export');
     Route::delete('/delete/{employe}', 'destroy')->name('employe.destroy');
+    Route::get('/{employe}/poste', 'poste')->name('employe.poste');
+
 });
 
 //Entité
@@ -89,7 +91,8 @@ Route::prefix('/entite')->middleware('auth')->controller(\EntiteController::clas
     Route::post('/add/import', 'EntiteController@import')->name('entite.import');
     Route::post('/add/export', 'export')->name('entite.export');
     Route::delete('/delete/{entite}', 'destroy')->name('entite.destroy');
-
+    Route::get('/{entite}/postes', 'postes')->name('entite.postes');
+    Route::get('/{entite}/employes', 'employes')->name('entite.employes');
 });
 
 //Poste
@@ -102,7 +105,9 @@ Route::prefix('/poste')->middleware('auth')->controller(\PosteController::class)
     Route::post('/add/import', 'PosteController@import')->name('poste.import');
     Route::post('/add/export', 'export')->name('poste.export');
     Route::delete('/delete/{poste}', 'destroy')->name('poste.destroy');
-
+    Route::get('/{poste}/entite', 'entite')->name('poste.entite');
+    Route::get('/{poste}/employes', 'employes')->name('poste.employes');
+    Route::get('/{poste}/profils', 'profils')->name('poste.profils');
 });
 
 //Application
@@ -115,6 +120,8 @@ Route::prefix('/application')->middleware('auth')->controller(\ApplicationContro
     Route::post('/add/import', 'ApplicationController@import')->name('application.import');
     Route::post('/add/export', 'export')->name('application.export');
     Route::delete('/delete/{application}', 'destroy')->name('application.destroy');
+    Route::get('/{application}/modules', 'modules')->name('application.modules');
+    Route::get('/{application}/fonctionnalites', 'fonctionnalites')->name('application.fonctionnalites');
 });
 
 //Module
@@ -127,7 +134,8 @@ Route::prefix('/module')->middleware('auth')->controller(\ModuleController::clas
     Route::post('/add/import', 'ModuleController@import')->name('module.import');
     Route::post('/add/export', 'export')->name('module.export');
     Route::delete('/delete/{module}', 'destroy')->name('module.destroy');
-
+    Route::get('/{module}/fonctionnalites', 'fonctionnalites')->name('module.fonctionnalites');
+    Route::get('/{module}/application', 'app')->name('module.app');
 });
 
 //Fonctionnalité
@@ -140,6 +148,8 @@ Route::prefix('/fonct')->middleware('auth')->controller(\FonctController::class)
     Route::post('/add/import', 'FonctController@import')->name('fonct.import');
     Route::post('/add/export', 'export')->name('fonct.export');
     Route::delete('/delete/{fonct}', 'destroy')->name('fonct.destroy');
+    Route::get('/{fonct}/module', 'module')->name('fonct.module');
+    Route::get('/{fonct}/profils', 'profils')->name('fonct.profils');
 });
 
 //Profil
@@ -152,10 +162,12 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::post('/add/import', 'ProfilController@import')->name('profil.import');
     Route::post('/add/export', 'export')->name('profil.export');
     Route::delete('/delete/{profil}', 'destroy')->name('profil.destroy');
+    Route::get('/{profil}/fonctionnalites', 'fonctionnalites')->name('profil.fonctionnalites');
+    Route::get('/{profil}/postes', 'postes')->name('profil.postes');
 });
 
 //importer fichier
-Route::post('/employe', 'ImporterFichier@import')->name('importEEP');
+Route::post('/poste/add/importEEP', 'ImporterFichier@import')->name('importEEP');
 Route::post('/profil/add/importFP', 'ImporterFichier@importFonctProfil')->name('importFP');
 Route::post('/poste/add/importPP', 'ImporterFichier@importProfilPoste')->name('importPP');
 Route::post('/profil/add/importIC', 'ImporterFichier@importAndCompare')->name('importIC');

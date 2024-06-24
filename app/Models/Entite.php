@@ -13,4 +13,12 @@ class Entite extends Model
         "code_entite",
         "libelle_entite"
     ];
+
+    public function postes(){
+        return $this->hasMany(Poste::class);
+    }
+
+    public function employes(){
+        return $this->hasManyThrough(Employe::class, Poste::class);
+    }
 }

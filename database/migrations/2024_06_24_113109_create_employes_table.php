@@ -16,11 +16,9 @@ class CreateEmployesTable extends Migration
         Schema::create('employes', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('matricule')->unique();
+            $table->string('matricule')->unique()->nullable();
+            $table->foreignId('poste_id')->nullable()->constrained('postes')->onDelete('cascade');
             $table->timestamps();
-            $table->string('code_poste');
-            
-            $table->foreign('code_poste')->nullable()->references('code_poste')->on('postes')->onDelete('cascade');
         });
     }
 

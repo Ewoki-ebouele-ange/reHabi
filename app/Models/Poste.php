@@ -12,6 +12,7 @@ class Poste extends Model
     protected $fillable = [
         "code_poste",
         "libelle_poste",
+        "entite_id",
         "code_entite"
     ];
 

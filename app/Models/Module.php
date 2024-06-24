@@ -12,6 +12,7 @@ class Module extends Model
     protected $fillable = [
         "code_module",
         "libelle_module",
+        'applicattion_id',
         'code_application',
     ];
 

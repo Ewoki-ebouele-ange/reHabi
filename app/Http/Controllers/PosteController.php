@@ -123,7 +123,7 @@ class PosteController extends Controller
     	// 2. Le nom du fichier avec l'extension : .xlsx ou .csv
     	$file_name = $request->name.".".$request->extension;
 
-    	// 3. On récupère données de la table "clients"
+    	// 3. On récupère données de la table "postes"
     	$postes = Poste::select("code_poste", "libelle_poste")->get();
 
     	// 4. $writer : Objet Spatie\SimpleExcel\SimpleExcelWriter
@@ -144,5 +144,32 @@ class PosteController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => "Le poste n'existe pas"]);
         }
+    }
+
+    public function entite ($poste) {
+        $post = Poste::find($poste);
+        $entites = $post->entite()->get();
+
+        return view("entite", [
+            'entites' => $entites,
+        ]);
+    }
+
+    public function employes ($poste) {
+        $post = Poste::find($poste);
+        $employes = $post->employes()->get();
+
+        return view("employe", [
+            'employes' => $employes,
+        ]);
+    }
+
+    public function profils ($poste) {
+        $post = Poste::find($poste);
+        $profils = $post->profils()->get();
+
+        return view("profil", [
+            'profils' => $profils,
+        ]);
     }
 }
