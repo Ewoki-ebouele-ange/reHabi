@@ -13,7 +13,6 @@ class Poste extends Model
         "code_poste",
         "libelle_poste",
         "entite_id",
-        "code_entite"
     ];
 
     

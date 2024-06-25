@@ -74,6 +74,10 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-start">
                                         <!-- item-->
+                                        <a href="{{route('employe.profils', $employe->id)}}" class="dropdown-item">
+                                            Profils
+                                        </a>
+                                        <!-- item-->
                                         <a href="{{route('employe.poste', $employe->id)}}" class="dropdown-item">
                                             Poste
                                         </a>

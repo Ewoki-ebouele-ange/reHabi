@@ -18,6 +18,10 @@ class Application extends Model
         return $this->hasMany(Module::class);
     }
 
+    public function profiles(){
+        return $this->hasMany(Profile::class);
+    }
+
     public function fonctionnalites(){
         return $this->hasManyThrough(Fonctionnalite::class, Module::class);
     }

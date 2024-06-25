@@ -40,7 +40,9 @@ class ImporterFichier extends Controller
 
         if ($rows->isNotEmpty()) {
             foreach ($rows as $row) {
-                $post_prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
+                $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
+                $emp = Employe::where("matricule", $row["matricule"])->get()->toArray();
+                $post = Poste::where("code_poste", $row["code_poste"])->get()->toArray();
 
                 $employe = Employe::firstOrCreate(
                     ['nom' => $row['nom']],
@@ -60,16 +62,8 @@ class ImporterFichier extends Controller
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
                 );
     
-                // Insérer ou trouver les enregistrements de fonctionnalite et profil
-                $profil = Profil::firstOrCreate(
-                    ['code_profil' => $row['code_profil']],
-                    ['libelle_profil' => $row['libelle_profil']],
-                    ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
-                );
                 //dd($module);
                 $entite->postes()->save($poste);
-
-                
                 $poste->employes()->save($employe);
 
                 $profil = Profil::firstOrCreate(
@@ -79,12 +73,27 @@ class ImporterFichier extends Controller
                 );
     
                 // Associer la fonctionnalite et le profil
-                $profil->postes()->syncWithoutDetaching($poste->id);
+                //$profil->postes()->syncWithoutDetaching($poste->id);
+                
 
-                if($post_prof == null){
+                if($prof == null){
                     $poste->profils()->syncWithoutDetaching($profil->id);
+                    $employe->profils()->syncWithoutDetaching($profil->id);
                 } else {
-                    $poste->profils()->syncWithoutDetaching($post_prof[0]["id"]);
+                    $poste->profils()->syncWithoutDetaching($prof[0]["id"]);
+                    $employe->profils()->syncWithoutDetaching($prof[0]["id"]);
+                }
+
+                if($emp == null){
+                    $profil->employes()->syncWithoutDetaching($employe->id);
+                } else {
+                    $profil->employes()->syncWithoutDetaching($emp[0]["id"]);
+                }
+
+                if($post == null){
+                    $profil->postes()->syncWithoutDetaching($poste->id);
+                } else {
+                    $profil->postes()->syncWithoutDetaching($post[0]["id"]);
                 }
 
                 //dd($post_prof != null);

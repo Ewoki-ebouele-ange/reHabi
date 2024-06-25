@@ -13,7 +13,6 @@ class Fonctionnalite extends Model
         'code_fonct',
         'libelle_fonct',
         'module_id',
-        'code_module'
     ];
 
     public function module(){

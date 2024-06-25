@@ -18,7 +18,17 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
-                        <h4 class="mt-0 header-title">Listes des profils</h4>
+                        @if ($employes)
+                            <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$employes->nom}} ({{$employes->matricule}})</span></h4>
+                        @elseif ($foncts)
+                            <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$foncts->code_fonct}} ( {{$foncts->libelle_fonct}} )  </span></h4>
+                            {{-- > {{$foncts->module->libelle_module}} > {{$foncts->module->application->libelle_application}} --}}
+                        @elseif ($postes)
+                            <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$postes->code_poste}}</span></h4>
+                        @else
+                            <h4 class="mt-0 header-title">Listes des profils</h4>
+                        @endif
+                        
                         <div class="d-flex gap-2">
                             <div class="fileupload add-new-plus">
                                     <span data-bs-toggle="modal" data-bs-target="#custom-modal-tree" data-animation="fadein"
@@ -92,6 +102,10 @@
                                         <!-- item-->
                                         <a href="{{route('profil.postes', $profil->id)}}" class="dropdown-item">
                                             Postes
+                                        </a>
+                                        <!-- item-->
+                                        <a href="{{route('profil.employes', $profil->id)}}" class="dropdown-item">
+                                            employés
                                         </a>
                                     </div>
                                 </div>

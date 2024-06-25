@@ -171,6 +171,9 @@ class FonctController extends Controller
 
         return view("profil", [
             'profils' => $profils,
+            'employes' => null,
+            'foncts' => $fon,
+            'postes' => null
         ]);
     }
 }

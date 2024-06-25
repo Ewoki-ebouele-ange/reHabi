@@ -78,6 +78,7 @@ Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::cl
     Route::post('/add/export', 'export')->name('employe.export');
     Route::delete('/delete/{employe}', 'destroy')->name('employe.destroy');
     Route::get('/{employe}/poste', 'poste')->name('employe.poste');
+    Route::get('/{employe}/profils', 'profils')->name('employe.profils');
 
 });
 
@@ -164,6 +165,7 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::delete('/delete/{profil}', 'destroy')->name('profil.destroy');
     Route::get('/{profil}/fonctionnalites', 'fonctionnalites')->name('profil.fonctionnalites');
     Route::get('/{profil}/postes', 'postes')->name('profil.postes');
+    Route::get('/{profil}/employes', 'employes')->name('profil.employes');
 });
 
 //importer fichier

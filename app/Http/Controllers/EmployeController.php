@@ -160,4 +160,16 @@ class EmployeController extends Controller
             'postes' => $postes,
         ]);
     }
+
+    public function profils ($employe) {
+        $employ = Employe::find($employe);
+        $profils = $employ->profils()->get();
+
+        return view("profil", [
+            'profils' => $profils,
+            'employes' => $employ,
+            'foncts' => null,
+            'postes' => null
+        ]);
+    }
 }

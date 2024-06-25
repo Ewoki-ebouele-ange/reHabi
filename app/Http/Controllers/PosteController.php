@@ -170,6 +170,9 @@ class PosteController extends Controller
 
         return view("profil", [
             'profils' => $profils,
+            'employes' => null,
+            'foncts' => null,
+            'postes' => $post
         ]);
     }
 }

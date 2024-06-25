@@ -20,6 +20,9 @@ class ProfilController extends Controller
         $profils = \App\Models\Profil::all();
         return view("profil", [
             'profils' => $profils,
+            'employes' => null,
+            'foncts' => null,
+            'postes' => null
         ]);
     }
 
@@ -168,6 +171,15 @@ class ProfilController extends Controller
 
         return view("poste", [
             'postes' => $postes,
+        ]);
+    }
+
+    public function employes ($profil) {
+        $prof = Profil::find($profil);
+        $employes = $prof->employes()->get();
+
+        return view("employe", [
+            'employes' => $employes,
         ]);
     }
 }

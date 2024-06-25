@@ -13,7 +13,6 @@ class Module extends Model
         "code_module",
         "libelle_module",
         'applicattion_id',
-        'code_application',
     ];
 
     public function application(){

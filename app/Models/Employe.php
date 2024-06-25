@@ -19,4 +19,8 @@ class Employe extends Model
     public function poste(){
         return $this->belongsTo(Poste::class,'poste_id');
     }
+
+    public function profils(){
+        return $this->belongsToMany(Profil::class);
+    }
 }
