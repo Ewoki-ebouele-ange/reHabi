@@ -23,10 +23,6 @@ class EmployeController extends Controller
         ]);
     }
 
-    public function addi() : View {
-        return view("employe.add-employe");
-    }
-
     public function store(CreateEmployeRequest $request){
         $employe = Employe::create($request->validated());
         return response()->json([

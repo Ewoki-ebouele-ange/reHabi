@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::table('profils', function (Blueprint $table) {
             $table->foreignId('application_id')->nullable()->constrained('applications')->onDelete('cascade');
-            $table->timestamp('date_dernier_acces')->nullable();
             $table->timestamp('date_creation')->nullable();
+            $table->timestamp('date_derniere_modification')->nullable();
+            $table->timestamp('date_dernier_acces')->nullable();
             $table->timestamp('date_suppression')->nullable();
         });
     }

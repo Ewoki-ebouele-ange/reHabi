@@ -164,8 +164,7 @@
                             @enderror
                         </div>
                         <button type="submit" class="btn btn-success waves-effect waves-light me-1" data-bs-dismiss="modal">Save</button>
-                        <button type="button" class="btn btn-danger waves-effect waves-light"
-                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">Cancel</button>
                     </form>
                 </div>
             </div><!-- /.modal-content -->

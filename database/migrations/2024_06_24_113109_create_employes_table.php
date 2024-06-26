@@ -17,7 +17,6 @@ class CreateEmployesTable extends Migration
             $table->id();
             $table->string('nom');
             $table->string('matricule')->unique()->nullable();
-            $table->foreignId('poste_id')->nullable()->constrained('postes')->onDelete('cascade');
             $table->timestamps();
         });
     }
