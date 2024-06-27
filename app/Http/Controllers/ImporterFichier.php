@@ -38,8 +38,12 @@ class ImporterFichier extends Controller
             return $row;
         });
 
+
         if ($rows->isNotEmpty()) {
             foreach ($rows as $row) {
+
+        //dd(NULL);
+
                 $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
                 $emp = Employe::where("matricule", $row["matricule"])->get()->toArray();
                 $post = Poste::where("code_poste", $row["code_poste"])->get()->toArray();
@@ -64,7 +68,6 @@ class ImporterFichier extends Controller
     
                 //dd($module);
                 $entite->postes()->save($poste);
-                $poste->employes()->save($employe);
 
                 $profil = Profil::firstOrCreate(
                     ['code_profil' => $row['code_profil']],
@@ -78,22 +81,78 @@ class ImporterFichier extends Controller
 
                 if($prof == null){
                     $poste->profils()->syncWithoutDetaching($profil->id);
-                    $employe->profils()->syncWithoutDetaching($profil->id);
+                    $employe->profils()->syncWithoutDetaching([
+                        $profil->id => [
+                            'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
+                            'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
+                            'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
+                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL
+                        ],
+                    ]);
                 } else {
                     $poste->profils()->syncWithoutDetaching($prof[0]["id"]);
-                    $employe->profils()->syncWithoutDetaching($prof[0]["id"]);
+                    $employe->profils()->syncWithoutDetaching([
+                        $prof[0]["id"] => [
+                            'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
+                            'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
+                            'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
+                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL
+                        ],
+                    ]);
                 }
 
-                if($emp == null){
-                    $profil->employes()->syncWithoutDetaching($employe->id);
-                } else {
-                    $profil->employes()->syncWithoutDetaching($emp[0]["id"]);
-                }
+                //----------------------------------------------------------------------
+
+                // if($emp == null){
+                //     $profil->employes()->syncWithoutDetaching([
+                //         $employe->id => [
+                //             'date_assignation' => $row['date_assignation'], 
+                //             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
+                //             'date_derniere_modification' => $row['date_derniere_modification'], 
+                //             'date_derniere_connexion' => $row['date_derniere_connexion']
+                //         ],
+                //     ]);
+                //     $poste->employes()->syncWithoutDetaching([
+                //         $employe->id => [
+                //             'date_debut_fonction' => $row['date_debut_fonction'], 
+                //             'date_fin_fonction' => $row['date_fin_fonction']
+                //         ],
+                //     ]);
+                // } else {
+                //     $profil->employes()->syncWithoutDetaching([
+                //         $emp[0]["id"] => [
+                //             'date_assignation' => $row['date_assignation'], 
+                //             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
+                //             'date_derniere_modification' => $row['date_derniere_modification'], 
+                //             'date_derniere_connexion' => $row['date_derniere_connexion']
+                //         ],
+                //     ]);
+                //     $poste->employes()->syncWithoutDetaching([
+                //         $emp[0]["id"] => [
+                //             'date_debut_fonction' => $row['date_debut_fonction'], 
+                //             'date_fin_fonction' => $row['date_fin_fonction']
+                //         ],
+                //     ]);
+                // }
+
+                //----------------------------------------------------------------------------------
 
                 if($post == null){
-                    $profil->postes()->syncWithoutDetaching($poste->id);
+                    //$profil->postes()->syncWithoutDetaching($poste->id);
+                    $employe->postes()->syncWithoutDetaching([
+                        $poste->id => [
+                            'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
+                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL
+                        ],
+                    ]);
                 } else {
-                    $profil->postes()->syncWithoutDetaching($post[0]["id"]);
+                   // $profil->postes()->syncWithoutDetaching($post[0]["id"]);
+                    $employe->postes()->syncWithoutDetaching([
+                        $post[0]["id"] => [
+                            'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
+                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL
+                        ],
+                    ]);
                 }
 
                 //dd($post_prof != null);

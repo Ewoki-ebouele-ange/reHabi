@@ -33,7 +33,7 @@ class Profil extends Model
     }
 
     public function employes(){
-        return $this->belongsToMany(Employe::class);
+        return $this->belongsToMany(Employe::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_modification', 'date_derniere_connexion');
     }
 
 }

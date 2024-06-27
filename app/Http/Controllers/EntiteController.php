@@ -154,12 +154,4 @@ class EntiteController extends Controller
         ]);
     }
 
-    public function employes ($entite) {
-        $ent = Entite::find($entite);
-        $employes = $ent->employes()->get();
-
-        return view("employe", [
-            'employes' => $employes,
-        ]);
-    }
 }

@@ -3,23 +3,38 @@
     <td>{{ $module->id }}</td>
     <td class="text-truncate" style="max-width: 100px;">{{ $module->code_module }}</td>
     <td class="text-truncate" style="max-width: 100px;">{{ $module->libelle_module }}</td>
-    <td class="d-flex">
-        <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$module->id}}"
-            class="btn waves-effect waves-light openModal" data-animation="fadein"
-            data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-            <i class="fe-edit"></i>
-        </a>
-        <button type="button" id="sa-warning" data-id="{{ $module->id }}" class="btn btn-danger waves-effect waves-light delete-button">
-            <i class="fe-trash-2"></i>
-        </button> 
+    <td class="d-flex justify-content-between align-items-center">
+        <div class="options">
+            <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$module->id}}"
+                class="btn btn-xs waves-effect waves-light openModal" data-animation="fadein"
+                data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                <i class="fe-edit"></i>
+            </a>
+            <button type="button" id="sa-warning" data-id="{{ $module->id }}" class="btn btn-xs btn-danger waves-effect waves-light delete-button">
+                <i class="fe-trash-2"></i>
+            </button>
+        </div>
+        <div class="dropdown float-end">
+            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="mdi mdi-dots-vertical"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-start">
+                <!-- item-->
+                <a href="{{route('module.app', $module->id)}}" class="dropdown-item">
+                    Application
+                </a>
+                <!-- item-->
+                <a href="{{route('module.fonctionnalites', $module->id)}}" class="dropdown-item">
+                    Fonctionnalités
+                </a>
+            </div>
+        </div>
     </td>
 </tr>
 @endforeach
 
 <script src="{{asset("/assets/js/module.js")}}"></script>
      <!-- third party js -->
-     <script src="{{asset("/assets/libs/jquery/jquery.min.js")}}"></script>
-     <script src="{{asset("/assets/libs/bootstrap/js/bootstrap.min.js")}}"></script>
      <script src="{{asset("/assets/libs/datatables.net/js/jquery.dataTables.min.js")}}"></script>
      <script src="{{asset("/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js")}}"></script>
      <script src="{{asset("/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js")}}"></script>

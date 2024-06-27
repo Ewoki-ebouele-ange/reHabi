@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('employe_profil', function (Blueprint $table) {
             $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
             $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
-            $table->timestamp('date_debut')->nullable();
-            $table->timestamp('date_fin')->nullable();
+            $table->timestamp('date_assignation')->nullable();
+            $table->timestamp('date_suspension')->nullable();
+            $table->timestamp('date_derniere_modification')->nullable();
+            $table->timestamp('date_derniere_connexion')->nullable();
 
             $table->primary(['employe_id','profil_id']);
         });

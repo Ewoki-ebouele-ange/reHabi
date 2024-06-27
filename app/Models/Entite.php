@@ -18,7 +18,4 @@ class Entite extends Model
         return $this->hasMany(Poste::class);
     }
 
-    public function employes(){
-        return $this->hasManyThrough(Employe::class, Poste::class);
-    }
 }

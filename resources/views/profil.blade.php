@@ -20,6 +20,7 @@
                     <div class="d-flex justify-content-between mb-2">
                         @if ($employes)
                             <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$employes->nom}} ({{$employes->matricule}})</span></h4>
+                            {{-- {{$employes->with("profils")->first()->profils}} --}}
                         @elseif ($foncts)
                             <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$foncts->code_fonct}} ( {{$foncts->libelle_fonct}} )  </span></h4>
                             {{-- > {{$foncts->module->libelle_module}} > {{$foncts->module->application->libelle_application}} --}}
@@ -62,12 +63,18 @@
                     </div>
                     
 
-                    <table id="datatable" class="table table-striped table-bordered table-hover dt-responsive nowrap">
+                    <table id="datatable" class="table table-sm table-striped table-bordered table-hover dt-responsive nowrap">
                         <thead>
                         <tr>
                             <th>#</th>
                             <th>Code</th>
                             <th>Libelle</th>
+                            @if ($employes)
+                            <th>Date d'assignation</th>
+                            <th>Date de suspension</th>
+                            <th>Date de dernière modification</th>
+                            <th>Date de dernière connexion</th>
+                            @endif
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -79,14 +86,28 @@
                             <td>{{ $profil->id }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $profil->code_profil }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $profil->libelle_profil }}</td>
+                            @if ($employes)
+                                <td class="text-truncate" style="max-width: 150px;">
+                                    {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_assignation }}
+                                </td>
+                                <td class="text-truncate" style="max-width: 150px;">
+                                    {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_suspension }}
+                                </td>
+                                <td class="text-truncate" style="max-width: 150px;">
+                                    {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_modification }}
+                                </td>
+                                <td class="text-truncate" style="max-width: 150px;">
+                                    {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_connexion }}
+                                </td>
+                            @endif
                             <td class="d-flex justify-content-between align-items-center">
                                 <div class="options">
                                     <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$profil->id}}"
-                                        class="btn waves-effect waves-light openModal" data-animation="fadein"
+                                        class="btn btn-xs waves-effect waves-light openModal" data-animation="fadein"
                                         data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
                                         <i class="fe-edit"></i>
                                     </a>
-                                    <button type="button" id="sa-warning" data-id="{{ $profil->id }}" class="btn btn-danger waves-effect waves-light delete-button">
+                                    <button type="button" id="sa-warning" data-id="{{ $profil->id }}" class="btn btn-xs btn-danger waves-effect waves-light delete-button">
                                         <i class="fe-trash-2"></i>
                                     </button>
                                 </div>

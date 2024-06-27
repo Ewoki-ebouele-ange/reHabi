@@ -77,7 +77,7 @@ Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::cl
     Route::post('/add/import', 'EmployeController@import')->name('employe.import');
     Route::post('/add/export', 'export')->name('employe.export');
     Route::delete('/delete/{employe}', 'destroy')->name('employe.destroy');
-    Route::get('/{employe}/poste', 'poste')->name('employe.poste');
+    Route::get('/{employe}/postes', 'postes')->name('employe.postes');
     Route::get('/{employe}/profils', 'profils')->name('employe.profils');
 
 });
@@ -93,7 +93,6 @@ Route::prefix('/entite')->middleware('auth')->controller(\EntiteController::clas
     Route::post('/add/export', 'export')->name('entite.export');
     Route::delete('/delete/{entite}', 'destroy')->name('entite.destroy');
     Route::get('/{entite}/postes', 'postes')->name('entite.postes');
-    Route::get('/{entite}/employes', 'employes')->name('entite.employes');
 });
 
 //Poste

@@ -12,15 +12,13 @@ class Employe extends Model
     protected $fillable = [
         "nom",
         "matricule",
-        "poste_id",
-        "code_poste"
     ];
 
-    public function poste(){
-        return $this->belongsTo(Poste::class,'poste_id');
+    public function postes(){
+        return $this->belongsToMany(Poste::class)->withPivot('date_debut_fonction', 'date_fin_fonction');
     }
 
     public function profils(){
-        return $this->belongsToMany(Profil::class);
+        return $this->belongsToMany(Profil::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_modification', 'date_derniere_connexion');
     }
 }

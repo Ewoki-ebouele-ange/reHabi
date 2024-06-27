@@ -69,32 +69,50 @@
                 </li>
                 <li>
                     <a href="#system" data-bs-toggle="collapse">
-                        <i class="mdi mdi-email"></i>
+                        <i class="mdi mdi-folder-open"></i>
                         <span> Système d'information </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="system">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('employe')}}">Employés</a>
+                                <a href="{{route('employe')}}">
+                                    <i class="fas fa-user-friends px-1"></i>
+                                    <span> Employés </span>
+                                </a>
                             </li>
                             <li>
-                                <a href="{{route('profil')}}">Profils</a>
+                                <a href="{{route('profil')}}">
+                                    <i class="fas fa-user px-1"></i>
+                                    <span> Profils </span>
+                                </a>
                             </li>
                             <li>
-                                <a href="{{route('application')}}">Applications</a>
+                                <a href="{{route('application')}}">
+                                    <i class="ti-layout-tab-window px-1"></i>
+                                    <span> Applications </span>  
+                                </a>
                             </li>
                             <li>
-                                <a href="{{route('module')}}">Modules</a>
+                                <a href="{{route('module')}}">
+                                    <i class="mdi mdi-view-module px-1"></i>
+                                    <span> Modules </span>
+                                </a>
                             </li>
                             <li>
-                                <a href="{{route('fonct')}}">Fonctionnalités</a>
+                                <a href="{{route('fonct')}}">
+                                    <span> Fonctionnalités </span>
+                                </a>
                             </li>
                             <li>
-                                <a href="{{route('entite')}}">Entités</a>
+                                <a href="{{route('entite')}}">
+                                    <span> Entités </span>
+                                </a>
                             </li>
                             <li>
-                                <a href="{{route('poste')}}">Postes</a>
+                                <a href="{{route('poste')}}">
+                                    <span> Postes </span>
+                                </a>
                             </li>
                         </ul>
                     </div>

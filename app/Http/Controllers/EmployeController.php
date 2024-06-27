@@ -150,7 +150,7 @@ class EmployeController extends Controller
 
     public function poste ($employe) {
         $employ = Employe::find($employe);
-        $postes = $employ->poste()->get();
+        $postes = $employ->postes()->get();
 
         return view("poste", [
             'postes' => $postes,

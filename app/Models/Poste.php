@@ -26,6 +26,6 @@ class Poste extends Model
 
     public function employes()
     {
-        return $this->hasMany(Employe::class);
+        return $this->belongsToMany(Employe::class)->withPivot('date_debut_fonction', 'date_fin_fonction');
     }
 }
