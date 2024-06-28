@@ -117,6 +117,12 @@
                         </ul>
                     </div>
                 </li>
+                {{-- <li>
+                    <a href={{route('revue')}}>
+                        <i class="mdi mdi-view-dashboard"></i>
+                        <span> Revue </span>
+                    </a>
+                </li> --}}
             </ul>
         </div>
         <!-- End Sidebar -->

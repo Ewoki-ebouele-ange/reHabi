@@ -21,6 +21,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/revue', function () {
+    return view('revue');
+})->middleware(['auth'])->name('revue');
+
 require __DIR__.'/auth.php';
 
 
@@ -171,5 +175,6 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
 Route::post('/poste/add/importEEP', 'ImporterFichier@import')->name('importEEP');
 Route::post('/profil/add/importFP', 'ImporterFichier@importFonctProfil')->name('importFP');
 Route::post('/poste/add/importPP', 'ImporterFichier@importProfilPoste')->name('importPP');
-Route::post('/profil/add/importIC', 'ImporterFichier@importAndCompare')->name('importIC');
+Route::post('/profil/add/importIC', 'ImporterFichier@compare')->name('importIC');
+Route::get('/revue', 'ImporterFichier@import')->name('revue');
 //Route::get('/importer', 'ImporterFichier@import')->name('import');

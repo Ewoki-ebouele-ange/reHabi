@@ -13,6 +13,7 @@ use App\Models\Module;
 use App\Models\Application;
 use App\Models\Profil;
 use Carbon\Carbon;
+use PDF;
 
 class ImporterFichier extends Controller
 {
@@ -338,7 +339,7 @@ public function importAndCompare(Request $request)
 
     //     file_put_contents($diffFilePath, $fileContent);
     //     return response()->download($diffFilePath);
-        //-----------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------
 
 
          // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
@@ -439,6 +440,46 @@ public function importAndCompare(Request $request)
     } else {
         return redirect()->route('profil')->with('info', "Toutes les informations existent déjà dans la base de données");
     }
+}
+
+public function compare(Request $request){
+    // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
+    $this->validate($request, [
+        'fichier' => 'bail|required|file|mimes:xlsx'
+    ]);
+
+    // 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
+    $fichier = $request->file('fichier')->move(public_path('storage/'), $request->file('fichier')->hashName());
+
+    // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
+    $reader = SimpleExcelReader::create($fichier);
+    $rows = $reader->getRows();
+    $currentTimestamp = Carbon::now();
+
+    // Récupérer les données de la base de données
+    $databaseData = Profil::all()->toArray();
+
+    // Comparer les données
+    $excelData = $rows->toArray();
+    $dataInExcelNotInDB = array_udiff($excelData, $databaseData, function ($a, $b) {
+        return strcmp(serialize($a), serialize($b));
+    });
+
+    $dataInDBNotInExcel = array_udiff($databaseData, $excelData, function ($a, $b) {
+        return strcmp(serialize($a), serialize($b));
+    });
+
+    // Générer le PDF
+    $pdf = PDF::loadView('pdf.differences', [
+        'dataInExcelNotInDB' => $dataInExcelNotInDB,
+        'dataInDBNotInExcel' => $dataInDBNotInExcel,
+    ]);
+
+    return view("pdf.differences", [
+        'dataInExcelNotInDB' => $dataInExcelNotInDB,
+        'dataInDBNotInExcel' => $dataInDBNotInExcel,
+    ]);
+    //return $pdf->download('differences.pdf');
 }
 
 
