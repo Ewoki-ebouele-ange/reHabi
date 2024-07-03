@@ -173,8 +173,9 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
 
 //importer fichier
 Route::post('/poste/add/importEEP', 'ImporterFichier@import')->name('importEEP');
+
 Route::post('/profil/add/importFP', 'ImporterFichier@importFonctProfil')->name('importFP');
-Route::post('/poste/add/importPP', 'ImporterFichier@importProfilPoste')->name('importPP');
-Route::post('/profil/add/importIC', 'ImporterFichier@compare')->name('importIC');
-Route::get('/revue', 'ImporterFichier@import')->name('revue');
+
+Route::post('/profil/add/importIC', 'CompareController@compare')->name('importIC');
+//Route::get('/revue', 'CompareController@import')->name('revue');
 //Route::get('/importer', 'ImporterFichier@import')->name('import');

@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
                         @if ($employes)
-                            <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$employes->nom}} ({{$employes->matricule}})</span></h4>
+                            <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$employes->nom}} ({{$employes->matricule}}) {{$employes->profils()->get()[0]->fonctionnalites()->get()[0]->module()->get()[0]->application()->get()[0]->libelle_application}}</span></h4>
                             {{-- {{$employes->with("profils")->first()->profils}} --}}
                         @elseif ($foncts)
                             <h4 class="mt-0 header-title">Listes des profils de <span style="text-transform: uppercase; font-size:20px;">{{$foncts->code_fonct}} ( {{$foncts->libelle_fonct}} )  </span></h4>

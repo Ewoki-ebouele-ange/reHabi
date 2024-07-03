@@ -15,6 +15,8 @@ use App\Models\Profil;
 use Carbon\Carbon;
 use PDF;
 
+
+
 class ImporterFichier extends Controller
 {
     public function import(Request $request) {
@@ -102,42 +104,6 @@ class ImporterFichier extends Controller
                     ]);
                 }
 
-                //----------------------------------------------------------------------
-
-                // if($emp == null){
-                //     $profil->employes()->syncWithoutDetaching([
-                //         $employe->id => [
-                //             'date_assignation' => $row['date_assignation'], 
-                //             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                //             'date_derniere_modification' => $row['date_derniere_modification'], 
-                //             'date_derniere_connexion' => $row['date_derniere_connexion']
-                //         ],
-                //     ]);
-                //     $poste->employes()->syncWithoutDetaching([
-                //         $employe->id => [
-                //             'date_debut_fonction' => $row['date_debut_fonction'], 
-                //             'date_fin_fonction' => $row['date_fin_fonction']
-                //         ],
-                //     ]);
-                // } else {
-                //     $profil->employes()->syncWithoutDetaching([
-                //         $emp[0]["id"] => [
-                //             'date_assignation' => $row['date_assignation'], 
-                //             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                //             'date_derniere_modification' => $row['date_derniere_modification'], 
-                //             'date_derniere_connexion' => $row['date_derniere_connexion']
-                //         ],
-                //     ]);
-                //     $poste->employes()->syncWithoutDetaching([
-                //         $emp[0]["id"] => [
-                //             'date_debut_fonction' => $row['date_debut_fonction'], 
-                //             'date_fin_fonction' => $row['date_fin_fonction']
-                //         ],
-                //     ]);
-                // }
-
-                //----------------------------------------------------------------------------------
-
                 if($post == null){
                     //$profil->postes()->syncWithoutDetaching($poste->id);
                     $employe->postes()->syncWithoutDetaching([
@@ -167,7 +133,8 @@ class ImporterFichier extends Controller
     }
 
 
-    public function importFonctProfil(Request $request){
+    public function importFonctProfil(Request $request) {
+
     // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
     $this->validate($request, [
         'fichier' => 'bail|required|file|mimes:xlsx'
@@ -223,10 +190,6 @@ class ImporterFichier extends Controller
                 ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
             );
 
-            // Associer la fonctionnalite et le profil
-            $profil->fonctionnalites()->syncWithoutDetaching($fonctionnalite->id);
-            //$fonctionnalite->profils()->syncWithoutDetaching($profil->id);
-
             if($fonct_prof == null){
                 $fonctionnalite->profils()->syncWithoutDetaching($profil->id);
             } else {
@@ -242,106 +205,9 @@ class ImporterFichier extends Controller
 }
 
 
-public function importProfilPoste(Request $request)
-{
-    // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
-    $this->validate($request, [
-        'fichier' => 'bail|required|file|mimes:xlsx'
-    ]);
-
-    // 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
-    $fichier = $request->fichier->move(public_path('storage/'), $request->fichier->hashName());
-
-    // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
-    $reader = SimpleExcelReader::create($fichier);
-    $rows = $reader->getRows();
-    $currentTimestamp = Carbon::now(); // Récupérer le timestamp actuel
-
-    $rows = $rows->map(function ($row) use ($currentTimestamp) {
-        $row['created_at'] = $currentTimestamp;
-        $row['updated_at'] = $currentTimestamp;
-        return $row;
-    });
-
-    // Filtrage des lignes existantes dans la base de données
-    // $filteredRows = $rows->filter(function($row) {
-    //     return !Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists() && !Profil::where('code_profil', $row['code_profil'])->exists();
-    // });
-
-    if ($rows->isNotEmpty()) {
-        foreach ($rows as $row) {
-            // Insérer ou trouver les enregistrements de fonctionnalite et profil
-            $postes = Poste::firstOrCreate(
-                ['code_poste' => $row['code_poste']],
-                ['libelle_poste' => $row['libelle_poste']],
-                ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
-            );
-
-            $profil = Profil::firstOrCreate(
-                ['code_profil' => $row['code_profil']],
-                ['libelle_profil' => $row['libelle_profil']],
-                ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
-            );
-
-            // Associer la fonctionnalite et le profil
-            $profil->postes()->syncWithoutDetaching($postes->id);
-            $postes->profils()->syncWithoutDetaching($profil->id);
-
-        }
-
-        $reader->close();
-        return redirect()->route('poste')->with('success', "Importation réussie");
-    } else {
-        return redirect()->route('profil')->with('info', "Aucune nouvelle information à ajouter");
-    }
-}
-
-
-
 //Fonction d'import et de comparaison
 public function importAndCompare(Request $request)
 {
-    //--------------------------------------------------------------------------------------------------------------
-    // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
-    // $this->validate($request, [
-    //     'fichier' => 'bail|required|file|mimes:xlsx'
-    // ]);
-
-    // // 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
-    // $fichier = $request->file('fichier')->move(public_path('storage/'), $request->file('fichier')->hashName());
-
-    // // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
-    // $reader = SimpleExcelReader::create($fichier);
-    // $rows = $reader->getRows();
-    // $currentTimestamp = Carbon::now();
-
-    // // 4. Initialisation des lignes qui n'existent pas
-    // $nonExistingRows = [];
-
-    // foreach ($rows as $row) {
-    //     $fonctionnaliteExists = Fonctionnalite::where('code_fonct', $row['code_fonct'])->exists();
-    //     $profilExists = Profil::where('code_profil', $row['code_profil'])->exists();
-
-    //     // 5. Stockage des lignes qui n'existent pas
-    //     if (!$fonctionnaliteExists || !$profilExists) {
-    //         $nonExistingRows[] = $row;
-    //     }
-    // }
-
-    // // 6. Écriture des lignes qui n'existent pas dans un fichier texte
-    // if (!empty($nonExistingRows)) {
-    //     $diffFilePath = public_path('storage/fic_sorti.txt');
-    //     $fileContent = "";
-
-    //     foreach ($nonExistingRows as $row) {
-    //         $fileContent .= implode("\t", $row) . "\n"; // Utilisation de tabulation comme séparateur
-    //     }
-
-    //     file_put_contents($diffFilePath, $fileContent);
-    //     return response()->download($diffFilePath);
-    // -----------------------------------------------------------------------------------------------------
-
-
          // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
     $this->validate($request, [
         'fichier' => 'bail|required|file|mimes:xlsx'
@@ -441,46 +307,5 @@ public function importAndCompare(Request $request)
         return redirect()->route('profil')->with('info', "Toutes les informations existent déjà dans la base de données");
     }
 }
-
-public function compare(Request $request){
-    // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
-    $this->validate($request, [
-        'fichier' => 'bail|required|file|mimes:xlsx'
-    ]);
-
-    // 2. On déplace le fichier uploadé vers le dossier "public" pour le lire
-    $fichier = $request->file('fichier')->move(public_path('storage/'), $request->file('fichier')->hashName());
-
-    // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
-    $reader = SimpleExcelReader::create($fichier);
-    $rows = $reader->getRows();
-    $currentTimestamp = Carbon::now();
-
-    // Récupérer les données de la base de données
-    $databaseData = Profil::all()->toArray();
-
-    // Comparer les données
-    $excelData = $rows->toArray();
-    $dataInExcelNotInDB = array_udiff($excelData, $databaseData, function ($a, $b) {
-        return strcmp(serialize($a), serialize($b));
-    });
-
-    $dataInDBNotInExcel = array_udiff($databaseData, $excelData, function ($a, $b) {
-        return strcmp(serialize($a), serialize($b));
-    });
-
-    // Générer le PDF
-    $pdf = PDF::loadView('pdf.differences', [
-        'dataInExcelNotInDB' => $dataInExcelNotInDB,
-        'dataInDBNotInExcel' => $dataInDBNotInExcel,
-    ]);
-
-    return view("pdf.differences", [
-        'dataInExcelNotInDB' => $dataInExcelNotInDB,
-        'dataInDBNotInExcel' => $dataInDBNotInExcel,
-    ]);
-    //return $pdf->download('differences.pdf');
-}
-
 
 }

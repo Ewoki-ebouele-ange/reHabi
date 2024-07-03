@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
+        "maatwebsite/excel": "*",
         "nesbot/carbon": "^2.72",
         "spatie/simple-excel": "^3.6",
         "symfony/filesystem": "^6.4"
