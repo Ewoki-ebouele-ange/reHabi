@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profils', function (Blueprint $table) {
-            $table->id();
-            $table->string('code_profil')->unique();
-            $table->string('libelle_profil')->nullable();
+        Schema::create('fonctionnalite_profil', function (Blueprint $table) {
+            $table->foreignId('fonctionnalite_id')->constrained('fonctionnalites')->onDelete('cascade');
+            $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
             $table->timestamps();
+
+            $table->primary(['fonctionnalite_id','profil_id']);
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profils');
+        Schema::dropIfExists('fonctionnalite_profil');
     }
 };

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('profils', function (Blueprint $table) {
+        Schema::create('profils', function (Blueprint $table) {
+            $table->id();
+            $table->string('code_profil')->unique();
+            $table->string('libelle_profil')->nullable();
             $table->foreignId('application_id')->nullable()->constrained('applications')->onDelete('cascade');
-            $table->timestamp('date_creation')->nullable();
-            $table->timestamp('date_derniere_modification')->nullable();
-            $table->timestamp('date_dernier_acces')->nullable();
-            $table->timestamp('date_suppression')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('profils', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('profils');
     }
 };

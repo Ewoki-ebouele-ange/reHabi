@@ -126,6 +126,7 @@ Route::prefix('/application')->middleware('auth')->controller(\ApplicationContro
     Route::delete('/delete/{application}', 'destroy')->name('application.destroy');
     Route::get('/{application}/modules', 'modules')->name('application.modules');
     Route::get('/{application}/fonctionnalites', 'fonctionnalites')->name('application.fonctionnalites');
+    Route::get('/{application}/profils', 'profils')->name('application.profils');
 });
 
 //Module
@@ -169,6 +170,7 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::get('/{profil}/fonctionnalites', 'fonctionnalites')->name('profil.fonctionnalites');
     Route::get('/{profil}/postes', 'postes')->name('profil.postes');
     Route::get('/{profil}/employes', 'employes')->name('profil.employes');
+    Route::get('/{profil}/application', 'application')->name('profil.application');
 });
 
 //importer fichier

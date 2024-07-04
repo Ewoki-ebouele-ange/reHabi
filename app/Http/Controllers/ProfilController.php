@@ -22,7 +22,8 @@ class ProfilController extends Controller
             'profils' => $profils,
             'employes' => null,
             'foncts' => null,
-            'postes' => null
+            'postes' => null,
+            'applications' => null,
         ]);
     }
 
@@ -180,6 +181,15 @@ class ProfilController extends Controller
 
         return view("employe", [
             'employes' => $employes,
+        ]);
+    }
+
+    public function application ($profil) {
+        $prof = Profil::find($profil);
+        $applications = $prof->application()->get();
+
+        return view("application", [
+            'applications' => $applications,
         ]);
     }
 }

@@ -89,7 +89,9 @@ class ImporterFichier extends Controller
                             'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
                             'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
-                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL
+                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
+                            'created_at' => $row['created_at'],
+                            'updated_at' => $row['updated_at']
                         ],
                     ]);
                 } else {
@@ -99,7 +101,9 @@ class ImporterFichier extends Controller
                             'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
                             'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
-                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL
+                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
+                            'created_at' => $row['created_at'],
+                            'updated_at' => $row['updated_at']
                         ],
                     ]);
                 }
@@ -109,7 +113,9 @@ class ImporterFichier extends Controller
                     $employe->postes()->syncWithoutDetaching([
                         $poste->id => [
                             'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
-                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL
+                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL,
+                            'created_at' => $row['created_at'],
+                            'updated_at' => $row['updated_at']
                         ],
                     ]);
                 } else {
@@ -117,7 +123,9 @@ class ImporterFichier extends Controller
                     $employe->postes()->syncWithoutDetaching([
                         $post[0]["id"] => [
                             'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
-                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL
+                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL,
+                            'created_at' => $row['created_at'],
+                            'updated_at' => $row['updated_at']
                         ],
                     ]);
                 }
@@ -189,11 +197,23 @@ class ImporterFichier extends Controller
                 ['libelle_profil' => $row['libelle_profil']],
                 ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
             );
+            $app->profils()->save($profil);
+
 
             if($fonct_prof == null){
-                $fonctionnalite->profils()->syncWithoutDetaching($profil->id);
+                $fonctionnalite->profils()->syncWithoutDetaching([
+                    $poste->id => [
+                        'created_at' => $row['created_at'],
+                        'updated_at' => $row['updated_at']
+                    ],
+                ]);
             } else {
-                $fonctionnalite->profils()->syncWithoutDetaching($fonct_prof[0]["id"]);
+                $fonctionnalite->profils()->syncWithoutDetaching([
+                    $fonct_prof[0]["id"] => [
+                        'created_at' => $row['created_at'],
+                        'updated_at' => $row['updated_at']
+                    ],
+                ]);
             }
         }
 

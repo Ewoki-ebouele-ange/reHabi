@@ -86,6 +86,10 @@
                                                                 <a href="{{route('application.fonctionnalites', $app->id)}}" class="dropdown-item">
                                                                     Fonctionnalités
                                                                 </a>
+                                                                <!-- item-->
+                                                                <a href="{{route('application.profils', $app->id)}}" class="dropdown-item">
+                                                                    Profiles
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </td>

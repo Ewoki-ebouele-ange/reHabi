@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('date_suspension')->nullable();
             $table->timestamp('date_derniere_modification')->nullable();
             $table->timestamp('date_derniere_connexion')->nullable();
+            $table->timestamps();
 
             $table->primary(['employe_id','profil_id']);
         });

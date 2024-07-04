@@ -165,4 +165,13 @@ class ApplicationController extends Controller
             'foncts' => $foncts,
         ]);
     }
+
+    public function profils ($application) {
+        $app = Application::find($application);
+        $profils = $app->profils()->get();
+
+        return view("profil", [
+            'profils' => $profils,
+        ]);
+    }
 }

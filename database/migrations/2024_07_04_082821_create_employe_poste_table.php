@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('poste_profil', function (Blueprint $table) {
+        Schema::create('employe_poste', function (Blueprint $table) {
+            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
             $table->foreignId('poste_id')->constrained('postes')->onDelete('cascade');
-            $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
+            $table->timestamp('date_debut_fonction')->nullable();
+            $table->timestamp('date_fin_fonction')->nullable();
+            $table->timestamps();
 
-            $table->primary(['poste_id','profil_id']);
-            
+            $table->primary(['employe_id','poste_id']);
         });
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('poste_profil');
+        Schema::dropIfExists('employe_poste');
     }
 };

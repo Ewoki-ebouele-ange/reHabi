@@ -18,8 +18,8 @@ class Application extends Model
         return $this->hasMany(Module::class);
     }
 
-    public function profiles(){
-        return $this->hasMany(Profile::class);
+    public function profils(){
+        return $this->hasMany(Profil::class);
     }
 
     public function fonctionnalites(){

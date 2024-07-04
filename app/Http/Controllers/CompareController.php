@@ -18,6 +18,7 @@ use PDF;
 use App\Entities\Employes;
 use App\Entities\Postes;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class CompareController extends Controller
 {
@@ -48,31 +49,31 @@ class CompareController extends Controller
                 $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
                 $post = Poste::where("code_poste", $row["code_poste"])->get()->toArray();
 
-                $employe = Employe::firstOrCreate(
+                $employe = Employe::updateOrCreate(
                     ['nom' => $row['nom']],
                     ['matricule' => $row['matricule']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
                 );
     
-                $entite = Entite::firstOrCreate(
+                $entite = Entite::updateOrCreate(
                     ['code_entite' => $row['code_entite']],
                     ['libelle_entite' => $row['libelle_entite']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
                 );
 
-                $poste = Poste::firstOrCreate(
+                $poste = Poste::updateOrCreate(
                     ['code_poste' => $row['code_poste']],
                     ['libelle_poste' => $row['libelle_poste']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
                 );
 
-                $app = Application::firstOrCreate(
+                $app = Application::updateOrCreate(
                     ['code_application' => $row['code_application']],
                     ['libelle_application' => $row['libelle_application']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
                 );
     
-                $module = Module::firstOrCreate(
+                $module = Module::updateOrCreate(
                     ['code_module' => $row['code_module']],
                     ['libelle_module' => $row['libelle_module']],
                     ['code_application' => $row['code_application']],
@@ -81,7 +82,7 @@ class CompareController extends Controller
                 
     
                 // Insérer ou trouver les enregistrements de fonctionnalite et profil
-                $fonctionnalite = Fonctionnalite::firstOrCreate(
+                $fonctionnalite = Fonctionnalite::updateOrCreate(
                     ['code_fonct' => $row['code_fonct']],
                     ['libelle_fonct' => $row['libelle_fonct']],
                     ['code_module' => $row['code_module']],
@@ -90,7 +91,7 @@ class CompareController extends Controller
                 //dd($module);
                 
     
-                $profil = Profil::firstOrCreate(
+                $profil = Profil::updateOrCreate(
                     ['code_profil' => $row['code_profil']],
                     ['libelle_profil' => $row['libelle_profil']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
@@ -99,52 +100,217 @@ class CompareController extends Controller
                 $app->modules()->save($module);
                 $entite->postes()->save($poste);
                 $module->fonctionnalites()->save($fonctionnalite);               
+                $app->profils()->save($profil);
     
                 //dd($module);
     
                 // Associer la fonctionnalite et le profil
                 //$profil->postes()->syncWithoutDetaching($poste->id);
 
+                
+
                 if($prof == null){
-                    $poste->profils()->syncWithoutDetaching($profil->id);
-                    $fonctionnalite->profils()->syncWithoutDetaching($profil->id);
-                    $employe->profils()->syncWithoutDetaching([
-                        $profil->id => [
-                            'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
-                            'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                            'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
-                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL
-                        ],
-                    ]);
+
+                    // Vérifier l'existence de l'association dans la table pivot
+                    $fp = DB::table('fonctionnalite_profil')
+                    ->where('fonctionnalite_id', $fonctionnalite->id)
+                    ->where('profil_id', $profil->id)
+                    ->first();
+
+                    $pp = DB::table('poste_profil')
+                    ->where('poste_id', $poste->id)
+                    ->where('profil_id', $profil->id)
+                    ->first();
+
+                    $ep = DB::table('employe_profil')
+                    ->where('employe_id', $employe->id)
+                    ->where('profil_id', $profil->id)
+                    ->first();
+
+                    if ($fp) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('fonctionnalite_profil')
+                            ->where('fonctionnalite_id', $fonctionnalite->id)
+                            ->where('profil_id', $profil->id)
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $fonctionnalite->profils()->syncWithoutDetaching([
+                            $profil->id => [
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
+
+                    if ($pp) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('poste_profil')
+                            ->where('poste_id', $poste->id)
+                            ->where('profil_id', $profil->id)
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $poste->profils()->syncWithoutDetaching([
+                            $profil->id => [
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
+
+                    if ($ep) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('employe_profil')
+                            ->where('employe_id', $employe->id)
+                            ->where('profil_id', $profil->id)
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $employe->profils()->syncWithoutDetaching([
+                            $profil->id => [
+                                'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
+                                'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
+                                'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
+                                'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
                 } else {
-                    $poste->profils()->syncWithoutDetaching($prof[0]["id"]);
-                    $fonctionnalite->profils()->syncWithoutDetaching($prof[0]["id"]);
-                    $employe->profils()->syncWithoutDetaching([
-                        $prof[0]["id"] => [
-                            'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
-                            'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                            'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
-                            'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL
-                        ],
-                    ]);
+
+                    // Vérifier l'existence de l'association dans la table pivot
+                    $fp = DB::table('fonctionnalite_profil')
+                    ->where('fonctionnalite_id', $fonctionnalite->id)
+                    ->where('profil_id', $prof[0]["id"])
+                    ->first();
+
+                    $pp = DB::table('poste_profil')
+                    ->where('poste_id', $poste->id)
+                    ->where('profil_id', $prof[0]["id"])
+                    ->first();
+
+                    $ep = DB::table('employe_profil')
+                    ->where('employe_id', $employe->id)
+                    ->where('profil_id', $prof[0]["id"])
+                    ->first();
+
+                    if ($fp) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('fonctionnalite_profil')
+                            ->where('fonctionnalite_id', $fonctionnalite->id)
+                            ->where('profil_id', $prof[0]["id"])
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $fonctionnalite->profils()->syncWithoutDetaching([
+                            $prof[0]["id"] => [
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
+
+                    if ($pp) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('poste_profil')
+                            ->where('poste_id', $poste->id)
+                            ->where('profil_id', $prof[0]["id"])
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $poste->profils()->syncWithoutDetaching([
+                            $prof[0]["id"] => [
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
+
+                    if ($ep) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('employe_profil')
+                            ->where('employe_id', $employe->id)
+                            ->where('profil_id', $prof[0]["id"])
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $employe->profils()->syncWithoutDetaching([
+                            $prof[0]["id"] => [
+                                'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
+                                'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
+                                'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
+                                'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
+
                 }
 
                 if($post == null){
-                    //$profil->postes()->syncWithoutDetaching($poste->id);
-                    $employe->postes()->syncWithoutDetaching([
-                        $poste->id => [
-                            'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
-                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL
-                        ],
-                    ]);
+
+                    $ep = DB::table('employe_poste')
+                    ->where('employe_id', $employe->id)
+                    ->where('poste_id', $poste->id)
+                    ->first();
+                    if ($ep) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('employe_poste')
+                            ->where('employe_id', $employe->id)
+                            ->where('poste_id', $poste->id)
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $employe->postes()->syncWithoutDetaching([
+                            $poste->id => [
+                                'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
+                                'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL,
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
                 } else {
-                   // $profil->postes()->syncWithoutDetaching($post[0]["id"]);
-                    $employe->postes()->syncWithoutDetaching([
-                        $post[0]["id"] => [
-                            'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
-                            'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL
-                        ],
-                    ]);
+                    $ep = DB::table('employe_poste')
+                    ->where('employe_id', $employe->id)
+                    ->where('poste_id', $post[0]["id"])
+                    ->first();
+                    if ($ep) {
+                        // Mise à jour de updated_at uniquement
+                        DB::table('employe_poste')
+                            ->where('employe_id', $employe->id)
+                            ->where('poste_id', $post[0]["id"])
+                            ->update([
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    } else {
+                        // Création de l'association avec syncWithoutDetaching
+                        $employe->postes()->syncWithoutDetaching([
+                            $post[0]["id"] => [
+                                'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
+                                'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL,
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
+                    }
                 }
 
                 //dd($post_prof != null);
