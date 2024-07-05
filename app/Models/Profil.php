@@ -25,15 +25,15 @@ class Profil extends Model
     }
 
     public function fonctionnalites(){
-        return $this->belongsToMany(Fonctionnalite::class);
+        return $this->belongsToMany(Fonctionnalite::class)->withPivot('created_at', 'updated_at');
     }
 
     public function postes(){
-        return $this->belongsToMany(Poste::class);
+        return $this->belongsToMany(Poste::class)->withPivot('created_at', 'updated_at');
     }
 
     public function employes(){
-        return $this->belongsToMany(Employe::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_modification', 'date_derniere_connexion');
+        return $this->belongsToMany(Employe::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_modification', 'date_derniere_connexion', 'created_at', 'updated_at');
     }
 
 }

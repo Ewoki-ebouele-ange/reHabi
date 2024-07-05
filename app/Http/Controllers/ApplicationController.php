@@ -172,6 +172,10 @@ class ApplicationController extends Controller
 
         return view("profil", [
             'profils' => $profils,
+            'employes' => null,
+            'foncts' => null,
+            'postes' => null,
+            'applications' => $app
         ]);
     }
 }

@@ -17,7 +17,7 @@ class Poste extends Model
 
     
     public function profils(){
-        return $this->belongsToMany(Profil::class);
+        return $this->belongsToMany(Profil::class)->withPivot('created_at', 'updated_at');
     }
 
     public function entite(){
@@ -26,6 +26,6 @@ class Poste extends Model
 
     public function employes()
     {
-        return $this->belongsToMany(Employe::class)->withPivot('date_debut_fonction', 'date_fin_fonction');
+        return $this->belongsToMany(Employe::class)->withPivot('date_debut_fonction', 'date_fin_fonction', 'created_at', 'updated_at');
     }
 }

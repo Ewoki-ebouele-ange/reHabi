@@ -44,14 +44,14 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <th scope="row" colspan="4">Application</th>
+                                        <th scope="row" colspan="4">{{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
                                     </tr>
                                     <tr>
                                         <th colspan="2">Poste récent</th>
                                         <th colspan="2">Poste actuel</th>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">{{$employe->postes()->first()->libelle_poste}} ({{$employe->postes()->first()->code_poste}}) </td>
+                                        <td colspan="2">{{$employe->postes()->first()->libelle_poste ?? null}} ({{$employe->postes()->first()->code_poste ?? null}}) </td>
                                         <td colspan="2">...</td>
                                     </tr>
                                     <tr>
@@ -59,7 +59,7 @@
                                         <th colspan="2">Profil actuel</th>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">{{$empProfil->libelle_profil}} avec pour code {{$empProfil->code_profil}} </td>
+                                        <td colspan="2">{{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}} </td>
                                         <td colspan="2">...</td>
                                     </tr>
                                     <tr>
@@ -68,11 +68,13 @@
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            @foreach ($empProfil->fonctionnalites()->get() as $empFonct )
-                                                <li>{{$empFonct->libelle_fonct}} avec pour code {{$empFonct->code_fonct}} sur le module {{$empFonct->module->libelle_module}} ({{$empFonct->module->code_module}}) </li>
+                                            @foreach ($empProfil->fonctionnalites()->get() as $empFonct)
+                                                <li>{{$empFonct->libelle_fonct ?? null}} avec pour code {{$empFonct->code_fonct ?? null}} sur le module {{$empFonct->module->libelle_module ?? null}} ({{$empFonct->module->code_module ?? null}}) </li>
                                             @endforeach
                                         </td>
-                                        <td colspan="2">.....</td>
+                                        {{-- @foreach ($empProfil->fonctionnalites()->get() as $empFonct) --}}
+                                        <td colspan="2">{{$empProfil->fonctionnalites()->get()->first()->pivot->created_at ?? null}}</td>
+                                        {{-- @endforeach --}}
                                     </tr>
                                 </tbody>
                             </table>

@@ -165,7 +165,8 @@ class EmployeController extends Controller
             'profils' => $profils,
             'employes' => $employ,
             'foncts' => null,
-            'postes' => null
+            'postes' => null,
+            'applications' => null
         ]);
     }
 }

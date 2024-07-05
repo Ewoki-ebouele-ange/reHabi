@@ -49,8 +49,7 @@ class PosteController extends Controller
         ]);
     }
 
-    public function list() : View
-    {
+    public function list() : View {
         $postes = Poste::all();
         //return view('employe.list', compact('employes'))->render();
         return view("poste.list", [
@@ -172,7 +171,8 @@ class PosteController extends Controller
             'profils' => $profils,
             'employes' => null,
             'foncts' => null,
-            'postes' => $post
+            'postes' => $post,
+            'applications' => null
         ]);
     }
 }
