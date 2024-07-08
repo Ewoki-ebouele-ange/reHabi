@@ -44,27 +44,26 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <th colspan="2">Poste actuel</th>
+                                        <th colspan="2">Poste précédent</th>
+                                    </tr>
+                                    <tr>
+                                        {{-- {{$employe->postes()->first()->libelle_poste ?? null}} ({{$employe->postes()->first()->code_poste ?? null}}) --}}
+                                        <td colspan="2"> {{$employe->posteActuel()->libelle_poste}} ({{$employe->posteActuel()->code_poste}}) </td>
+                                        <td colspan="2"> {{$employe->postePrecedent()->libelle_poste ?? $employe->posteActuel()->libelle_poste }} ({{$employe->postePrecedent()->code_poste ?? $employe->posteActuel()->code_poste}}) </td>
+                                    </tr>
+                                    <tr>
                                         <th scope="row" colspan="4">{{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
                                     </tr>
                                     <tr>
-                                        <th colspan="2">Poste récent</th>
-                                        <th colspan="2">Poste actuel</th>
+                                        <th colspan="4">Profil actuel</th>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">{{$employe->postes()->first()->libelle_poste ?? null}} ({{$employe->postes()->first()->code_poste ?? null}}) </td>
-                                        <td colspan="2">...</td>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="2">Profil récent</th>
-                                        <th colspan="2">Profil actuel</th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">{{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}} </td>
-                                        <td colspan="2">...</td>
+                                        <td colspan="4">{{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}} </td>
                                     </tr>
                                     <tr>
                                         <th colspan="2">Fonctionnalités récentes</th>
-                                        <th colspan="2">Fonctionnalités actuelles</th>
+                                        <th colspan="2">Fonctionnalités ajoutées</th>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
@@ -72,9 +71,18 @@
                                                 <li>{{$empFonct->libelle_fonct ?? null}} avec pour code {{$empFonct->code_fonct ?? null}} sur le module {{$empFonct->module->libelle_module ?? null}} ({{$empFonct->module->code_module ?? null}}) </li>
                                             @endforeach
                                         </td>
-                                        {{-- @foreach ($empProfil->fonctionnalites()->get() as $empFonct) --}}
-                                        <td colspan="2">{{$empProfil->fonctionnalites()->get()->first()->pivot->created_at ?? null}}</td>
+                                        <td colspan="2">
+                                            {{-- <td>{{$empProfil->fonctionnalites()->where('fonctionnalites.created_at', '<', $currentTimestamp->subDays(2))->get()}}</td> --}}
+                                        {{-- @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $currentTimestamp->subDays(3))->get() as $empFct) --}}
+                                        {{-- {{$empFct->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}   --}}
+                                        {{-- <li style="background-color: rgb(255, 230, 0)">{{$empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $currentTimestamp->subDays(3))->get()}}</li> --}}
+                                            {{-- @if ($empFct->where('fonctionnalites.created_at', '>', $currentTimestamp->subDays(3))->exists())
+                                                <li style="background-color: red">{{$empFct->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
+                                            @else
+                                                <span>Aucune nouvelle fonctionnalité</span>
+                                            @endif --}}
                                         {{-- @endforeach --}}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

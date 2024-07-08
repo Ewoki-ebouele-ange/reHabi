@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\DB;
 class CompareController extends Controller
 {
     public function compare(Request $request){
+
+        
+
         // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
         $this->validate($request, [
             'fichier' => 'bail|required|file|mimes:xlsx'
@@ -101,13 +104,11 @@ class CompareController extends Controller
                 $entite->postes()->save($poste);
                 $module->fonctionnalites()->save($fonctionnalite);               
                 $app->profils()->save($profil);
-    
+
                 //dd($module);
-    
+
                 // Associer la fonctionnalite et le profil
                 //$profil->postes()->syncWithoutDetaching($poste->id);
-
-                
 
                 if($prof == null){
 
@@ -316,11 +317,20 @@ class CompareController extends Controller
                 //dd($post_prof != null);
             }
             $employes= Employe::all();
+            
+            $nvoFonct= Poste::where('created_at', '>', Carbon::now()->subDays(3))->get()->toArray();
+
+            // dd($nvoFonct);
+
+            
+            
             $reader->close();
             return view("pdf.differences", [
                 'employes' => $employes,
-                // 'dataInExcelNotInDB' => $dataInExcelNotInDB,
-                // 'dataInDBNotInExcel' => $dataInDBNotInExcel,
+                'nvoFonct' => $nvoFonct,
+                'currentTimestamp' => $currentTimestamp,
+                //'dataInExcelNotInDB' => $dataInExcelNotInDB,
+                //'dataInDBNotInExcel' => $dataInDBNotInExcel,
             ]);
         } else {
             return redirect()->route('poste')->with('info', "Aucune nouvelle information à ajouter");
