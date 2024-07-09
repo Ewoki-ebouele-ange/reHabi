@@ -18,7 +18,11 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
+                        @if ($employes)
+                        <h4 class="mt-0 header-title">Listes des postes occupés par <span style="text-transform: uppercase; font-size:20px;">{{$employes->nom}} ({{$employes->matricule}})</span></h4>
+                        @else
                         <h4 class="mt-0 header-title">Listes des postes</h4>
+                        @endif
                         <div class="d-flex gap-2">
                             <div class="fileupload add-new-plus">
                                     <span data-bs-toggle="modal" data-bs-target="#custom-modal-tree" data-animation="fadein"
@@ -51,6 +55,10 @@
                             <th>#</th>
                             <th>Code</th>
                             <th>Libelle</th>
+                            @if ($employes)
+                            <th>Date de debut de fonction</th>
+                            <th>Date de fin de fonction</th>
+                            @endif
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -62,6 +70,14 @@
                             <td>{{ $poste->id }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $poste->code_poste }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $poste->libelle_poste }}</td>
+                            @if ($employes)
+                                <td class="text-truncate" style="max-width: 150px;">
+                                    {{ $employes->postes()->where('poste_id', $poste->id)->first()->pivot->date_debut_fonction }}
+                                </td>
+                                <td class="text-truncate" style="max-width: 150px;">
+                                    {{ $employes->postes()->where('poste_id', $poste->id)->first()->pivot->date_fin_fonction }}
+                                </td>
+                            @endif
                             <td class="d-flex justify-content-between align-items-center">
                                 <div class="options">
                                     <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$poste->id}}"

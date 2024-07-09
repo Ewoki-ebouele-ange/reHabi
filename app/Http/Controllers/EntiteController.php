@@ -151,6 +151,7 @@ class EntiteController extends Controller
 
         return view("poste", [
             'postes' => $postes,
+            'employes' => null,
         ]);
     }
 

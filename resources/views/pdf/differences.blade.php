@@ -9,6 +9,7 @@
 <link href="/assets/css/config/default/app-dark.min.css" rel="stylesheet" type="text/css" id="app-dark-stylesheet" disabled="disabled" />
 
 <!-- icons -->
+<link rel="shortcut icon" href="{{asset("/assets/images/logo-scb-vide.png")}}">
 <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -63,25 +64,28 @@
                                     </tr>
                                     <tr>
                                         <th colspan="2">Fonctionnalités récentes</th>
-                                        <th colspan="2">Fonctionnalités ajoutées</th>
+                                        <th colspan="1">Fonctionnalités ajoutées</th>
+                                        <th colspan="1">Fonctionnalités à suspendre</th>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
                                             @foreach ($empProfil->fonctionnalites()->get() as $empFonct)
-                                                <li>{{$empFonct->libelle_fonct ?? null}} avec pour code {{$empFonct->code_fonct ?? null}} sur le module {{$empFonct->module->libelle_module ?? null}} ({{$empFonct->module->code_module ?? null}}) </li>
+                                                <li>{{$empFonct->libelle_fonct ?? null}} ({{$empFonct->code_fonct ?? null}}) sur le module {{$empFonct->module->libelle_module ?? null}} ({{$empFonct->module->code_module ?? null}}) </li>
                                             @endforeach
                                         </td>
-                                        <td colspan="2">
-                                            {{-- <td>{{$empProfil->fonctionnalites()->where('fonctionnalites.created_at', '<', $currentTimestamp->subDays(2))->get()}}</td> --}}
-                                        {{-- @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $currentTimestamp->subDays(3))->get() as $empFct) --}}
-                                        {{-- {{$empFct->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}   --}}
-                                        {{-- <li style="background-color: rgb(255, 230, 0)">{{$empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $currentTimestamp->subDays(3))->get()}}</li> --}}
-                                            {{-- @if ($empFct->where('fonctionnalites.created_at', '>', $currentTimestamp->subDays(3))->exists())
-                                                <li style="background-color: red">{{$empFct->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
-                                            @else
-                                                <span>Aucune nouvelle fonctionnalité</span>
-                                            @endif --}}
-                                        {{-- @endforeach --}}
+                                        <td colspan="1">
+                                            
+                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>=', $periodTimestamp)->get() as $pop)
+                                            <li style="background-color: rgb(255, 230, 0)">{{$pop->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
+                                            @endforeach
+
+                                        </td>
+                                        <td colspan="1">
+                                            
+                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>=', $periodTimestamp)->get() as $pop)
+                                            <li style="background-color: rgb(255, 230, 0)">{{$pop->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
+                                            @endforeach
+
                                         </td>
                                     </tr>
                                 </tbody>

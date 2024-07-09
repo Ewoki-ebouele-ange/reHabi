@@ -38,6 +38,7 @@ class CompareController extends Controller
         $reader = SimpleExcelReader::create($fichier);
         $rows = $reader->getRows();
         $currentTimestamp = Carbon::now();
+        $periodTimestamp = Carbon::now()->subDays(3);
         $rows = $rows->map(function ($row) use ($currentTimestamp) {
             $row['created_at'] = $currentTimestamp;
             $row['updated_at'] = $currentTimestamp;
@@ -275,8 +276,17 @@ class CompareController extends Controller
                             ->where('employe_id', $employe->id)
                             ->where('poste_id', $poste->id)
                             ->update([
+                                'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL,
                                 'updated_at' => $row['updated_at'],
-                            ]);
+                        ]);
+                        $employe->postes()->syncWithoutDetaching([
+                            $poste->id => [
+                                'date_debut_fonction' => $row['date_debut_fonction'] != "" ? $row['date_debut_fonction'] : NULL, 
+                                'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL,
+                                'created_at' => $row['created_at'],
+                                'updated_at' => $row['updated_at'],
+                            ],
+                        ]);
                     } else {
                         // Création de l'association avec syncWithoutDetaching
                         $employe->postes()->syncWithoutDetaching([
@@ -299,8 +309,9 @@ class CompareController extends Controller
                             ->where('employe_id', $employe->id)
                             ->where('poste_id', $post[0]["id"])
                             ->update([
+                                'date_fin_fonction' => $row['date_fin_fonction'] != "" ? $row['date_fin_fonction'] : NULL,
                                 'updated_at' => $row['updated_at'],
-                            ]);
+                        ]);
                     } else {
                         // Création de l'association avec syncWithoutDetaching
                         $employe->postes()->syncWithoutDetaching([
@@ -318,17 +329,22 @@ class CompareController extends Controller
             }
             $employes= Employe::all();
             
-            $nvoFonct= Poste::where('created_at', '>', Carbon::now()->subDays(3))->get()->toArray();
+             //dd($nvoFonct);
 
-            // dd($nvoFonct);
-
-            
-            
             $reader->close();
+
+            $pdf = PDF::loadView('pdf.differences', [
+                'employes' => $employes,
+                'periodTimestamp' => $periodTimestamp,
+                // 'dataInExcelNotInDB' => $dataInExcelNotInDB,
+                // 'dataInDBNotInExcel' => $dataInDBNotInExcel,
+            ]);
+            
+            //return $pdf->download('differences.pdf');
+
             return view("pdf.differences", [
                 'employes' => $employes,
-                'nvoFonct' => $nvoFonct,
-                'currentTimestamp' => $currentTimestamp,
+                'periodTimestamp' => $periodTimestamp,
                 //'dataInExcelNotInDB' => $dataInExcelNotInDB,
                 //'dataInDBNotInExcel' => $dataInDBNotInExcel,
             ]);

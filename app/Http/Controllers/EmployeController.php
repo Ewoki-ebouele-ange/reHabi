@@ -148,12 +148,13 @@ class EmployeController extends Controller
         //return redirect()->route('employe')->with('success','Employé ' .$emp->nom. ' supprimé avec succès');
     }
 
-    public function poste ($employe) {
+    public function postes ($employe) {
         $employ = Employe::find($employe);
         $postes = $employ->postes()->get();
 
         return view("poste", [
             'postes' => $postes,
+            'employes' => $employ,
         ]);
     }
 
