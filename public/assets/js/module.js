@@ -169,7 +169,7 @@ $(document).ready(function() {
         url: '/module/list',
         type: 'GET',
         success: function(response) {
-            $('#modulesList').html(response);
+            $('#datatable').html(response);
         },
         error: function() {
             showAlertModalError('Failed to reload module list.');

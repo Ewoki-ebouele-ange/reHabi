@@ -224,7 +224,7 @@ $(document).ready(function() {
         url: '/profil/list',
         type: 'GET',
         success: function(response) {
-            $('#profilsList').html(response);
+            $('#datatable').html(response);
         },
         error: function() {
             showAlertModalError('Failed to reload profil list.');

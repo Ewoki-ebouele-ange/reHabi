@@ -25,6 +25,7 @@ class CreateEmployeRequest extends FormRequest
         return [
             'nom' => ['required'],
             'matricule' => ['required', Rule::unique('employes')->ignore($this->route()->parameter('employe'))],
+            //'poste_input' => ['required']
         ];
     }
 }

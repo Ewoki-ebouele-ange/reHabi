@@ -46,6 +46,93 @@ $(document).ready(function () {
         });
     });
 
+    // Assigner un poste
+    $(document).on("click", ".openModal_one", function (event) {
+        event.preventDefault();
+        employeId = $(this).data("id");
+
+        $.get("/employe/" + employeId + "/edit", function (data) {
+            // $("#assignPostForm").attr("action", "/employe/" + employeId + "/assignPoste");
+            $("#empNom").text(data.nom);
+            $("#empMat").text(data.matricule);
+        });
+    });
+
+    $("#assignPostForm").on('submit', function(event){
+        event.preventDefault();
+        var formData2 = $(this).serialize();
+        // console.log(formData2)
+
+        $.ajax({
+            url: "/employe/" + employeId + "/assignPoste",
+            type: "POST",
+            data: {
+                formData2, 
+                poste_input: $('#poste_input').val(),
+                deb_fonct: $('#deb_fonct').val(),
+                fin_fonct: $('#fin_fonct').val()
+            },
+            success: function (response) {
+                if (response.success) {
+                    showAlertModalSuccess(response.message);
+                    //updateEmployeList();
+                    $("#custom-modal-four").modal("hide");
+                } else {
+                    showAlertModalWarning(
+                        "Something went wrong. Please try again."
+                    );
+                }
+            },
+            error: function (error) {
+                showAlertModalError("An error occurred. Please try again.");
+                //console.log(error)
+            },
+        })
+    })
+
+    // Assigner un profil
+    $(document).on("click", ".openModal_two", function (event) {
+        event.preventDefault();
+        employeId = $(this).data("id");
+
+        $.get("/employe/" + employeId + "/edit", function (data) {
+            // $("#assignPostForm").attr("action", "/employe/" + employeId + "/assignPoste");
+            $("#empName").text(data.nom);
+            $("#empMatr").text(data.matricule);
+        });
+    });
+
+    $("#assignProfForm").on('submit', function(event){
+        event.preventDefault();
+        var formData = $(this).serialize();
+        // console.log(formData2)
+
+        $.ajax({
+            url: "/employe/" + employeId + "/assignProfil",
+            type: "POST",
+            data: {
+                formData, 
+                poste_input: $('#profil_input').val(),
+                deb_fonct: $('#ass_profil').val()
+            },
+            success: function (response) {
+                if (response.success) {
+                    showAlertModalSuccess(response.message);
+                    //updateEmployeList();
+                    $("#custom-modal-five").modal("hide");
+                } else {
+                    showAlertModalWarning(
+                        "Something went wrong. Please try again."
+                    );
+                }
+            },
+            error: function (error) {
+                showAlertModalError("An error occurred. Please try again.");
+                //console.log(error)
+            },
+        })
+    })
+
     //Ajouter un employé
     $("#addForm").on("submit", function (event) {
         event.preventDefault();
@@ -191,7 +278,7 @@ $(document).ready(function () {
             url: "/employe/list",
             type: "GET",
             success: function (response) {
-                $("#employesList").html(response);
+                $("#datatable").html(response);
             },
             error: function () {
                 showAlertModalError("Failed to reload employe list.");

@@ -20,6 +20,7 @@ class PosteController extends Controller
         $postes = \App\Models\Poste::all();
         return view("poste", [
             'postes' => $postes,
+            'employes' => null,
         ]);
     }
 
@@ -160,6 +161,8 @@ class PosteController extends Controller
 
         return view("employe", [
             'employes' => $employes,
+            'entite' => null,
+            'apps' => null,
         ]);
     }
 

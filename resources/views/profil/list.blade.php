@@ -1,41 +1,79 @@
-@foreach ($profils as $profil)
-<tr>
-    <td>{{ $profil->id }}</td>
-    <td class="text-truncate" style="max-width: 100px;">{{ $profil->code_profil }}</td>
-    <td class="text-truncate" style="max-width: 100px;">{{ $profil->libelle_profil }}</td>
-    <td class="d-flex justify-content-between align-items-center">
-        <div class="options">
-            <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$profil->id}}"
-                class="btn btn-xs waves-effect waves-light openModal" data-animation="fadein"
-                data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-                <i class="fe-edit"></i>
-            </a>
-            <button type="button" id="sa-warning" data-id="{{ $profil->id }}" class="btn btn-xs btn-danger waves-effect waves-light delete-button">
-                <i class="fe-trash-2"></i>
-            </button>
-        </div>
-        <div class="dropdown float-end">
-            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="mdi mdi-dots-vertical"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-start">
-                <!-- item-->
-                <a href="{{route('profil.fonctionnalites', $profil->id)}}" class="dropdown-item">
-                    Fonctionnalités
+<table id="datatable" class="table table-sm table-striped table-bordered table-hover dt-responsive nowrap">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Code</th>
+        <th>Libelle</th>
+        @if ($employes)
+        <th>Date d'assignation</th>
+        <th>Date de suspension</th>
+        <th>Date de dernière modification</th>
+        <th>Date de dernière connexion</th>
+        @endif
+        <th>Actions</th>
+    </tr>
+    </thead>
+
+
+    <tbody id="profilsList">
+        @foreach ($profils as $profil)
+    <tr>
+        <td>{{ $profil->id }}</td>
+        <td class="text-truncate" style="max-width: 100px;">{{ $profil->code_profil }}</td>
+        <td class="text-truncate" style="max-width: 100px;">{{ $profil->libelle_profil }}</td>
+        @if ($employes)
+            <td class="text-truncate" style="max-width: 150px;">
+                {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_assignation }}
+            </td>
+            <td class="text-truncate" style="max-width: 150px;">
+                {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_suspension }}
+            </td>
+            <td class="text-truncate" style="max-width: 150px;">
+                {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_modification }}
+            </td>
+            <td class="text-truncate" style="max-width: 150px;">
+                {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_connexion }}
+            </td>
+        @endif
+        <td class="d-flex justify-content-between align-items-center">
+            <div class="options">
+                <a data-bs-toggle="modal" data-bs-target="#custom-modal" data-id="{{$profil->id}}"
+                    class="btn btn-xs waves-effect waves-light openModal" data-animation="fadein"
+                    data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                    <i class="fe-edit"></i>
                 </a>
-                <!-- item-->
-                <a href="{{route('profil.postes', $profil->id)}}" class="dropdown-item">
-                    Postes
-                </a>
-                <!-- item-->
-                <a href="{{route('profil.employes', $profil->id)}}" class="dropdown-item">
-                    employés
-                </a>
+                <button type="button" id="sa-warning" data-id="{{ $profil->id }}" class="btn btn-xs btn-danger waves-effect waves-light delete-button">
+                    <i class="fe-trash-2"></i>
+                </button>
             </div>
-        </div>
-    </td>
-</tr>
-@endforeach
+            <div class="dropdown float-end">
+                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="mdi mdi-dots-vertical"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-start">
+                    <!-- item-->
+                    <a href="{{route('profil.fonctionnalites', $profil->id)}}" class="dropdown-item">
+                        Fonctionnalités
+                    </a>
+                    <!-- item-->
+                    <a href="{{route('profil.postes', $profil->id)}}" class="dropdown-item">
+                        Postes
+                    </a>
+                    <!-- item-->
+                    <a href="{{route('profil.employes', $profil->id)}}" class="dropdown-item">
+                        employés
+                    </a>
+                    <!-- item-->
+                    <a href="{{route('profil.application', $profil->id)}}" class="dropdown-item">
+                        application
+                    </a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    @endforeach
+    </tbody>
+</table>
 
 
 <script src="{{asset("/assets/js/profil.js")}}"></script>

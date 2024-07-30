@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateEmployeRequest;
 use Illuminate\View\View;
 use App\Models\Employe;
+use App\Models\Poste;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use \Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class EmployeController extends Controller
 {
@@ -18,13 +21,18 @@ class EmployeController extends Controller
         //dd(Auth::user());
 
         $employes = \App\Models\Employe::all();
+        $entite = \App\Models\Entite::all();
+        $apps = \App\Models\Application::all();
         return view("employe", [
             'employes' => $employes,
+            'entite' => $entite,
+            'apps' => $apps,
         ]);
     }
 
     public function store(CreateEmployeRequest $request){
         $employe = Employe::create($request->validated());
+
         return response()->json([
             'success' => true,
             'message' => "L'employé a bien été modifié",
@@ -39,14 +47,77 @@ class EmployeController extends Controller
 
     public function update(Employe $employe, CreateEmployeRequest $request){
         $employe->update($request->validated());
+       // $nom = $request->validated()->nom;
 
         return response()->json([
             'success' => true,
-            'message' => "L'employé a bien été modifié",
+            'message' => "L'employé ".$employe->nom." a bien été modifié",
         ]);
         //return redirect()->route('employe')->with('success', "L'employé a bien été modifié");
     }
 
+    public function assignPoste (Employe $employe, Request $request){
+        
+            $poste_input = $request->poste_input;
+            $deb_fonct = $request->deb_fonct;
+            $fin_fonct = $request->fin_fonct;
+
+            $pos = Poste::findOrFail($poste_input);
+
+            DB::table('employe_poste')
+                ->where('employe_id', $employe->id)
+                ->where('poste_id', $employe->posteActuel()->id)
+                ->update([
+                    'date_fin_fonction' => $fin_fonct,
+                    'updated_at' => Carbon::now(),
+            ]);
+
+            $employe->postes()->syncWithoutDetaching([
+                $poste_input => [
+                    'date_debut_fonction' => $deb_fonct, 
+                    'date_fin_fonction' => NULL,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => "Le poste ".$pos->libelle_poste." a bien été assigné à ".$employe->nom,
+            ]);
+    }
+
+    public function assignProfil (Employe $employe, Request $request){
+        
+        $profil_input = $request->profil_input;
+        $ass_profil = $request->ass_profil;
+
+        // $prf = Poste::findOrFail($poste_input);
+
+        // DB::table('employe_poste')
+        //     ->where('employe_id', $employe->id)
+        //     ->where('poste_id', $employe->posteActuel()->id)
+        //     ->update([
+        //         'date_fin_fonction' => $fin_fonct,
+        //         'updated_at' => Carbon::now(),
+        // ]);
+
+        $employe->profil()->syncWithoutDetaching([
+            $poste_input => [
+                'date_assignation' => $ass_profil, 
+                'date_suspension' => NULL, 
+                'date_derniere_modification' => $ass_profil, 
+                'date_derniere_connexion' => NULL,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Le poste a bien été assigné à ".$employe->nom,
+        ]);
+}
 
     public function list() : View
     {

@@ -170,7 +170,7 @@ $(document).ready(function() {
         url: '/fonct/list',
         type: 'GET',
         success: function(response) {
-            $('#fonctsList').html(response);
+            $('#datatable').html(response);
         },
         error: function() {
             showAlertModalError('Failed to reload fonctionnality list.');

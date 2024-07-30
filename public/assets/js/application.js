@@ -170,7 +170,7 @@ var appId = null;
                 url: '/application/list',
                 type: 'GET',
                 success: function(response) {
-                    $('#appsList').html(response);
+                    $('#datatable').html(response);
                 },
                 error: function() {
                     showAlertModalError('Failed to reload application list.');

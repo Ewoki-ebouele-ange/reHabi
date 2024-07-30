@@ -86,7 +86,7 @@ $(document).ready(function() {
         }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-            url: '/entite/delete/' + deleteAppId, // Votre route de suppression
+            url: '/entite/delete/' + deleteEntId, // Votre route de suppression
             type: 'DELETE',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content') // Token CSRF
@@ -131,7 +131,7 @@ $(document).ready(function() {
         success: function(response) {
             if (response.success) {
                 showAlertModalSuccess(response.message);
-                updateEmployeList();
+                updateEntList();
                 $('#custom-modal-two').modal('hide');
             } else {
                 showAlertModalWarning('Something went wrong. Please try again.');
@@ -168,7 +168,7 @@ $(document).ready(function() {
         url: '/entite/list',
         type: 'GET',
         success: function(response) {
-            $('#entitesList').html(response);
+            $('#datatable').html(response);
         },
         error: function() {
             showAlertModalError('Failed to reload application list.');

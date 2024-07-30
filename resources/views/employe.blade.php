@@ -9,6 +9,12 @@
      <!-- third party css end -->
      <!-- Sweet Alert-->
         <link href="{{asset("/assets/libs/sweetalert2/sweetalert2.min.css")}}" rel="stylesheet" type="text/css" />
+        <!-- Plugins css -->
+        <link href="{{asset("/assets/libs/mohithg-switchery/switchery.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("/assets/libs/multiselect/css/multi-select.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("/assets/libs/select2/css/select2.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("/assets/libs/selectize/css/selectize.bootstrap3.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css")}}" rel="stylesheet" type="text/css" />
 
 @endsection
 
@@ -63,6 +69,16 @@
                                         class="btn btn-xs waves-effect waves-light openModal" data-animation="fadein"
                                         data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
                                         <i class="fe-edit"></i>
+                                    </a>
+                                    <a data-bs-toggle="modal" data-bs-target="#custom-modal-four" data-id="{{$employe->id}}"
+                                        class="btn btn-xs waves-effect waves-light openModal_one" data-animation="fadein"
+                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                        <i class="fe-paperclip"></i>
+                                    </a>
+                                    <a data-bs-toggle="modal" data-bs-target="#custom-modal-five" data-id="{{$employe->id}}"
+                                        class="btn btn-xs waves-effect waves-light openModal_two" data-animation="fadein"
+                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                        <i class="fe-link"></i>
                                     </a>
                                     <button type="button" id="sa-warning" data-id="{{ $employe->id }}" class="btn btn-xs btn-danger waves-effect waves-light delete-button">
                                         <i class="fe-trash-2"></i>
@@ -163,6 +179,18 @@
                                 {{$message}}
                             @enderror
                         </div>
+                        {{-- <div class="mb-3">
+                            <select class="form-control" data-toggle="select2" data-width="100%">
+                                @foreach ($entite as $ent)
+                                <option>Selectionner un poste</option>
+                                <optgroup label="{{$ent->libelle_entite}}">
+                                    @foreach ($ent->postes()->get() as $poste)
+                                    <option value="AK">{{$poste->libelle_poste}}</option>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
+                        </div> --}}
                         <button type="submit" class="btn btn-success waves-effect waves-light me-1" data-bs-dismiss="modal">Save</button>
                         <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal">Cancel</button>
                     </form>
@@ -193,6 +221,88 @@
                         <div class="d-flex flex-row justify-content-between">
                             <button class="btn btn-success" type="submit">Exporter</button>
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Modal assign poste -->
+    <div class="modal fade" id="custom-modal-four" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Assigner un poste à <span id="empNom"></span> (<span id="empMat"></span>)</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="assignPostForm" method="POST" class="d-flex flex-column aligns-items-center">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label" for="fin_fonct">Entrer la date d'arret de dernière fonction</label>
+                            <input class="form-control" type="date" name="fin_fonct" id="fin_fonct">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="poste_input">Sélectionner un poste</label>
+                            <select id="poste_input" class="form-control" data-toggle="select2" data-width="100%">
+                                <option>--poste--</option>
+                                @foreach ($entite as $ent)
+                                <optgroup label="{{$ent->libelle_entite}}">
+                                    @foreach ($ent->postes()->get() as $poste)
+                                    <option value="{{$poste->id}}">{{$poste->libelle_poste}}</option>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="deb_fonct">Entrer la date de debut de sa fonction</label>
+                            <input class="form-control" type="date" name="deb_fonct" id="deb_fonct">
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <button class="btn btn-success" type="submit" data-bs-dismiss="modal">Assigner</button>
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Modal assign profil -->
+    <div class="modal fade" id="custom-modal-five" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Assigner profil à <span id="empName"></span> (<span id="empMatr"></span>)</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="assignProfForm" method="POST" class="d-flex flex-column aligns-items-center">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label" for="profil_input">Sélectionner un profil</label>
+                            <select id="profil_input" class="form-control" data-toggle="select2" data-width="100%">
+                                <option>--profils--</option>
+                                @foreach ($apps as $app)
+                                <optgroup label="{{$app->libelle_application}}">
+                                    @foreach ($app->profils()->get() as $profil)
+                                    <option value="{{$profil->id}}">{{$profil->libelle_profil}}</option>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="ass_profil">Entrer la date d'assignation du profil</label>
+                            <input class="form-control" type="date" name="ass_profil" id="ass_profil">
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <button class="btn btn-success" type="submit" data-bs-dismiss="modal">Assigner</button>
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Annuler</button>
                         </div>
                     </form>
                 </div>

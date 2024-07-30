@@ -196,7 +196,7 @@ $(document).ready(function() {
         url: '/poste/list',
         type: 'GET',
         success: function(response) {
-            $('#postesList').html(response);
+            $('#datatable').html(response);
         },
         error: function() {
             showAlertModalError('Failed to reload poste list.');

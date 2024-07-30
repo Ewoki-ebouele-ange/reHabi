@@ -30,7 +30,6 @@
     </ul> --}}
     @foreach ($employes as $employe)
 
-        @foreach ($employe->profils()->get() as $empProfil)
         
             <div class="col-lg-6">
                 <div class="card">
@@ -53,19 +52,17 @@
                                         <td colspan="2"> {{$employe->posteActuel()->libelle_poste}} ({{$employe->posteActuel()->code_poste}}) </td>
                                         <td colspan="2"> {{$employe->postePrecedent()->libelle_poste ?? $employe->posteActuel()->libelle_poste }} ({{$employe->postePrecedent()->code_poste ?? $employe->posteActuel()->code_poste}}) </td>
                                     </tr>
+        @foreach ($employe->profils()->get() as $empProfil)
+
                                     <tr>
-                                        <th scope="row" colspan="4">{{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
+                                        <th scope="row" colspan="4" style="background-color:rgb(201, 199, 199)">Application : {{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
                                     </tr>
                                     <tr>
-                                        <th colspan="4">Profil actuel</th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="4">{{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}} </td>
+                                        <th colspan="4" style="background-color: {{$employe->posteActuel()->pivot->date_fin_fonction ? 'rgb(255, 230, 0)' : ''}};">Profil : {{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}}</th>
                                     </tr>
                                     <tr>
                                         <th colspan="2">Fonctionnalités récentes</th>
-                                        <th colspan="1">Fonctionnalités ajoutées</th>
-                                        <th colspan="1">Fonctionnalités à suspendre</th>
+                                        <th colspan="2">Fonctionnalités ajoutées</th>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
@@ -73,21 +70,14 @@
                                                 <li>{{$empFonct->libelle_fonct ?? null}} ({{$empFonct->code_fonct ?? null}}) sur le module {{$empFonct->module->libelle_module ?? null}} ({{$empFonct->module->code_module ?? null}}) </li>
                                             @endforeach
                                         </td>
-                                        <td colspan="1">
-                                            
-                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>=', $periodTimestamp)->get() as $pop)
+                                        <td colspan="2">
+                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $periodTimestamp)->get() as $pop)
                                             <li style="background-color: rgb(255, 230, 0)">{{$pop->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
                                             @endforeach
-
-                                        </td>
-                                        <td colspan="1">
-                                            
-                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>=', $periodTimestamp)->get() as $pop)
-                                            <li style="background-color: rgb(255, 230, 0)">{{$pop->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
-                                            @endforeach
-
                                         </td>
                                     </tr>
+        @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -97,7 +87,6 @@
                 </div>
             
             </div>
-        @endforeach
     @endforeach
     
 </body>

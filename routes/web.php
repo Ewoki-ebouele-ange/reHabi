@@ -83,6 +83,8 @@ Route::prefix('/employe')->middleware('auth')->controller(\EmployeController::cl
     Route::delete('/delete/{employe}', 'destroy')->name('employe.destroy');
     Route::get('/{employe}/postes', 'postes')->name('employe.postes');
     Route::get('/{employe}/profils', 'profils')->name('employe.profils');
+    Route::post('/{employe}/assignPoste', 'assignPoste')->name('employe.assignPoste');
+    Route::post('/{employe}/assignProfil', 'assignProfil')->name('employe.assignProfil');
 
 });
 
