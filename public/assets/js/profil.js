@@ -46,6 +46,50 @@ $(document).ready(function() {
         });
     });
 
+    // Assigner un role
+    $(document).on("click", ".openModal_two", function (event) {
+        event.preventDefault();
+        profilId = $(this).data("id");
+
+        $.get("/profil/" + profilId + "/edit", function (data) {
+            // $("#assignPostForm").attr("action", "/employe/" + employeId + "/assignPoste");
+            $("#prfLib").text(data.libelle_profil);
+            $("#prfCode").text(data.code_profil);
+        });
+    });
+    $("#assignRoleForm").on('submit', function(event){
+        event.preventDefault();
+        var formData6 = $(this).serialize();
+        // console.log(formData2)
+
+        
+
+        $.ajax({
+            url: "/profil/" + profilId + "/assignRole",
+            type: "POST",
+            data: {
+                formData6, 
+                role_input: $('#role_input').val(),
+            },
+            success: function (response) {
+                if (response.success) {
+                    showAlertModalSuccess(response.message);
+                    //updateEmployeList();
+                    $("#custom-modal-five").modal("hide");
+                } else {
+                    showAlertModalWarning(
+                        "Something went wrong. Please try again."
+                    );
+                }
+            },
+            error: function (error) {
+                //showAlertModalError("An error occurred. Please try again.");
+                //console.log($('#profil_input').val())
+                 console.error(error)
+            },
+        })
+    })
+
     $('#addForm').on('submit', function(event) {
         event.preventDefault();
 

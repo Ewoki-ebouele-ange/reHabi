@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateProfilRequest;
 use Illuminate\View\View;
 use App\Models\Profil;
+use App\Models\Fonctionnalite;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use Carbon\Carbon;
@@ -18,12 +19,14 @@ class ProfilController extends Controller
         //dd(Auth::user());
 
         $profils = \App\Models\Profil::all();
+        $apps = \App\Models\Application::all();
         return view("profil", [
             'profils' => $profils,
             'employes' => null,
             'foncts' => null,
             'postes' => null,
             'applications' => null,
+            'apps' => $apps,
         ]);
     }
 
@@ -46,7 +49,6 @@ class ProfilController extends Controller
     
     }
 
-
     public function update(Profil $profil, CreateProfilRequest $request){
         $profil->update($request->validated());
         return response()->json([
@@ -54,6 +56,22 @@ class ProfilController extends Controller
             'message' => "Le profil a bien été modifié",
         ]);
     }
+
+    public function assignRole(Profil $profil, Request $request){
+        
+        $role_input = $request->role_input;
+
+        $role = Fonctionnalite::findOrFail($role_input);
+
+        // dd($prf);
+
+        $profil->fonctionnalites()->syncWithoutDetaching($role_input);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Le role ".$role->libelle_fonct." a bien été assigné au profil ".$profil->libelle_profil,
+        ]);
+}
 
     public function list() : View
     {

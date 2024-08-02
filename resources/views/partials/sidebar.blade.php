@@ -117,6 +117,18 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href={{route('addData')}}>
+                        <i class="mdi mdi-view-dashboard"></i>
+                        <span> Données trimestrielles </span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <i class="mdi mdi-view-dashboard"></i>
+                        <span> Rapport des écarts </span>
+                    </a>
+                </li>
                 {{-- <li>
                     <a href={{route('revue')}}>
                         <i class="mdi mdi-view-dashboard"></i>

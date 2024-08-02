@@ -173,6 +173,8 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::get('/{profil}/postes', 'postes')->name('profil.postes');
     Route::get('/{profil}/employes', 'employes')->name('profil.employes');
     Route::get('/{profil}/application', 'application')->name('profil.application');
+    Route::post('/{profil}/assignRole', 'assignRole')->name('employe.assignRole');
+
 });
 
 //importer fichier
@@ -181,5 +183,8 @@ Route::post('/poste/add/importEEP', 'ImporterFichier@import')->name('importEEP')
 Route::post('/profil/add/importFP', 'ImporterFichier@importFonctProfil')->name('importFP');
 
 Route::post('/profil/add/importIC', 'CompareController@compare')->name('importIC');
+
+Route::get('/addData', 'DataController@index')->name('addData');
+Route::post('/addData/add', 'DataController@import')->name('addData.importEmploye');
 //Route::get('/revue', 'CompareController@import')->name('revue');
 //Route::get('/importer', 'ImporterFichier@import')->name('import');

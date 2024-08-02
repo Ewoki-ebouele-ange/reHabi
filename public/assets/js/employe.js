@@ -19,7 +19,6 @@ $(document).ready(function () {
             $("#matricule").val(data.matricule);
         });
     });
-
     $("#editForm").on("submit", function (event) {
         event.preventDefault();
 
@@ -57,7 +56,6 @@ $(document).ready(function () {
             $("#empMat").text(data.matricule);
         });
     });
-
     $("#assignPostForm").on('submit', function(event){
         event.preventDefault();
         var formData2 = $(this).serialize();
@@ -101,19 +99,20 @@ $(document).ready(function () {
             $("#empMatr").text(data.matricule);
         });
     });
-
     $("#assignProfForm").on('submit', function(event){
         event.preventDefault();
-        var formData = $(this).serialize();
+        var formData6 = $(this).serialize();
         // console.log(formData2)
+
+        
 
         $.ajax({
             url: "/employe/" + employeId + "/assignProfil",
             type: "POST",
             data: {
-                formData, 
-                poste_input: $('#profil_input').val(),
-                deb_fonct: $('#ass_profil').val()
+                formData6, 
+                profil_input: $('#profil_input').val(),
+                ass_profil: $('#ass_profil').val()
             },
             success: function (response) {
                 if (response.success) {
@@ -128,7 +127,8 @@ $(document).ready(function () {
             },
             error: function (error) {
                 showAlertModalError("An error occurred. Please try again.");
-                //console.log(error)
+                //console.log($('#profil_input').val())
+                // console.error(error)
             },
         })
     })
@@ -209,9 +209,7 @@ $(document).ready(function () {
     });
 
     //Importer les employés
-    document
-        .getElementById("file-input1")
-        .addEventListener("change", function () {
+    document.getElementById("file-input1").addEventListener("change", function () {
             document
                 .getElementById("upload-form")
                 .submit()
@@ -252,7 +250,7 @@ $(document).ready(function () {
                         },
                     });
                 });
-        });
+    });
 
     //Alerte de succès
     function showAlertModalSuccess(message) {

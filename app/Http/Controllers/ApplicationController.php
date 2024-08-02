@@ -175,7 +175,9 @@ class ApplicationController extends Controller
             'employes' => null,
             'foncts' => null,
             'postes' => null,
-            'applications' => $app
+            'applications' => $app,
+            'apps' => null
+
         ]);
     }
 }

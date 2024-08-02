@@ -175,7 +175,9 @@ class PosteController extends Controller
             'employes' => null,
             'foncts' => null,
             'postes' => $post,
-            'applications' => null
+            'applications' => null,
+            'apps' => null
+
         ]);
     }
 }

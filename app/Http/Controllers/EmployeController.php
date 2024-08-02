@@ -7,6 +7,7 @@ use App\Http\Requests\CreateEmployeRequest;
 use Illuminate\View\View;
 use App\Models\Employe;
 use App\Models\Poste;
+use App\Models\Profil;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use Carbon\Carbon;
@@ -64,14 +65,6 @@ class EmployeController extends Controller
 
             $pos = Poste::findOrFail($poste_input);
 
-            DB::table('employe_poste')
-                ->where('employe_id', $employe->id)
-                ->where('poste_id', $employe->posteActuel()->id)
-                ->update([
-                    'date_fin_fonction' => $fin_fonct,
-                    'updated_at' => Carbon::now(),
-            ]);
-
             $employe->postes()->syncWithoutDetaching([
                 $poste_input => [
                     'date_debut_fonction' => $deb_fonct, 
@@ -79,6 +72,14 @@ class EmployeController extends Controller
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]
+            ]);
+
+            DB::table('employe_poste')
+                ->where('employe_id', $employe->id)
+                ->where('poste_id', $employe->postePrecedent()->id)
+                ->update([
+                    'date_fin_fonction' => $fin_fonct,
+                    'updated_at' => Carbon::now(),
             ]);
     
             return response()->json([
@@ -92,18 +93,12 @@ class EmployeController extends Controller
         $profil_input = $request->profil_input;
         $ass_profil = $request->ass_profil;
 
-        // $prf = Poste::findOrFail($poste_input);
+        $prf = Profil::findOrFail($profil_input);
 
-        // DB::table('employe_poste')
-        //     ->where('employe_id', $employe->id)
-        //     ->where('poste_id', $employe->posteActuel()->id)
-        //     ->update([
-        //         'date_fin_fonction' => $fin_fonct,
-        //         'updated_at' => Carbon::now(),
-        // ]);
+        // dd($prf);
 
-        $employe->profil()->syncWithoutDetaching([
-            $poste_input => [
+        $employe->profils()->syncWithoutDetaching([
+            $profil_input => [
                 'date_assignation' => $ass_profil, 
                 'date_suspension' => NULL, 
                 'date_derniere_modification' => $ass_profil, 
@@ -115,7 +110,7 @@ class EmployeController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "Le poste a bien été assigné à ".$employe->nom,
+            'message' => "Le profil ".$prf->libelle_profil." a bien été assigné à ".$employe->nom,
         ]);
 }
 
@@ -238,7 +233,8 @@ class EmployeController extends Controller
             'employes' => $employ,
             'foncts' => null,
             'postes' => null,
-            'applications' => null
+            'applications' => null,
+            'apps' => null
         ]);
     }
 }

@@ -88,7 +88,7 @@
                                     <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="mdi mdi-dots-vertical"></i>
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-start">
+                                    <div class="dropdown-menu dropdown-meu-start">
                                         <!-- item-->
                                         <a href="{{route('employe.profils', $employe->id)}}" class="dropdown-item">
                                             Profils
@@ -285,7 +285,7 @@
                         @csrf
                         <div class="mb-3">
                             <label class="form-label" for="profil_input">Sélectionner un profil</label>
-                            <select id="profil_input" class="form-control" data-toggle="select2" data-width="100%">
+                            <select id="profil_input" class="form-control" data-width="100%">
                                 <option>--profils--</option>
                                 @foreach ($apps as $app)
                                 <optgroup label="{{$app->libelle_application}}">

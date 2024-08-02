@@ -173,7 +173,10 @@ class FonctController extends Controller
             'profils' => $profils,
             'employes' => null,
             'foncts' => $fon,
-            'postes' => null
+            'postes' => null,
+            'applications' => null,
+            'apps' => null
+
         ]);
     }
 }

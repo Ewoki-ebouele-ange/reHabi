@@ -109,6 +109,11 @@
                                         data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
                                         <i class="fe-edit"></i>
                                     </a>
+                                    <a data-bs-toggle="modal" data-bs-target="#custom-modal-five" data-id="{{$profil->id}}"
+                                        class="btn btn-xs waves-effect waves-light openModal_two" data-animation="fadein"
+                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                        <i class="fe-link"></i>
+                                    </a>
                                     <button type="button" id="sa-warning" data-id="{{ $profil->id }}" class="btn btn-xs btn-danger waves-effect waves-light delete-button">
                                         <i class="fe-trash-2"></i>
                                     </button>
@@ -278,6 +283,45 @@
             </div><!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+
+        <!-- Modal assign profil -->
+    <div class="modal fade" id="custom-modal-five" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myCenterModalLabel">Assigner un rôle au profil <span id="prfLib"></span> (<span id="prfCode"></span>)</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="assignRoleForm" method="POST" class="d-flex flex-column aligns-items-center">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label" for="role_input">Sélectionner une fonctionnalité</label>
+                            <select id="role_input" class="form-control" data-width="100%">
+                                <option>--profils--</option>
+                                @foreach ($apps as $app)
+                                <optgroup label="{{$app->libelle_application}}" style="color: rgb(0, 0, 0); font-size: 20px;">
+                                    @foreach ($app->modules()->get() as $modules)
+                                    <optgroup label="{{$modules->libelle_module}}">
+                                        @foreach ($modules->fonctionnalites()->get() as $fonction)
+                                            <option value="{{$fonction->id}}">{{$fonction->libelle_fonct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between">
+                            <button class="btn btn-success" type="submit" data-bs-dismiss="modal">Confirmer</button>
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     
             <!-- Success Alert Modal -->
             <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
