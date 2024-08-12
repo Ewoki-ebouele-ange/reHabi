@@ -186,5 +186,12 @@ Route::post('/profil/add/importIC', 'CompareController@compare')->name('importIC
 
 Route::get('/addData', 'DataController@index')->name('addData');
 Route::post('/addData/add', 'DataController@import')->name('addData.importEmploye');
+Route::post('/addData/extraction', 'DataController@extraction')->name('addData.importExtractions');
+
+
+Route::get('/rapports', 'RapController@index')->name('rapports');
+Route::get('/rapports/apercu', 'RapController@show')->name('rapports.show');
+Route::get('/rapports/{rapport}/download', 'RapController@download')->name('rapports.download');
+
 //Route::get('/revue', 'CompareController@import')->name('revue');
 //Route::get('/importer', 'ImporterFichier@import')->name('import');

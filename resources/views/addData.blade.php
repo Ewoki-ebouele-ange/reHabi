@@ -1,126 +1,124 @@
 @extends("layouts.index")
 
 @section('link')
-    <!-- Plugins css -->
-    <link href="{{asset("/assets/libs/dropzone/min/dropzone.min.css")}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset("/assets/libs/dropify/css/dropify.min.css")}}" rel="stylesheet" type="text/css" />
+    
+    <link href="{{asset("/assets/libs/sweetalert2/sweetalert2.min.css")}}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
     <!-- Start Content-->
     <div class="container-fluid">
+        @if(session('session'))
+            <div>
+                {{session('success')}}   
+            </div>                       
+        @endif
 
         <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title">Fichier des employés</h4>
-                        <p class="sub-header">
-                            Le fichier suivant doit contenir les informations des employés (fichier reçu du capital humain)
-                        </p>
-
-                        <form role="form" id="dataForm" method="POST" action="{{route('addData.importEmploye')}}" enctype="multipart/form-data">
-                            @csrf
-                            <div action='/' class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
-                            data-upload-preview-template="#uploadPreviewTemplate">
-                            <div class="fallback">
-                                    <input name="fichier" type="file"/>
-                                </div>
-
-                                <div class="dz-message needsclick">
-                                    <i class="h1 text-muted dripicons-cloud-upload"></i>
-                                    <h3>Déposez le fichier ici ou cliquez pour télécharger.</h3>
-                                    <span class="text-muted font-13">(This is just a demo dropzone. Selected files are
-                                        <strong>not</strong> actually uploaded.)</span>
-                                </div>
-                            </div>
-                        
-
-                        <!-- Preview -->
-                        <div class="dropzone-previews mt-3 mb-3" id="file-previews"></div>  
-                        <button type="submit" class="btn-success waves-effect waves-light">Soumettre</button>
-
-                        </form>
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-            </div><!-- end col -->
-        </div>
-        <!-- end row -->  
-
-        <!-- file preview template -->
-        <div class="d-none" id="uploadPreviewTemplate">
-            <div class="card mt-1 mb-0 shadow-none border">
-                <div class="p-2">
-                    <div class="row align-items-center">
-                        <div class="col-auto">
-                            <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                        </div>
-                        <div class="col ps-0">
-                            <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                            <p class="mb-0" data-dz-size></p>
-                        </div>
-                        <div class="col-auto">
-                            <!-- Button -->
-                            <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                <i class="dripicons-cross"></i>
-                            </a>
-                        </div>
-                    </div>
+            <form role="form" id="dataForm" action="{{route('addData.importEmploye')}}" method="POST" enctype='multipart/form-data'>
+                @csrf
+                <div class="mb-3">
+                    <label for="fileinput" class="form-label">Veuillez entrer le fichier des employés</label>
+                    <input type="file" id="fileinput" name="fichier" class="form-control">
+                    <button type="submit" class="btn btn-success mt-2">Soumettre</button>
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title">Dropify File Upload</h4>
-                        <p class="sub-header">
-                            Override your input files with style. Your so fresh input file — Default version.
-                        </p>
-
-                        <input type="file" data-plugins="dropify" data-height="300" />
-
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="mt-3">
-                                    <input type="file" data-plugins="dropify" data-default-file="../assets/images/small/img-2.jpg"  />
-                                    <p class="text-muted text-center mt-2 mb-0">Default File</p>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4">
-                                <div class="mt-3">
-                                    <input type="file" data-plugins="dropify" disabled="disabled"  />
-                                    <p class="text-muted text-center mt-2 mb-0">Disabled the input</p>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4">
-                                <div class="mt-3">
-                                    <input type="file" data-plugins="dropify" data-max-file-size="1M" />
-                                    <p class="text-muted text-center mt-2 mb-0">Max File size</p>
-                                </div>
-                            </div>
-                        </div> <!-- end row -->
-
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-            </div><!-- end col -->
+            </form>
         </div>
         <!-- end row -->  
-        
+
+        <p>Entrer les fichiers des extractions du trimestre</p>
+            <form id="extract" class="row" action="{{route('addData.importExtractions')}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <input class="form-control" name="fichier1" type="file" id="inputGroupFile04">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" name="fichier2" type="file" id="inputGroupFile04">
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" name="fichier3" type="file" id="inputGroupFile04">
+                    </div>
+                </div> <!-- end col -->
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <input class="form-control" name="fichier4"  type="file" id="inputGroupFile04">
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-control" name="fichier5" type="file" id="inputGroupFile04">
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-control" name="fichier6" type="file" id="inputGroupFile04">
+                    </div>
+                </div> <!-- end col -->
+            <button type="submit" class="btn btn-success">Soumettre</button>
+        </form>
     </div> 
     <!-- container -->
+
+
+    <!-- Success Alert Modal -->
+    <div id="success-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-filled bg-success">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="dripicons-checkmark h1 text-white"></i>
+                        <h4 class="mt-2 text-white">Reussi!</h4>
+                        <p class="mt-3 text-white" id="success-alert-modal-message"></p>
+                        <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continuer</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->                       
+
+    <!-- Warning Alert Modal -->
+    <div id="warning-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="dripicons-warning h1 text-warning"></i>
+                        <h4 class="mt-2">Information incorrecte</h4>
+                        <p class="mt-3" id="warning-alert-modal-message"></p>
+                        <button type="button" class="btn btn-warning my-2" data-bs-dismiss="modal">Continue</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Danger Alert Modal -->
+    <div id="danger-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modal-filled bg-danger">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="dripicons-wrong h1 text-white"></i>
+                        <h4 class="mt-2 text-white">Erreur</h4>
+                        <p class="mt-3 text-white" id="danger-alert-modal-message"></p>
+                        <button type="button" class="btn btn-light my-2" data-bs-dismiss="modal">Continue</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 
 @section('script')
-<script src="{{asset("/assets/js/addData.js")}}"></script>
+{{-- <script src="{{asset("/assets/js/addData.js")}}"></script> --}}
 
     <!-- Plugins js -->
     <script src="{{asset("/assets/libs/dropzone/min/dropzone.min.js")}}"></script>
     <script src="{{asset("/assets/libs/dropify/js/dropify.min.js")}}"></script>
 
+    <!-- Sweet Alerts js -->
+    <script src="{{asset("/assets/libs/sweetalert2/sweetalert2.all.min.js")}}"></script>
     <!-- Init js-->
     <script src="{{asset("/assets/js/pages/form-fileuploads.init.js")}}"></script>
+
+
 @endsection

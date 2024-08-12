@@ -24,8 +24,6 @@ class CompareController extends Controller
 {
     public function compare(Request $request){
 
-        
-
         // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
         $this->validate($request, [
             'fichier' => 'bail|required|file|mimes:xlsx'

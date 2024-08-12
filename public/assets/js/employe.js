@@ -216,17 +216,15 @@ $(document).ready(function () {
                 .addEventListener("click", function (e) {
                     e.preventDefault();
 
-                    //var uploadData = $(this).serialize();
-                    var formData = new FormData(this);
+                    var uploadData = $(this).serialize();
+                    //var formData = new FormData(this);
 
                     console.log("upload", formData);
 
                     $.ajax({
                         url: "/employe/add/import",
                         type: "POST",
-                        data: formData,
-                        contentType: false, // Nécessaire pour envoyer les fichiers
-                        processData: false, // Nécessaire pour envoyer les fichiers
+                        data: uploadData,
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
                                 "content"

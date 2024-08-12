@@ -124,7 +124,7 @@
                     </a>
                 </li>
                 <li>
-                    <a>
+                    <a href={{route('rapports')}}>
                         <i class="mdi mdi-view-dashboard"></i>
                         <span> Rapport des écarts </span>
                     </a>
