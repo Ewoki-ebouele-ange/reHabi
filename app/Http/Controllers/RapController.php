@@ -39,7 +39,6 @@ class RapController extends Controller
     public function download(Rapport $rapport){
 
         $rap = Rapport::find($rapport);
-        // dd($rap);
 
         $periodTimestamp = Carbon::now()->subDays(3);
 

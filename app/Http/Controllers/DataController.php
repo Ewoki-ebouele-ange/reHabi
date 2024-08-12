@@ -152,7 +152,6 @@ class DataController extends Controller
 
     public function extraction(Request $request){
 
-        // dd("Bonjour");
         // 1. Validation du fichier uploadé. Extension ".xlsx" autorisée
         $this->validate($request, [
             'fichier1' => 'bail|nullable|file|mimes:xlsx',
@@ -202,22 +201,7 @@ class DataController extends Controller
             $rows = $rows->concat($reader6);
         }
 
-        // if($rows->isEmpty()){
-
-        // }
-
-    
-        // 3. $reader : L'instance Spatie\SimpleExcel\SimpleExcelReader
-
-        // $rows = $reader->getRows();
-
-
-
-        // $rows = $reader1->concat($reader2)->concat($reader3)->concat($reader4)->concat($reader5)->concat($reader6);
-
-        // dd($rows);
-
-        $currentTimestamp = Carbon::now();
+         $currentTimestamp = Carbon::now();
         $periodTimestamp = Carbon::now()->subDays(3);
         $rows = $rows->map(function ($row) use ($currentTimestamp) {
             $row['created_at'] = $currentTimestamp;
@@ -227,8 +211,6 @@ class DataController extends Controller
 
         if ($rows->isNotEmpty()) {
             foreach ($rows as $row) {
-
-        //dd(NULL);
 
                 $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
                 $post = Poste::where("code_poste", $row["code_poste"])->get()->toArray();
@@ -504,90 +486,15 @@ class DataController extends Controller
                         ]);
                     }
                 }
-
-                // $rapport = Rapport::create();
-
-
-                //dd($post_prof != null);
             }
 
             Auth::user()->rapports()->create();
 
-            // $employes= Employe::all();
-            
-             //dd($nvoFonct);
-
-            // $reader->close();
-
-            // $pdf = PDF::loadView('pdf.differences', [
-            //     'employes' => $employes,
-            //     'periodTimestamp' => $periodTimestamp,
-            //     // 'dataInExcelNotInDB' => $dataInExcelNotInDB,
-            //     // 'dataInDBNotInExcel' => $dataInDBNotInExcel,
-            // ]);
-            
-            //return $pdf->download('differences.pdf');
-
-            // return view("pdf.differences", [
-            //     'employes' => $employes,
-            //     'periodTimestamp' => $periodTimestamp,
-            //     //'dataInExcelNotInDB' => $dataInExcelNotInDB,
-            //     //'dataInDBNotInExcel' => $dataInDBNotInExcel,
-            // ]);
             return redirect()->route('addData')->with('success', "Informations ajouter avec succès");
 
         } else {
-            return redirect()->route('poste')->with('info', "Aucune nouvelle information à ajouter");
+            return redirect()->route('addData')->with('info', "Aucune nouvelle information à ajouter");
         }
-
-
-
-    
-        // Récupérer les données de la base de données
-        // $employes= Employe::all();
-        // $profils= Profil::all();
-        // $postes=Poste::all();
-        // $applications= Application::all();
-        // $modules= Module::all();
-        // $foncts= Fonctionnalite::all();
-        // $entites= Entite::all();
-    
-        
-        // $databaseProfil = $profils->toArray();
-        // $databaseEmploye = $employes->toArray();
-        // $databasePoste = $postes->toArray();
-        // $databaseApp = $applications->toArray();
-        // $databaseModule = $modules->toArray();
-        // $databaseFonct = $foncts->toArray();
-        // $databaseEntite = $entites->toArray();
-    
-        // $databaseData = array_merge($databaseProfil,$databaseApp,$databaseEmploye, $databaseFonct,$databaseModule,$databasePoste,$databaseEntite);
-    
-        // // Comparer les données
-        // $excelData = $rows->toArray();
-        // $dataInExcelNotInDB = array_udiff($excelData, $databaseData, function ($a, $b) {
-        //     return strcmp(serialize($a), serialize($b));
-        // });
-    
-        // $dataInDBNotInExcel = array_udiff($databaseData, $excelData, function ($a, $b) {
-        //     return strcmp(serialize($a), serialize($b));
-        // });
-    
-        //dd($dataInExcelNotInDB);
-    
-        // Générer le PDF
-        // $pdf = PDF::loadView('pdf.differences', [
-        //     'employes' => $employes,
-        //     // 'dataInExcelNotInDB' => $dataInExcelNotInDB,
-        //     // 'dataInDBNotInExcel' => $dataInDBNotInExcel,
-        // ]);
-    
-        // return view("pdf.differences", [
-        //     'employes' => $employes,
-        //     // 'dataInExcelNotInDB' => $dataInExcelNotInDB,
-        //     // 'dataInDBNotInExcel' => $dataInDBNotInExcel,
-        // ]);
-        //return $pdf->download('differences.pdf');
     }
 }
 

@@ -174,7 +174,19 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::get('/{profil}/employes', 'employes')->name('profil.employes');
     Route::get('/{profil}/application', 'application')->name('profil.application');
     Route::post('/{profil}/assignRole', 'assignRole')->name('employe.assignRole');
+});
 
+Route::prefix('/addData')->middleware('auth')->controller(\DataController::class)->group(function () {
+    Route::get('/', 'index')->name('addData');
+    Route::post('/add', 'import')->name('addData.importEmploye');
+    Route::post('/extraction', 'extraction')->name('addData.importExtractions');
+});
+
+
+Route::prefix('/rapports')->middleware('auth')->controller(\RapController::class)->group(function () {
+    Route::get('/', 'index')->name('rapports');
+    Route::get('/apercu', 'show')->name('rapports.show');
+    Route::get('/{rapport}/download', 'download')->name('rapports.download');
 });
 
 //importer fichier
@@ -184,14 +196,8 @@ Route::post('/profil/add/importFP', 'ImporterFichier@importFonctProfil')->name('
 
 Route::post('/profil/add/importIC', 'CompareController@compare')->name('importIC');
 
-Route::get('/addData', 'DataController@index')->name('addData');
-Route::post('/addData/add', 'DataController@import')->name('addData.importEmploye');
-Route::post('/addData/extraction', 'DataController@extraction')->name('addData.importExtractions');
 
 
-Route::get('/rapports', 'RapController@index')->name('rapports');
-Route::get('/rapports/apercu', 'RapController@show')->name('rapports.show');
-Route::get('/rapports/{rapport}/download', 'RapController@download')->name('rapports.download');
 
 //Route::get('/revue', 'CompareController@import')->name('revue');
 //Route::get('/importer', 'ImporterFichier@import')->name('import');
