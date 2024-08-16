@@ -30,7 +30,7 @@
                     <div class="widget-chart-1">
                         <div class="widget-chart-box-1 float-start" dir="ltr">
                             <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#f05050 "
-                                   data-bgColor="#F9B9B9" value="58"
+                                   data-bgColor="#F9B9B9" value="67"
                                    data-skin="tron" data-angleOffset="180" data-readOnly=true
                                    data-thickness=".15"/>
                         </div>

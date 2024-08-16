@@ -13,7 +13,7 @@
 <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h1>Différences entre Excel et la Base de Données</h1>
+    <h1>Rapport des écarts</h1>
     
     {{-- <h2>Données présentes dans le fichier Excel mais pas dans la Base de Données</h2>
     <ul>
@@ -52,17 +52,21 @@
                                         <td colspan="2"> {{$employe->posteActuel()->libelle_poste}} ({{$employe->posteActuel()->code_poste}}) </td>
                                         <td colspan="2"> {{$employe->postePrecedent()->libelle_poste ?? $employe->posteActuel()->libelle_poste }} ({{$employe->postePrecedent()->code_poste ?? $employe->posteActuel()->code_poste}}) </td>
                                     </tr>
+
+                                    {{-- @foreach ($employe->profils()->where('fonctionnalites.created_at', '>', $date)->get() as $empProfil)
+    
+                                    @endforeach --}}
         @foreach ($employe->profils()->get() as $empProfil)
 
                                     <tr>
-                                        <th scope="row" colspan="4" style="background-color:rgb(201, 199, 199)">Application : {{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
+                                        <th scope="row" colspan="4" style="background-color:rgb(199, 199, 201)">Application : {{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
                                     </tr>
                                     <tr>
-                                        <th colspan="4" style="background-color: {{$employe->posteActuel()->pivot->date_fin_fonction ? 'rgb(255, 230, 0)' : ''}};">Profil : {{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}}</th>
+                                        <th colspan="4" style="background-color: {{$employe->posteActuel()->pivot->date_fin_fonction ? 'rgb(255, 230, 0)' : ''}} {{$empProfil->employes()->where('employe_id', $employe->id)->first()->pivot->date_assignation >= $date ? 'rgb(99, 73, 245)' : ''}};">Profil : {{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}}</th>
                                     </tr>
                                     <tr>
-                                        <th colspan="2">Fonctionnalités récentes</th>
-                                        <th colspan="2">Fonctionnalités ajoutées</th>
+                                        <th colspan="2">Fonctionnalités totales</th>
+                                        <th colspan="2">Fonctionnalités ajoutées récemment</th>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
@@ -71,7 +75,7 @@
                                             @endforeach
                                         </td>
                                         <td colspan="2">
-                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $periodTimestamp)->get() as $pop)
+                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $date)->get() as $pop)
                                             <li style="background-color: rgb(255, 230, 0)">{{$pop->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
                                             @endforeach
                                         </td>

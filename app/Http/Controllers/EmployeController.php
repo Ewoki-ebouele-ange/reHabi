@@ -227,6 +227,7 @@ class EmployeController extends Controller
     public function profils ($employe) {
         $employ = Employe::find($employe);
         $profils = $employ->profils()->get();
+        $apps = \App\Models\Application::all();
 
         return view("profil", [
             'profils' => $profils,
@@ -234,7 +235,7 @@ class EmployeController extends Controller
             'foncts' => null,
             'postes' => null,
             'applications' => null,
-            'apps' => null
+            'apps' => $apps
         ]);
     }
 }

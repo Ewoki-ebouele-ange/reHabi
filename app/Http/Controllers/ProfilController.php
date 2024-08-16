@@ -198,9 +198,13 @@ class ProfilController extends Controller
     public function employes ($profil) {
         $prof = Profil::find($profil);
         $employes = $prof->employes()->get();
-
+        $entite = \App\Models\Entite::all();
+        $apps = \App\Models\Application::all();
+        
         return view("employe", [
             'employes' => $employes,
+            'entite' => $entite,
+            'apps' => $apps,
         ]);
     }
 

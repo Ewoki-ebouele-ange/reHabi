@@ -168,6 +168,7 @@ class ApplicationController extends Controller
 
     public function profils ($application) {
         $app = Application::find($application);
+        $apps = \App\Models\Application::all();
         $profils = $app->profils()->get();
 
         return view("profil", [
@@ -176,7 +177,7 @@ class ApplicationController extends Controller
             'foncts' => null,
             'postes' => null,
             'applications' => $app,
-            'apps' => null
+            'apps' => $apps
 
         ]);
     }

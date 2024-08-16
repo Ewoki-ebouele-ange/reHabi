@@ -185,7 +185,7 @@ Route::prefix('/addData')->middleware('auth')->controller(\DataController::class
 
 Route::prefix('/rapports')->middleware('auth')->controller(\RapController::class)->group(function () {
     Route::get('/', 'index')->name('rapports');
-    Route::get('/apercu', 'show')->name('rapports.show');
+    Route::get('/{rapport}/apercu', 'show')->name('rapports.show');
     Route::get('/{rapport}/download', 'download')->name('rapports.download');
 });
 

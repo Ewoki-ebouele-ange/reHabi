@@ -28,14 +28,14 @@
                         </thead>
 
 
-                        <tbody id="employesList">
+                        <tbody>
                             @foreach ($rapports as $rapport)
                         <tr>
                             <td>{{ $rapport->id }}</td>
                             <td>{{ $rapport->user->name }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $rapport->created_at }}</td>
                             <td class="text-truncate" style="max-width: 100px;">
-                                <a href="{{route('rapports.show')}}" class="btn btn-xs waves-effect waves-light">
+                                <a href="{{route('rapports.show', $rapport->id)}}" class="btn btn-xs waves-effect waves-light">
                                     <i class="fe-eye"></i>
                                 </a>
                             </td>

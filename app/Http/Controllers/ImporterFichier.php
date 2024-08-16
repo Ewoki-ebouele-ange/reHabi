@@ -202,7 +202,7 @@ class ImporterFichier extends Controller
 
             if($fonct_prof == null){
                 $fonctionnalite->profils()->syncWithoutDetaching([
-                    $poste->id => [
+                    $profil->id => [
                         'created_at' => $row['created_at'],
                         'updated_at' => $row['updated_at']
                     ],

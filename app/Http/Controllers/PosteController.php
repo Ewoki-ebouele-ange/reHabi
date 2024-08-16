@@ -158,11 +158,13 @@ class PosteController extends Controller
     public function employes ($poste) {
         $post = Poste::find($poste);
         $employes = $post->employes()->get();
+        $entite = \App\Models\Entite::all();
+        $apps = \App\Models\Application::all();
 
         return view("employe", [
             'employes' => $employes,
-            'entite' => null,
-            'apps' => null,
+            'entite' => $entite,
+            'apps' => $apps,
         ]);
     }
 
