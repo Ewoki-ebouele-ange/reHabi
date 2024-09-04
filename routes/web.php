@@ -17,9 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', 'DashController@index')->middleware(['auth'])->name('dashboard');
 
 Route::get('/revue', function () {
     return view('revue');

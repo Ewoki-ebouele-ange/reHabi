@@ -1,97 +1,72 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Rapport</title>
-    <link href="/assets/css/config/default/bootstrap.min.css" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
-<link href="/assets/css/config/default/app.min.css" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
+@extends("layouts.index")
 
-<link href="/assets/css/config/default/bootstrap-dark.min.css" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" disabled="disabled" />
-<link href="/assets/css/config/default/app-dark.min.css" rel="stylesheet" type="text/css" id="app-dark-stylesheet" disabled="disabled" />
+@section('content')
+    <div class="content-fluid">
+        <div class="row">
+            <h1>Rapport des écarts</h1>
+        @foreach ($employes as $employe)
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="4" style="font-size: 30px"> <strong>{{$employe->nom}}</strong></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th colspan="2">Poste actuel</th>
+                                            <th colspan="2">Poste précédent</th>
+                                        </tr>
+                                        <tr>
+                                            {{-- {{$employe->postes()->first()->libelle_poste ?? null}} ({{$employe->postes()->first()->code_poste ?? null}}) --}}
+                                            <td colspan="2"> {{$employe->posteActuel()->libelle_poste ?? 'Aucun poste assigné'}} ({{$employe->posteActuel()->code_poste ?? 'Aucun poste assigné'}}) </td>
+                                            <td colspan="2"> {{$employe->postePrecedent()->libelle_poste ?? $employe->posteActuel()->libelle_poste ?? 'Aucun poste assigné' }} ({{$employe->postePrecedent()->code_poste ?? $employe->posteActuel()->code_poste ?? 'Aucun poste assigné'}}) </td>
+                                        </tr>
 
-<!-- icons -->
-<link rel="shortcut icon" href="{{asset("/assets/images/logo-scb-vide.png")}}">
-<link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
-    <h1>Rapport des écarts</h1>
-    
-    {{-- <h2>Données présentes dans le fichier Excel mais pas dans la Base de Données</h2>
-    <ul>
-        @foreach ($dataInExcelNotInDB as $item)
-            <li> {{ json_encode($item) }}</li>
-        @endforeach
-    </ul>
-
-    <h2>Données présentes dans la Base de Données mais pas dans le fichier Excel</h2>
-    <ul>
-        @foreach ($dataInDBNotInExcel as $item)
-            <li> {{ json_encode($item) }} </li>
-        @endforeach
-    </ul> --}}
-    @foreach ($employes as $employe)
-
+                                        {{-- @foreach ($employe->profils()->where('fonctionnalites.created_at', '>', $date)->get() as $empProfil)
         
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        
-                        <div class="table-responsive">
-                            <table class="table table-bordered mb-0">
-                                <thead>
-                                <tr>
-                                    <th colspan="4">{{$employe->nom}}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th colspan="2">Poste actuel</th>
-                                        <th colspan="2">Poste précédent</th>
-                                    </tr>
-                                    <tr>
-                                        {{-- {{$employe->postes()->first()->libelle_poste ?? null}} ({{$employe->postes()->first()->code_poste ?? null}}) --}}
-                                        <td colspan="2"> {{$employe->posteActuel()->libelle_poste}} ({{$employe->posteActuel()->code_poste}}) </td>
-                                        <td colspan="2"> {{$employe->postePrecedent()->libelle_poste ?? $employe->posteActuel()->libelle_poste }} ({{$employe->postePrecedent()->code_poste ?? $employe->posteActuel()->code_poste}}) </td>
-                                    </tr>
+                                        @endforeach --}}
+            @foreach ($employe->profils()->get() as $empProfil)
 
-                                    {{-- @foreach ($employe->profils()->where('fonctionnalites.created_at', '>', $date)->get() as $empProfil)
-    
-                                    @endforeach --}}
-        @foreach ($employe->profils()->get() as $empProfil)
+                                        <tr>
+                                            <th scope="row" colspan="4" style="background-color:rgb(199, 199, 201)">Application : {{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4" style="background-color: {{$employe->posteActuel()->pivot->date_fin_fonction ? 'rgb(255, 230, 0)' : ''}} {{$empProfil->employes()->where('employe_id', $employe->id)->first()->pivot->date_assignation >= $date ? 'rgb(99, 73, 245)' : ''}};">Profil : {{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2">Fonctionnalités totales</th>
+                                            <th colspan="2">Fonctionnalités ajoutées récemment</th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                @foreach ($empProfil->fonctionnalites()->get() as $empFonct)
+                                                    <li>{{$empFonct->libelle_fonct ?? null}} ({{$empFonct->code_fonct ?? null}}) sur le module {{$empFonct->module->libelle_module ?? null}} ({{$empFonct->module->code_module ?? null}}) </li>
+                                                @endforeach
+                                            </td>
+                                            <td colspan="2">
+                                                @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $date)->get() as $pop)
+                                                <li style="background-color: rgb(255, 230, 0)">{{$pop->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
+                                                @endforeach
+                                            </td>
+                                        </tr>
+            @endforeach
 
-                                    <tr>
-                                        <th scope="row" colspan="4" style="background-color:rgb(199, 199, 201)">Application : {{$empProfil->application->libelle_application  ?? null}} ({{$empProfil->application->code_application ?? null}}) </th>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="4" style="background-color: {{$employe->posteActuel()->pivot->date_fin_fonction ? 'rgb(255, 230, 0)' : ''}} {{$empProfil->employes()->where('employe_id', $employe->id)->first()->pivot->date_assignation >= $date ? 'rgb(99, 73, 245)' : ''}};">Profil : {{$empProfil->libelle_profil ?? null}} avec pour code {{$empProfil->code_profil ?? null}}</th>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="2">Fonctionnalités totales</th>
-                                        <th colspan="2">Fonctionnalités ajoutées récemment</th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            @foreach ($empProfil->fonctionnalites()->get() as $empFonct)
-                                                <li>{{$empFonct->libelle_fonct ?? null}} ({{$empFonct->code_fonct ?? null}}) sur le module {{$empFonct->module->libelle_module ?? null}} ({{$empFonct->module->code_module ?? null}}) </li>
-                                            @endforeach
-                                        </td>
-                                        <td colspan="2">
-                                            @foreach ($empProfil->fonctionnalites()->where('fonctionnalites.created_at', '>', $date)->get() as $pop)
-                                            <li style="background-color: rgb(255, 230, 0)">{{$pop->libelle_fonct ?? "Aucune nouvelle fonctionnalité"}}</li>
-                                            @endforeach
-                                        </td>
-                                    </tr>
-        @endforeach
-
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
                         </div>
-                        
-                    </div>
 
+                    </div>
+                
                 </div>
-            
-            </div>
-    @endforeach
-    
-</body>
-</html>
+        @endforeach
+    </div>  
+    </div>
+@endsection
+
