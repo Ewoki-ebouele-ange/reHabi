@@ -114,11 +114,6 @@
                                         data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
                                         <i class="fe-link"></i>
                                     </a>
-                                    <a data-bs-toggle="modal" data-bs-target="#custom-modal-six" data-id="{{$profil->id}}"
-                                        class="btn btn-xs waves-effect waves-light openModal_tree" data-animation="fadein"
-                                        data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-                                        <i class="fe-eye"></i>
-                                    </a>
                                     <button type="button" id="sa-warning" data-id="{{ $profil->id }}" class="btn btn-xs btn-danger waves-effect waves-light delete-button">
                                         <i class="fe-trash-2"></i>
                                     </button>
@@ -235,43 +230,7 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
-
-        <!-- Modal suspendre rôle -->
-        <div class="modal fade" id="custom-modal-six" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myCenterModalLabel">Rôles du profil "<span id="prfLib"></span> (<span id="prfCode"></span>)"</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Application</th>
-                                <th>code de la fonction</th>
-                                <th>libelle</th>
-                                <th>Suspendre</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Adminto Admin v1</td>
-                                    <td>Adminto Admin v1</td>
-                                    <td>Arrrrrr</td>
-                                    <td><i class="mdi mdi-minus border border-danger bg-danger text-white h4 rounded-circle"></i></td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->       
+        <!-- /.modal -->      
     
         {{-- <!-- Modal importer -->
         <div class="modal fade" id="custom-modal-four" tabindex="-1" role="dialog" aria-hidden="true">
