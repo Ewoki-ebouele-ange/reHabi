@@ -63,7 +63,7 @@ $(document).ready(function() {
         // console.log(formData2)
 
         
-
+        
         $.ajax({
             url: "/profil/" + profilId + "/assignRole",
             type: "POST",

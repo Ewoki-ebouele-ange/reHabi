@@ -71,7 +71,7 @@ class ProfilController extends Controller
             'success' => true,
             'message' => "Le role ".$role->libelle_fonct." a bien été assigné au profil ".$profil->libelle_profil,
         ]);
-}
+    }
 
     public function list() : View
     {
