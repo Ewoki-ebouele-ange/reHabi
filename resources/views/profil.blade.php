@@ -71,10 +71,10 @@
                             <th>#</th>
                             <th>Code</th>
                             <th>Libelle</th>
+                            <th>application</th>
                             @if ($employes)
                             <th>Date d'assignation</th>
                             <th>Date de suspension</th>
-                            <th>Date de dernière modification</th>
                             <th>Date de dernière connexion</th>
                             @endif
                             <th>Actions</th>
@@ -88,15 +88,13 @@
                             <td>{{ $profil->id }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $profil->code_profil }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $profil->libelle_profil }}</td>
+                            <td class="text-truncate" style="max-width: 100px;">{{ $profil->application()->first()->libelle_application }}</td>
                             @if ($employes)
                                 <td class="text-truncate" style="max-width: 150px;">
                                     {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_assignation }}
                                 </td>
                                 <td class="text-truncate" style="max-width: 150px;">
                                     {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_suspension }}
-                                </td>
-                                <td class="text-truncate" style="max-width: 150px;">
-                                    {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_modification }}
                                 </td>
                                 <td class="text-truncate" style="max-width: 150px;">
                                     {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_connexion }}
@@ -125,15 +123,15 @@
                                     <div class="dropdown-menu dropdown-menu-start">
                                         <!-- item-->
                                         <a href="{{route('profil.fonctionnalites', $profil->id)}}" class="dropdown-item">
-                                            Fonctionnalités
+                                            Rôle(s)
                                         </a>
                                         <!-- item-->
                                         <a href="{{route('profil.postes', $profil->id)}}" class="dropdown-item">
-                                            Postes
+                                            Poste(s)
                                         </a>
                                         <!-- item-->
                                         <a href="{{route('profil.employes', $profil->id)}}" class="dropdown-item">
-                                            employés
+                                            employé(s)
                                         </a>
                                         <!-- item-->
                                         <a href="{{route('profil.application', $profil->id)}}" class="dropdown-item">
@@ -230,31 +228,8 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->      
-    
-        {{-- <!-- Modal importer -->
-        <div class="modal fade" id="custom-modal-four" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myCenterModalLabel">Ajouter un/plusieurs profil(s)</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method='POST' action="{{ route('profil.import') }}" class="d-flex flex-column aligns-items-center">
-                            @csrf
-                            <input type="file" name="fichier" class="form-control col-auto w-100 mb-2">
-                            <div class="d-flex flex-row justify-content-between">
-                                <button class="btn btn-success" type="submit">Importer</button>
-                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->        --}}
-    
+        <!-- /.modal -->
+        
         <!-- Modal 3 -->
         <div class="modal fade" id="custom-modal-tree" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -284,7 +259,7 @@
         </div>
         <!-- /.modal -->
 
-        <!-- Modal assign profil -->
+        <!-- Modal assign role -->
     <div class="modal fade" id="custom-modal-five" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -295,6 +270,10 @@
                 <div class="modal-body">
                     <form id="assignRoleForm" method="POST" class="d-flex flex-column aligns-items-center">
                         @csrf
+                        <div class="mb-3">
+                            <label class="form-label" for="ass_role">Entrer la date d'assignation du rôle</label>
+                            <input class="form-control" type="date" name="ass_role" id="ass_role">
+                        </div>
                         <div class="mb-3">
                             <label class="form-label" for="role_input">Sélectionner une fonctionnalité</label>
                             <select id="role_input" class="form-control" data-width="100%">
@@ -376,8 +355,6 @@
 @section("script")
      <!-- third party js -->
     <script src="{{asset("/assets/js/profil.js")}}"></script>
-
-     
      <script src="{{asset("/assets/libs/datatables.net/js/jquery.dataTables.min.js")}}"></script>
      <script src="{{asset("/assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js")}}"></script>
      <script src="{{asset("/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js")}}"></script>

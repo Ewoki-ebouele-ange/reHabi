@@ -57,23 +57,25 @@ class DataController extends Controller
 
         //dd(NULL);
 
-                $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
+                if($row["code_profil"]){
+                    $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
+                }
                 $emp = Employe::where("matricule", $row["matricule"])->get()->toArray();
                 $post = Poste::where("code_poste", $row["code_poste"])->get()->toArray();
 
-                $employe = Employe::firstOrCreate(
+                $employe = Employe::updateOrCreate(
                     ['nom' => $row['nom']],
                     ['matricule' => $row['matricule']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
                 );
     
-                $entite = Entite::firstOrCreate(
+                $entite = Entite::updateOrCreate(
                     ['code_entite' => $row['code_entite']],
                     ['libelle_entite' => $row['libelle_entite']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
                 );
 
-                $poste = Poste::firstOrCreate(
+                $poste = Poste::updateOrCreate(
                     ['code_poste' => $row['code_poste']],
                     ['libelle_poste' => $row['libelle_poste']],
                     ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
@@ -82,11 +84,13 @@ class DataController extends Controller
                 //dd($module);
                 $entite->postes()->save($poste);
 
-                $profil = Profil::firstOrCreate(
-                    ['code_profil' => $row['code_profil']],
-                    ['libelle_profil' => $row['libelle_profil']],
-                    ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
-                );
+                if($row["code_profil"]){
+                    $profil = Profil::updateOrCreate(
+                        ['code_profil' => $row['code_profil']],
+                        ['libelle_profil' => $row['libelle_profil']],
+                        ['created_at' => $row['created_at'], 'updated_at' => $row['updated_at']]
+                    );
+                }
     
                 // Associer la fonctionnalite et le profil
                 //$profil->postes()->syncWithoutDetaching($poste->id);
@@ -98,7 +102,6 @@ class DataController extends Controller
                         $profil->id => [
                             'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                            'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
                             'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
                             'created_at' => $row['created_at'],
                             'updated_at' => $row['updated_at']
@@ -110,7 +113,6 @@ class DataController extends Controller
                         $prof[0]["id"] => [
                             'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                             'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                            'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
                             'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
                             'created_at' => $row['created_at'],
                             'updated_at' => $row['updated_at']
@@ -285,6 +287,8 @@ class DataController extends Controller
                             // Création de l'association avec syncWithoutDetaching
                             $fonctionnalite->profils()->syncWithoutDetaching([
                                 $profil->id => [
+                                    'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
+                                    'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
                                     'created_at' => $row['created_at'],
                                     'updated_at' => $row['updated_at'],
                                 ],
@@ -309,6 +313,8 @@ class DataController extends Controller
                             // Création de l'association avec syncWithoutDetaching
                             $fonctionnalite->profils()->syncWithoutDetaching([
                                 $prof[0]["id"] => [
+                                    'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
+                                    'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
                                     'created_at' => $row['created_at'],
                                     'updated_at' => $row['updated_at'],
                                 ],
@@ -352,7 +358,6 @@ class DataController extends Controller
                                 $profil->id => [
                                     'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                                     'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                                    'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
                                     'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
                                     'created_at' => $row['created_at'],
                                     'updated_at' => $row['updated_at'],
@@ -379,7 +384,6 @@ class DataController extends Controller
                                 $prof[0]["id"] => [
                                     'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                                     'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                                    'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
                                     'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
                                     'created_at' => $row['created_at'],
                                     'updated_at' => $row['updated_at'],

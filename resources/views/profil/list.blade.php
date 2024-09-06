@@ -7,7 +7,6 @@
         @if ($employes)
         <th>Date d'assignation</th>
         <th>Date de suspension</th>
-        <th>Date de dernière modification</th>
         <th>Date de dernière connexion</th>
         @endif
         <th>Actions</th>
@@ -27,9 +26,6 @@
             </td>
             <td class="text-truncate" style="max-width: 150px;">
                 {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_suspension }}
-            </td>
-            <td class="text-truncate" style="max-width: 150px;">
-                {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_modification }}
             </td>
             <td class="text-truncate" style="max-width: 150px;">
                 {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_derniere_connexion }}

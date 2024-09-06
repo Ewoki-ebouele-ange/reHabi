@@ -15,9 +15,6 @@ class Profil extends Model
         "code_profil",
         "libelle_profil",
         "application_id",
-        "date_dernier_acces",
-        "date_creation",
-        "date_suppression"
     ];
 
     public function application(){
@@ -25,7 +22,7 @@ class Profil extends Model
     }
 
     public function fonctionnalites(){
-        return $this->belongsToMany(Fonctionnalite::class)->withPivot('created_at', 'updated_at');
+        return $this->belongsToMany(Fonctionnalite::class)->withPivot('date_assignation','date_suspension','created_at', 'updated_at');
     }
 
     public function postes(){
@@ -33,7 +30,7 @@ class Profil extends Model
     }
 
     public function employes(){
-        return $this->belongsToMany(Employe::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_modification', 'date_derniere_connexion', 'created_at', 'updated_at');
+        return $this->belongsToMany(Employe::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_connexion', 'created_at', 'updated_at');
     }
 
 }

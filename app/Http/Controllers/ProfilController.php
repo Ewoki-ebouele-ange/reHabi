@@ -12,6 +12,7 @@ use Spatie\SimpleExcel\SimpleExcelReader;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use \Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfilController extends Controller
 {
@@ -58,18 +59,61 @@ class ProfilController extends Controller
     }
 
     public function assignRole(Profil $profil, Request $request){
-        
+        // dd('bonjo');
         $role_input = $request->role_input;
+        $ass_role = $request->ass_role;
 
         $role = Fonctionnalite::findOrFail($role_input);
 
+        $mod = $role->module()->first();
+
+        $app = $mod->application()->first()->code_application;
+
         // dd($prf);
 
-        $profil->fonctionnalites()->syncWithoutDetaching($role_input);
+        if($app == $profil->application()->first()->code_application){
+            $profil->fonctionnalites()->syncWithoutDetaching([
+                $role_input => [
+                    'date_assignation' => $ass_role, 
+                    'date_suspension' => NULL, 
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            ]);
+            // $profil->fonctionnalites()->syncWithoutDetaching($role_input);
 
-        return response()->json([
+            return response()->json([
+                'success' => true,
+                'message' => "Le role ".$role->libelle_fonct." a bien été assigné au profil ".$profil->libelle_profil,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => "Erreur sur l'application choisie",
+            ]);
+        }
+
+        
+    }
+
+    public function susRole(Profil $profil, Fonctionnalite $fonct, Request $request){
+        
+
+        $dt_sus = $request->dt_sus;
+
+        // $role = Fonctionnalite::findOrFail($fonct->id);
+
+         // Mise à jour de updated_at uniquement
+         DB::table('fonctionnalite_profil')
+         ->where('fonctionnalite_id', $fonct->id)
+         ->where('profil_id', $profil->id)
+         ->update([
+             'date_suspension' => $dt_sus,
+         ]);
+
+         return response()->json([
             'success' => true,
-            'message' => "Le role ".$role->libelle_fonct." a bien été assigné au profil ".$profil->libelle_profil,
+            'message' => "Le rôle ".$fonct->libelle_fonct." a bien été suspendu du profil ".$profil->libelle_profil,
         ]);
     }
 
@@ -178,9 +222,12 @@ class ProfilController extends Controller
     public function fonctionnalites ($profil) {
         $prof = Profil::find($profil);
         $foncts = $prof->fonctionnalites()->get();
+        $app = $prof->application()->first();
 
-        return view("fonct", [
+        return view('fonct.role', [
             'foncts' => $foncts,
+            'app' => $app,
+            'prof' => $profil
         ]);
     }
 

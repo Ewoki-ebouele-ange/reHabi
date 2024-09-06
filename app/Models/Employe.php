@@ -19,7 +19,7 @@ class Employe extends Model
     }
 
     public function profils(){
-        return $this->belongsToMany(Profil::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_modification', 'date_derniere_connexion', 'created_at', 'updated_at');
+        return $this->belongsToMany(Profil::class)->withPivot('date_assignation', 'date_suspension', 'date_derniere_connexion', 'created_at', 'updated_at');
     }
 
     public function posteActuel(){

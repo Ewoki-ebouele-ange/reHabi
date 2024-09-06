@@ -104,8 +104,6 @@ $(document).ready(function () {
         var formData6 = $(this).serialize();
         // console.log(formData2)
 
-        
-
         $.ajax({
             url: "/employe/" + employeId + "/assignProfil",
             type: "POST",

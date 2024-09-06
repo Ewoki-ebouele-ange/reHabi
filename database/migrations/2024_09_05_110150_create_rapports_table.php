@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fonctionnalite_profil', function (Blueprint $table) {
-            $table->foreignId('fonctionnalite_id')->constrained('fonctionnalites')->onDelete('cascade');
-            $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
+        Schema::create('rapports', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
-
-            $table->primary(['fonctionnalite_id','profil_id']);
         });
     }
 
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fonctionnalite_profil');
+        Schema::dropIfExists('rapports');
     }
 };

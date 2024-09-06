@@ -171,7 +171,8 @@ Route::prefix('/profil')->middleware('auth')->controller(\ProfilController::clas
     Route::get('/{profil}/postes', 'postes')->name('profil.postes');
     Route::get('/{profil}/employes', 'employes')->name('profil.employes');
     Route::get('/{profil}/application', 'application')->name('profil.application');
-    Route::post('/{profil}/assignRole', 'assignRole')->name('employe.assignRole');
+    Route::post('/{profil}/assignRole', 'assignRole')->name('profil.assignRole');
+    Route::post('/{profil}/susRole/{fonct}', 'susRole')->name('profil.susRole');
 });
 
 Route::prefix('/addData')->middleware('auth')->controller(\DataController::class)->group(function () {

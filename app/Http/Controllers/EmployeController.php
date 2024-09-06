@@ -101,7 +101,6 @@ class EmployeController extends Controller
             $profil_input => [
                 'date_assignation' => $ass_profil, 
                 'date_suspension' => NULL, 
-                'date_derniere_modification' => $ass_profil, 
                 'date_derniere_connexion' => NULL,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -228,6 +227,7 @@ class EmployeController extends Controller
         $employ = Employe::find($employe);
         $profils = $employ->profils()->get();
         $apps = \App\Models\Application::all();
+
 
         return view("profil", [
             'profils' => $profils,

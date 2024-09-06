@@ -139,6 +139,8 @@ class CompareController extends Controller
                         // Création de l'association avec syncWithoutDetaching
                         $fonctionnalite->profils()->syncWithoutDetaching([
                             $profil->id => [
+                                'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
+                                'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
                                 'created_at' => $row['created_at'],
                                 'updated_at' => $row['updated_at'],
                             ],
@@ -177,7 +179,6 @@ class CompareController extends Controller
                             $profil->id => [
                                 'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                                 'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                                'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
                                 'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
                                 'created_at' => $row['created_at'],
                                 'updated_at' => $row['updated_at'],
@@ -252,7 +253,6 @@ class CompareController extends Controller
                             $prof[0]["id"] => [
                                 'date_assignation' => $row['date_assignation'] != "" ? $row['date_assignation'] : NULL, 
                                 'date_suspension' => $row['date_suspension'] != "" ? $row['date_suspension'] : NULL, 
-                                'date_derniere_modification' => $row['date_derniere_modification'] != "" ? $row['date_derniere_modification'] : NULL, 
                                 'date_derniere_connexion' => $row['date_derniere_connexion'] != "" ? $row['date_derniere_connexion'] : NULL,
                                 'created_at' => $row['created_at'],
                                 'updated_at' => $row['updated_at'],

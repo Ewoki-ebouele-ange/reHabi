@@ -1,6 +1,7 @@
 
 var profilId = null;
 var deleteProfId = null;
+var fonctId = null;
 
 $(document).ready(function() {
 
@@ -62,14 +63,13 @@ $(document).ready(function() {
         var formData6 = $(this).serialize();
         // console.log(formData2)
 
-        
-        
         $.ajax({
             url: "/profil/" + profilId + "/assignRole",
             type: "POST",
             data: {
                 formData6, 
                 role_input: $('#role_input').val(),
+                ass_role: $('#ass_role').val()
             },
             success: function (response) {
                 if (response.success) {
@@ -77,18 +77,20 @@ $(document).ready(function() {
                     //updateEmployeList();
                     $("#custom-modal-five").modal("hide");
                 } else {
-                    showAlertModalWarning(
-                        "Something went wrong. Please try again."
-                    );
+                    showAlertModalWarning(response.message);
                 }
             },
             error: function (error) {
                 //showAlertModalError("An error occurred. Please try again.");
                 //console.log($('#profil_input').val())
-                 console.error(error)
+                console.error(error);
             },
         })
     })
+
+    
+
+    
 
     $('#addForm').on('submit', function(event) {
         event.preventDefault();

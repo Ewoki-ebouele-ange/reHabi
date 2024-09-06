@@ -20,6 +20,6 @@ class Fonctionnalite extends Model
     }
 
     public function profils(){
-        return $this->belongsToMany(Profil::class)->withPivot('created_at', 'updated_at');
+        return $this->belongsToMany(Profil::class)->withPivot('date_assignation','date_suspension','created_at', 'updated_at');
     }
 }

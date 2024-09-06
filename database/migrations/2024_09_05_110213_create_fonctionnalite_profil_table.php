@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employe_profil', function (Blueprint $table) {
-            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
+        Schema::create('fonctionnalite_profil', function (Blueprint $table) {
+            $table->foreignId('fonctionnalite_id')->constrained('fonctionnalites')->onDelete('cascade');
             $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
             $table->timestamp('date_assignation')->nullable();
             $table->timestamp('date_suspension')->nullable();
-            $table->timestamp('date_derniere_modification')->nullable();
-            $table->timestamp('date_derniere_connexion')->nullable();
             $table->timestamps();
 
-            $table->primary(['employe_id','profil_id']);
+            $table->primary(['fonctionnalite_id','profil_id']);
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employe_profil');
+        Schema::dropIfExists('fonctionnalite_profil');
     }
 };
