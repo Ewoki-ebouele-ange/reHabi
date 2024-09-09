@@ -19,7 +19,7 @@
                                 <th>Date d'assignation</th>
                                 <th>Application</th>
                                 <th>Etat</th>
-                                <th>Suspendre</th>
+                                <th>Suspendre/Assigner</th>
                             </tr>
                             </thead>
                             <tbody id="listRole">
@@ -35,12 +35,20 @@
                                     @else
                                     <td><span class="badge bg-danger">Suspendu</span></td>
                                     @endif
-                                    <td>
-                                        <a data-bs-toggle="modal" data-bs-target="#custom-modal-six" data-id="{{$prof}}" data-fonct="{{$fonct->id}}"
+                                    <td class="center">
+
+                                            @if(!$fonct->profils()->first()->pivot->date_suspension)
+                                            <a data-bs-toggle="modal" data-bs-target="#custom-modal-six" data-id="{{$prof}}" data-fonct="{{$fonct->id}}"
                                             class="btn btn-xs waves-effect waves-light p-0 openModal_tree" data-animation="fadein"
                                             data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
                                             <i class="mdi mdi-minus border border-danger bg-danger text-white h4 rounded-circle p-0 m-0"></i>
-                                        </a>
+                                            @else
+                                            <a data-bs-toggle="modal" data-bs-target="#custom-modal-six" data-id="{{$prof}}" data-fonct="{{$fonct->id}}"
+                                                class="btn btn-xs waves-effect waves-light p-0 openModal_tree" data-animation="fadein"
+                                                data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
+                                                <i class="mdi mdi-plus border border-success bg-success text-white h4 rounded-circle p-0 m-0"></i>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

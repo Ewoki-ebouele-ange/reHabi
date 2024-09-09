@@ -10,7 +10,7 @@
                         <div class="card-body">
                             
                             <div class="table-responsive">
-                                <table class="table table-bordered mb-0">
+                                <table class="table table-bordered mb-0" style="border-collapse: collapse">
                                     <thead>
                                     <tr>
                                         <th colspan="4" style="font-size: 30px"> <strong>{{$employe->nom}}</strong></th>

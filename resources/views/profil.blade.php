@@ -88,7 +88,7 @@
                             <td>{{ $profil->id }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $profil->code_profil }}</td>
                             <td class="text-truncate" style="max-width: 100px;">{{ $profil->libelle_profil }}</td>
-                            <td class="text-truncate" style="max-width: 100px;">{{ $profil->application()->first()->libelle_application }}</td>
+                            <td class="text-truncate" style="max-width: 100px;">{{ $profil->application()->first()->libelle_application ?? 'Lié à aucune application' }}</td>
                             @if ($employes)
                                 <td class="text-truncate" style="max-width: 150px;">
                                     {{ $employes->profils()->where('profil_id', $profil->id)->first()->pivot->date_assignation }}

@@ -45,10 +45,6 @@ class ImporterFichier extends Controller
         if ($rows->isNotEmpty()) {
             foreach ($rows as $row) {
 
-                if(isset($row["code_profil"])){
-                    $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
-                }
-
                 $emp = Employe::where("matricule", $row["matricule"])->get()->toArray();
                 $post = Poste::where("code_poste", $row["code_poste"])->get()->toArray();
 
@@ -74,6 +70,8 @@ class ImporterFichier extends Controller
                 $entite->postes()->save($poste);
 
                 if(isset($row["code_profil"])){
+                    $prof = Profil::where("code_profil", $row["code_profil"])->get()->toArray();
+
                     $profil = Profil::updateOrCreate(
                         ['code_profil' => $row['code_profil']],
                         ['libelle_profil' => $row['libelle_profil']],
