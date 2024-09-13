@@ -19,7 +19,7 @@ class DashController extends Controller
             'employes' => $employes,
             'profils' => $profils,
             'apps' => $apps,
-            'date' => $dateDash->subDay(),
+            'date' => $dateDash->subWeek(),
         ]);
     }
 }

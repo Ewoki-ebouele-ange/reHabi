@@ -1,9 +1,15 @@
-@extends("layouts.index")
-
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Revue des habilitations</title>
+</head>
+<body>
     <div class="content-fluid">
         <div class="row">
-            <h1>Rapport des écarts</h1>
+            <h1>Rapport des écarts fait le {{$date}}</h1>
         @foreach ($employes as $employe)
                 <div class="col-12">
                     <div class="card">
@@ -68,5 +74,18 @@
         @endforeach
     </div>  
     </div>
+</body>
+</html>
+
+{{-- @section('link')
+    
 @endsection
+
+@section('script')
+    
+@endsection --}}
+
+
+
+
 
